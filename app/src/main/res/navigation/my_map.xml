@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_map"
+    app:startDestination="@id/mainActivity">
+
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.example.myapp.MainActivity"
+        android:label="MainActivity" />
+    <fragment
+        android:id="@+id/login_screen"
+        android:name="com.example.myapp.login_screen"
+        android:label="fragment_login_screen"
+        tools:layout="@layout/fragment_login_screen" />
+    <fragment
+        android:id="@+id/signup_screen"
+        android:name="com.example.myapp.signup_screen"
+        android:label="fragment_signup_screen"
+        tools:layout="@layout/fragment_signup_screen" />
+    <fragment
+        android:id="@+id/forgot_password2"
+        android:name="com.example.myapp.forgot_password"
+        android:label="fragment_forgot_password"
+        tools:layout="@layout/fragment_forgot_password" />
+</navigation>
