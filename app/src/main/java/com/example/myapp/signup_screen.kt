@@ -92,7 +92,7 @@ class SignUpScreen : Fragment() {
             // Handle success
             showToast("User registered successfully")
             // Redirect to Login screen
-            navigateToLogin()
+            navigateToHome()
         }, { errorMessage ->
             // Handle failure (Custom error message)
 
@@ -114,6 +114,15 @@ class SignUpScreen : Fragment() {
             .addToBackStack(null)
             .commit()
     }
+
+    private fun navigateToHome() {
+        val loginFragment = HomeScreenFragment()
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, loginFragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
 
     // Function to show toast message
     private fun showToast(message: String) {

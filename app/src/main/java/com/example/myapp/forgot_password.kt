@@ -40,6 +40,15 @@ class ForgotPasswordScreen : Fragment() {
                 .commit()
         }
 
+        val signInTextView: TextView = view.findViewById(R.id.login_link)
+        signInTextView.setOnClickListener {
+            val signInFragment = LoginScreen()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, signInFragment)
+                .addToBackStack(null)
+                .commit()
+        }
+
         val submitButton: TextView = view.findViewById(R.id.submit_button)
         submitButton.setOnClickListener {
             collectUser()
@@ -88,5 +97,7 @@ class ForgotPasswordScreen : Fragment() {
                 }
             }
     }
+
+
 
 }

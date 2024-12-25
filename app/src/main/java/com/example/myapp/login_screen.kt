@@ -28,6 +28,8 @@ class LoginScreen : Fragment() {
         emailInput = view.findViewById(R.id.pasword_email_input)
         passwordInput = view.findViewById(R.id.password_input)
 
+        (requireActivity() as MainActivity).showBottomNavigation(false)
+
         val signUpTextView: TextView = view.findViewById(R.id.sign_up)
         val forgotTextView: TextView = view.findViewById(R.id.forgot_password)
 
@@ -71,15 +73,15 @@ class LoginScreen : Fragment() {
         // Use FirebaseHelperLogin to validate the user credentials
         firebaseHelperLogin.loginUser(email, password, {
             Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
-            navigateTonext()
+            navigateToHome()
         }, { errorMessage ->
             // Show error message if login fails
             Toast.makeText(requireContext(), "Login failed: $errorMessage", Toast.LENGTH_SHORT).show()
         })
     }
 
-    private fun navigateTonext() {
-        val loginFragment = ForgotPasswordScreen()
+    private fun navigateToHome() {
+        val loginFragment = HomeScreenFragment()
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, loginFragment)
             .addToBackStack(null)

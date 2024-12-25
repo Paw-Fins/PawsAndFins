@@ -1,25 +1,57 @@
 package com.example.myapp
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.FirebaseApp  // Add this import for Firebase initialization
+import androidx.fragment.app.Fragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
-
+    private lateinit var bottomNavigationView: BottomNavigationView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        // Initialize Firebase
-        FirebaseApp.initializeApp(this)  // Initialize Firebase
-
         supportActionBar?.hide()
 
+        bottomNavigationView = findViewById(R.id.bottom_navigation)
         if (savedInstanceState == null) {
-            val loginFragment = LoginScreen()
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, loginFragment)
-                .commit()
+            loadFragment(LoginScreen())
+        }
+
+        bottomNavigationView.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_home -> {
+                    loadFragment(HomeScreenFragment())
+                    true
+                }
+//                R.id.navigation_search -> {
+//                    loadFragment(SearchFragment())
+//                    true
+//                }
+//                R.id.navigation_cart -> {
+//                    loadFragment(CartFragment())
+//                    true
+//                }
+//                R.id.navigation_slider -> {
+//                    loadFragment(SliderFragment())
+//                    true
+//                }
+                else -> false
+            }
+        }
+    }
+
+    private fun loadFragment(fragment: Fragment) {
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragment_container, fragment)
+        transaction.commit()
+    }
+    fun showBottomNavigation(show: Boolean) {
+        if (show) {
+            bottomNavigationView.visibility = View.VISIBLE
+        } else {
+            bottomNavigationView.visibility = View.GONE
         }
     }
 }
+
