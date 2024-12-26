@@ -8,4 +8,7 @@
         <item>Option 3</item>
         <item>Option 4</item>
     </string-array>
+        <string name="cloud_name">dmg3a821h</string>
+        <string name="api_key">123751547573678</string>
+        <string name="api_secret">SDcpJvxor-PbiR_QMFNkblKCar4</string>
 </resources>

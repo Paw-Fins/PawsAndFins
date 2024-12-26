@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,22 +7,7 @@
     android:fillViewport="true"
     android:padding="16dp">
 
-    <!-- Logo Text -->
-    <TextView
-        android:id="@+id/logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="LOGO"
-        android:textColor="#526EA3"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="15dp" />
-
     <!-- Sign In Title -->
-
-    <!-- Gradient View Below Sign In Title -->
     <TextView
         android:id="@+id/sign_in_title"
         android:layout_width="wrap_content"
@@ -36,8 +20,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/logo" />
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Gradient View Below Sign In Title -->
+    <View
+        android:id="@+id/gradient_view"
+        android:layout_width="141dp"
+        android:layout_height="10dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/gradient_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sign_in_title" />
+
+    <!-- Description Text -->
     <TextView
         android:id="@+id/description"
         android:layout_width="wrap_content"
@@ -52,18 +48,6 @@
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/gradient_view" />
-
-    <View
-        android:id="@+id/gradient_view"
-        android:layout_width="141dp"
-        android:layout_height="10dp"
-        android:layout_marginTop="4dp"
-        android:background="@drawable/gradient_background"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sign_in_title" />
-
-    <!-- Description Text -->
 
     <!-- Name TextField -->
     <com.google.android.material.textfield.TextInputLayout
@@ -170,14 +154,47 @@
             android:textColor="@android:color/black" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Upload Image Option (on the leftmost side) -->
+
+    <!-- Image Preview (on the rightmost side) -->
+
     <!-- Sign Up Button -->
 
     <!-- Sign Up Row -->
+
+    <Button
+        android:id="@+id/upload_image_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="44dp"
+        android:backgroundTint="#BBD4F6"
+        android:text="Upload"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        app:cornerRadius="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/confirm_password_input_layout" />
+
+    <ImageView
+        android:id="@+id/image_preview"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="12dp"
+        android:src="@drawable/demo"
+        android:layout_centerInParent="true"
+        android:scaleType="centerCrop"
+        android:clipToOutline="true"
+        android:background="@drawable/circle_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/confirm_password_input_layout" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/sign_up_button"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="36dp"
         android:backgroundTint="#BBD4F6"
         android:text="Sign up"
         android:textColor="@android:color/black"
@@ -186,13 +203,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/confirm_password_input_layout" />
+        app:layout_constraintTop_toBottomOf="@id/upload_image_button" />
 
     <LinearLayout
         android:id="@+id/sign_up_row"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="33dp"
+        android:layout_marginTop="8dp"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
@@ -211,7 +228,7 @@
             android:id="@+id/sign_in"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
+            android:layout_marginStart="0dp"
             android:clickable="true"
             android:focusable="true"
             android:text="Log in"

@@ -35,6 +35,10 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -43,21 +47,22 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.firebase.storage.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    // Firebase Authentication
+
     implementation("com.google.firebase:firebase-auth:23.1.0")
-
-    // Firebase Firestore (if using Firestore for data storage)
     implementation("com.google.firebase:firebase-firestore-ktx:25.1.1")
-
-    // Firebase Realtime Database (optional)
     implementation("com.google.firebase:firebase-database:21.0.0")
-
-    // Firebase Analytics (optional)
     implementation("com.google.firebase:firebase-analytics:22.1.2")
+    implementation("com.cloudinary:cloudinary-android:3.0.2")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.navigation:navigation-fragment:2.7.7")
+    implementation("androidx.navigation:navigation-ui:2.7.7")
+    implementation("com.google.android.material:material:1.9.0")
 }
 
 // Add the Google services plugin at the bottom of your app-level build.gradle
