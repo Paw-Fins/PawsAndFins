@@ -1,6 +1,7 @@
 package com.example.myapp
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,11 +9,13 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Spinner
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.bumptech.glide.Glide
-import android.util.Log
+import com.google.android.material.button.MaterialButton
 
 class HomeScreenFragment : Fragment() {
 
@@ -62,47 +65,62 @@ class HomeScreenFragment : Fragment() {
 
         // Layout for displaying products
         val productContainer: LinearLayout = view.findViewById(R.id.productContainer)
-        val inflater = LayoutInflater.from(requireContext())
-        val n = 5
 
-        // Generate product rows dynamically
-        for (i in 0 until n step 2) {
-            val rowLayout = LinearLayout(requireContext()).apply {
-                orientation = LinearLayout.HORIZONTAL
-                layoutParams = LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                )
-                val params = layoutParams as LinearLayout.LayoutParams
-                params.setMargins(0, 0, 0, 13) // 13px margin at the bottom for row spacing
-                layoutParams = params
-            }
-
-            val productCard1 = inflater.inflate(R.layout.product_card, rowLayout, false)
-            val params1 = LinearLayout.LayoutParams(
-                0,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                1f
-            )
-            params1.setMargins(0, 0, 16, 0)
-            productCard1.layoutParams = params1
-            rowLayout.addView(productCard1)
-
-            if (i + 1 < n) {
-                val productCard2 = inflater.inflate(R.layout.product_card, rowLayout, false)
-                val params2 = LinearLayout.LayoutParams(
-                    0,
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    1f
-                )
-                productCard2.layoutParams = params2
-                rowLayout.addView(productCard2)
-            }
-
-            productContainer.addView(rowLayout)
-        }
+        // Fetch and display products dynamically
+        fetchProducts(productContainer)
 
         return view
+    }
+
+    // Fetch product data from Firestore and display them
+    private fun fetchProducts(productContainer: LinearLayout) {
+        val db = FirebaseFirestore.getInstance()
+
+        db.collection("products")
+            .get()
+            .addOnSuccessListener { documents ->
+                productContainer.removeAllViews() // Clear existing views
+                val inflater = LayoutInflater.from(requireContext())
+                var rowLayout: LinearLayout? = null
+                var productCount = 0
+
+                for ((index, document) in documents.withIndex()) {
+                    val productData = document.data
+                    val productCard = inflater.inflate(R.layout.product_card, productContainer, false)
+
+                    // Set product details
+                    productCard.findViewById<TextView>(R.id.dynamicTextView).text = productData["name"].toString()
+                    productCard.findViewById<TextView>(R.id.dynamicPrice).text = "$${productData["price"].toString()}"
+                    val descriptionTextView: TextView = productCard.findViewById(R.id.dynamicDes)
+                    descriptionTextView.text = productData["description"].toString()
+
+                    // Load product image using Glide
+                    Glide.with(requireContext())
+                        .load(productData["imageUrl"].toString())
+                        .into(productCard.findViewById(R.id.imageView))
+
+                    // Add the product card to the row
+                    if (productCount % 2 == 0) {
+                        rowLayout = LinearLayout(requireContext()).apply {
+                            orientation = LinearLayout.HORIZONTAL
+                            layoutParams = LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT
+                            ).apply {
+                                setMargins(0, 0, 0, 13)
+                            }
+                        }
+                        productContainer.addView(rowLayout)
+                    }
+
+                    rowLayout?.addView(productCard, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
+                    productCount++
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.e("HomeScreenFragment", "Error fetching products", e)
+                Toast.makeText(requireContext(), "Error fetching products: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
     }
 
     // Function to fetch the image URL from Firestore
@@ -116,7 +134,7 @@ class HomeScreenFragment : Fragment() {
 
             userRef.get().addOnSuccessListener { document ->
                 if (document.exists()) {
-                    val imageUrl = document.getString("imageUrl") // Assuming the image URL is stored in the "imageUrl" field
+                    val imageUrl = document.getString("imageUrl")
                     Log.d("HomeScreenFragment", "Fetched Image URL: $imageUrl")
                     callback(imageUrl) // Pass the image URL to the callback
                 } else {
@@ -132,4 +150,12 @@ class HomeScreenFragment : Fragment() {
             callback(null) // No logged-in user
         }
     }
+
+    // Data class to represent a product
+    data class Product(
+        val name: String = "",
+        val price: Int = 0,
+        val description: String = "",
+        val imageUrl: String = ""
+    )
 }

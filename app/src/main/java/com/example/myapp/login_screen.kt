@@ -1,20 +1,25 @@
 package com.example.myapp
 
-
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import com.google.android.material.textfield.TextInputEditText
+import androidx.fragment.app.Fragment
 
 class LoginScreen : Fragment() {
 
     private lateinit var emailInput: TextInputEditText
     private lateinit var passwordInput: TextInputEditText
     private lateinit var firebaseHelperLogin: FirebaseHelperLogin
+
+    private val adminCredentials = object {
+        val adminEmail = "test@gmail.com"
+        val adminPassword = "test@123"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +57,6 @@ class LoginScreen : Fragment() {
 
         val signInButton: TextView = view.findViewById(R.id.submit_button)
         signInButton.setOnClickListener {
-
             collectUser()
         }
 
@@ -62,6 +66,7 @@ class LoginScreen : Fragment() {
     private fun collectUser() {
         val email = emailInput.text.toString().trim()
         val password = passwordInput.text.toString().trim()
+
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(
                 requireContext(),
@@ -71,20 +76,42 @@ class LoginScreen : Fragment() {
             return
         }
 
-        // Use FirebaseHelperLogin to validate the user credentials
-        firebaseHelperLogin.loginUser(email, password, {
-            Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
-            navigateToHome()
-        }, { errorMessage ->
-            // Show error message if login fails
-            Toast.makeText(requireContext(), "Login failed: $errorMessage", Toast.LENGTH_SHORT).show()
-        })
+        // Check for admin login
+        if (email == adminCredentials.adminEmail && password == adminCredentials.adminPassword) {
+            Toast.makeText(
+                requireContext(),
+                "Admin Login Successful!\nEmail: $email",
+                Toast.LENGTH_SHORT
+            ).show()
+            navigateToAdminScreen()
+        } else {
+            // Use FirebaseHelperLogin for regular user login
+            firebaseHelperLogin.loginUser(email, password, {
+                Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
+                navigateToHome()
+            }, { errorMessage ->
+                // Show error message if login fails
+                Toast.makeText(requireContext(), "Login failed: $errorMessage", Toast.LENGTH_SHORT).show()
+            })
+        }
+    }
+
+    private fun navigateToAdminScreen() {
+        try {
+            val adminMainFragment = AdminScreenFragment()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, adminMainFragment)
+                .addToBackStack(null)
+                .commit()
+        } catch (e: Exception) {
+            Log.e("LoginScreen", "Error during fragment transaction", e)
+        }
     }
 
     private fun navigateToHome() {
-        val loginFragment = HomeScreenFragment()
+        val homeScreenFragment = HomeScreenFragment()
         requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, loginFragment)
+            .replace(R.id.fragment_container, homeScreenFragment)
             .addToBackStack(null)
             .commit()
     }

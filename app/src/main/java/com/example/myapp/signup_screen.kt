@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.android.material.textfield.TextInputEditText
@@ -70,8 +71,19 @@ class SignUpScreen : Fragment() {
             collectUserData()
         }
 
+        val signInTextView: TextView = view.findViewById(R.id.sign_in)
+        signInTextView.setOnClickListener {
+            val signInFragment = LoginScreen()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, signInFragment)
+                .addToBackStack(null)
+                .commit()
+        }
+
         return view
     }
+
+
 
     private fun openImageChooser() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
