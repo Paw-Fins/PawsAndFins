@@ -30,10 +30,10 @@ class MainActivity : AppCompatActivity() {
 //                    loadFragment(SearchFragment())
 //                    true
 //                }
-//                R.id.navigation_cart -> {
-//                    loadFragment(CartFragment())
-//                    true
-//                }
+                R.id.navigation_cart -> {
+                    loadFragment(CartFragment())
+                    true
+                }
 //                R.id.navigation_slider -> {
 //                    loadFragment(SliderFragment())
 //                    true

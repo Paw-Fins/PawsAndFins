@@ -89,15 +89,53 @@ class HomeScreenFragment : Fragment() {
                     val productCard = inflater.inflate(R.layout.product_card, productContainer, false)
 
                     // Set product details
-                    productCard.findViewById<TextView>(R.id.dynamicTextView).text = productData["name"].toString()
-                    productCard.findViewById<TextView>(R.id.dynamicPrice).text = "$${productData["price"].toString()}"
-                    val descriptionTextView: TextView = productCard.findViewById(R.id.dynamicDes)
-                    descriptionTextView.text = productData["description"].toString()
+                    val productName = productData["name"].toString()
+                    val productPrice = productData["price"]?.toString() ?: "0"
+                    val productDescription = productData["description"].toString()
+                    val productImageUrl = productData["imageUrl"].toString()
+
+                    productCard.findViewById<TextView>(R.id.dynamicTextView).text = productName
+                    productCard.findViewById<TextView>(R.id.dynamicPrice).text = "₹$productPrice"
+                    productCard.findViewById<TextView>(R.id.dynamicDes).text = productDescription
 
                     // Load product image using Glide
                     Glide.with(requireContext())
-                        .load(productData["imageUrl"].toString())
+                        .load(productImageUrl)
                         .into(productCard.findViewById(R.id.imageView))
+
+                    // Handle "Buy Now" button click
+                    val buyNowButton = productCard.findViewById<MaterialButton>(R.id.buyNowButton)
+                    buyNowButton.setOnClickListener {
+                        // Check if the product is already in the cart
+                        val currentUser = auth.currentUser
+                        if (currentUser != null) {
+                            val userId = currentUser.uid
+
+                            // Query Firestore to check if the product already exists in the user's cart
+                            firestore.collection("orders")
+                                .whereEqualTo("userId", userId)
+                                .whereEqualTo("name", productName)
+                                .get()
+                                .addOnSuccessListener { querySnapshot ->
+                                    if (querySnapshot.isEmpty) {
+                                        // Product not in the cart, add it with quantity 1
+                                        val product = Product(
+                                            name = productName,
+                                            price = productPrice.toInt(),
+                                            description = productDescription,
+                                            imageUrl = productImageUrl,
+                                            quantity = 1 // Set default quantity to 1
+                                        )
+                                        saveProductToFirestore(product)
+                                    } else {
+                                        // Product already in the cart
+                                        Toast.makeText(requireContext(), "Product already in cart", Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+                        } else {
+                            Toast.makeText(requireContext(), "User not authenticated!", Toast.LENGTH_SHORT).show()
+                        }
+                    }
 
                     // Add the product card to the row
                     if (productCount % 2 == 0) {
@@ -121,6 +159,36 @@ class HomeScreenFragment : Fragment() {
                 Log.e("HomeScreenFragment", "Error fetching products", e)
                 Toast.makeText(requireContext(), "Error fetching products: ${e.message}", Toast.LENGTH_SHORT).show()
             }
+    }
+
+    // Function to save product details to Firestore
+    private fun saveProductToFirestore(product: Product) {
+        val db = FirebaseFirestore.getInstance()
+        val currentUser = auth.currentUser
+
+        if (currentUser != null) {
+            val userId = currentUser.uid
+            val orderData = hashMapOf(
+                "name" to product.name,
+                "price" to product.price,
+                "description" to product.description,
+                "imageUrl" to product.imageUrl,
+                "quantity" to product.quantity,
+                "userId" to userId,
+                "timestamp" to System.currentTimeMillis() // Optional: To track when the order was placed
+            )
+
+            db.collection("orders") // Create or use an "orders" collection
+                .add(orderData)
+                .addOnSuccessListener {
+                    Toast.makeText(requireContext(), "Product added to orders!", Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(requireContext(), "Failed to add product: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+        } else {
+            Toast.makeText(requireContext(), "User not authenticated!", Toast.LENGTH_SHORT).show()
+        }
     }
 
     // Function to fetch the image URL from Firestore
@@ -156,6 +224,7 @@ class HomeScreenFragment : Fragment() {
         val name: String = "",
         val price: Int = 0,
         val description: String = "",
-        val imageUrl: String = ""
+        val imageUrl: String = "",
+        val quantity: Int = 1 // Added quantity field with default value of 1
     )
 }
