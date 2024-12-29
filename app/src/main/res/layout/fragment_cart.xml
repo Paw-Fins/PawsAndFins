@@ -22,10 +22,11 @@
         android:layout_marginBottom="16dp" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/payButton"
+        android:id="@+id/checkoutButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Proceed to Payment"
-        android:textColor="@android:color/white"
-        android:backgroundTint="@android:color/holo_green_dark" />
+        android:text="Checkout"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:backgroundTint="@color/primary" />
 </LinearLayout>

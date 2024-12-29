@@ -63,6 +63,7 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment:2.7.7")
     implementation("androidx.navigation:navigation-ui:2.7.7")
     implementation("com.google.android.material:material:1.9.0")
+    implementation ("com.razorpay:checkout:1.6.38")
 }
 
 // Add the Google services plugin at the bottom of your app-level build.gradle
