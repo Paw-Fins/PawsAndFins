@@ -74,11 +74,16 @@ class SignUpScreen : Fragment() {
         val signInTextView: TextView = view.findViewById(R.id.sign_in)
         signInTextView.setOnClickListener {
             val signInFragment = LoginScreen()
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, signInFragment)
-                .addToBackStack(null)
-                .commit()
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            val currentFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.fragment_container)
+            if (currentFragment != null) {
+                transaction.hide(currentFragment)
+            }
+            transaction.replace(R.id.fragment_container, signInFragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
         }
+
 
         return view
     }

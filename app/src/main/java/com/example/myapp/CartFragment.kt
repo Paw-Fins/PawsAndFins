@@ -154,11 +154,16 @@ class CartFragment : Fragment() {
 
     private fun navigateToDeliveryAddress() {
         val deliveryFragment = DeliveryAddressFragment()
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, deliveryFragment)
-            .addToBackStack(null)
-            .commit()
+        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+        val currentFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.fragment_container)
+        if (currentFragment != null) {
+            transaction.hide(currentFragment)
+        }
+        transaction.replace(R.id.fragment_container, deliveryFragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
     }
+
 
     data class Product(
         val name: String = "",

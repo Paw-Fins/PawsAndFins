@@ -37,7 +37,8 @@
                 android:layout_gravity="end"
                 android:src="@drawable/profile_circle"
                 app:shapeAppearanceOverlay="@style/CircularImageView"
-                android:contentDescription="Profile Image" />
+                android:contentDescription="Profile Image"
+                android:onClick="showProfileMenu" /> <!-- Added onClick attribute -->
         </LinearLayout>
 
         <!-- Search Bar Section -->
@@ -72,7 +73,6 @@
                 android:paddingVertical="4dp"
                 android:imeOptions="actionSearch" />
         </LinearLayout>
-
 
         <!-- Banner Image -->
         <ImageView

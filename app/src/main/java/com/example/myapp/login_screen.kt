@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import com.google.android.material.textfield.TextInputEditText
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 
 class LoginScreen : Fragment() {
@@ -31,6 +32,7 @@ class LoginScreen : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_login_screen, container, false)
+
         emailInput = view.findViewById(R.id.pasword_email_input)
         passwordInput = view.findViewById(R.id.password_input)
 
@@ -59,6 +61,13 @@ class LoginScreen : Fragment() {
         signInButton.setOnClickListener {
             collectUser()
         }
+
+        // Adding a callback to handle back press actions, including gestures
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                requireActivity().finish()  // Exit the app when back or gesture is used
+            }
+        })
 
         return view
     }
@@ -99,10 +108,14 @@ class LoginScreen : Fragment() {
     private fun navigateToAdminScreen() {
         try {
             val adminMainFragment = AdminScreenFragment()
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, adminMainFragment)
-                .addToBackStack(null)
-                .commit()
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            val currentFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.fragment_container)
+            if (currentFragment != null) {
+                transaction.hide(currentFragment)
+            }
+            transaction.replace(R.id.fragment_container, adminMainFragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
         } catch (e: Exception) {
             Log.e("LoginScreen", "Error during fragment transaction", e)
         }
@@ -110,9 +123,13 @@ class LoginScreen : Fragment() {
 
     private fun navigateToHome() {
         val homeScreenFragment = HomeScreenFragment()
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, homeScreenFragment)
-            .addToBackStack(null)
-            .commit()
+        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+        val currentFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.fragment_container)
+        if (currentFragment != null) {
+            transaction.hide(currentFragment)
+        }
+        transaction.replace(R.id.fragment_container, homeScreenFragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
     }
 }

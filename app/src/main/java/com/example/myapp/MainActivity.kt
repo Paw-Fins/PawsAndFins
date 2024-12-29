@@ -43,12 +43,25 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
     private fun loadFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
+
+        // Optionally hide the current fragment
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+        if (currentFragment != null) {
+            transaction.hide(currentFragment)
+        }
+
+        // Replace the current fragment with the new one
         transaction.replace(R.id.fragment_container, fragment)
+
+        // Add the transaction to the back stack so user can navigate back
+        transaction.addToBackStack(null)
+
+        // Commit the transaction
         transaction.commit()
     }
+
     fun showBottomNavigation(show: Boolean) {
         if (show) {
             bottomNavigationView.visibility = View.VISIBLE
