@@ -24,4 +24,9 @@
         android:name="com.example.myapp.forgot_password"
         android:label="fragment_forgot_password"
         tools:layout="@layout/fragment_forgot_password" />
+    <fragment
+        android:id="@+id/user_profile"
+        android:name="com.example.myapp.user_profile"
+        android:label="fragment_user_profile"
+        tools:layout="@layout/fragment_user_profile" />
 </navigation>
