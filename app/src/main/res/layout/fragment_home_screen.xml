@@ -10,13 +10,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/primary"
         android:orientation="vertical">
 
         <!-- Search Bar Section -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:background="@color/primary"
+            android:background="#BBD4F6"
             android:gravity="center|start"
             android:orientation="horizontal"
             android:paddingHorizontal="9dp"
@@ -26,8 +27,8 @@
                 android:id="@+id/imageView2"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/search_status"
-                android:layout_gravity="center_vertical" />
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/search_status" />
 
             <EditText
                 android:id="@+id/searchEditText"
@@ -36,12 +37,11 @@
                 android:layout_marginLeft="10dp"
                 android:layout_weight="1"
                 android:hint="Search"
-                android:textColor="#000000"
-                android:textSize="14sp"
-                android:background="@color/primary"
+                android:imeOptions="actionSearch"
                 android:paddingHorizontal="8dp"
                 android:paddingVertical="4dp"
-                android:imeOptions="actionSearch" />
+                android:textColor="#000000"
+                android:textSize="14sp" />
         </LinearLayout>
 
         <!-- Banner Image -->

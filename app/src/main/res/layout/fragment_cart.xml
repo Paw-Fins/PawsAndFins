@@ -25,8 +25,8 @@
         android:id="@+id/checkoutButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="#BBD4F6"
         android:text="Checkout"
         android:textColor="@color/black"
-        android:textStyle="bold"
-        android:backgroundTint="@color/primary" />
+        android:textStyle="bold" />
 </LinearLayout>

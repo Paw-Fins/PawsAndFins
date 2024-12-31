@@ -236,7 +236,7 @@ class HomeScreenFragment : Fragment() {
                                 LinearLayout.LayoutParams.MATCH_PARENT,
                                 LinearLayout.LayoutParams.WRAP_CONTENT
                             ).apply {
-                                setMargins(16, 8, 16, 8) // Row spacing
+                                setMargins(0, 8, 0, 8) // Row spacing
                             }
                         }
                         productContainer.addView(rowLayout)
@@ -248,7 +248,7 @@ class HomeScreenFragment : Fragment() {
                         LinearLayout.LayoutParams.WRAP_CONTENT,
                         1f // Equal weight for each card
                     ).apply {
-                        setMargins(8, 8, 8, 8) // Card spacing
+                        setMargins(0, 8, 8, 8) // Card spacing
                     }
                     productCard.layoutParams = layoutParams
                     rowLayout?.addView(productCard)

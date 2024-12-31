@@ -29,4 +29,14 @@
         android:name="com.example.myapp.user_profile"
         android:label="fragment_user_profile"
         tools:layout="@layout/fragment_user_profile" />
+    <fragment
+        android:id="@+id/user_profile_edit"
+        android:name="com.example.myapp.user_profile_edit"
+        android:label="fragment_user_profile_edit"
+        tools:layout="@layout/fragment_user_profile_edit" />
+    <fragment
+        android:id="@+id/user_management"
+        android:name="com.example.myapp.user_management"
+        android:label="fragment_user_management"
+        tools:layout="@layout/fragment_user_management" />
 </navigation>

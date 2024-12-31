@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:text="SIGN UP"
-        android:textColor="@color/black"
+        android:textColor="?attr/colorOnBackground"
         android:textSize="40sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -41,7 +41,7 @@
         android:layout_marginTop="27dp"
         android:layout_marginBottom="16dp"
         android:text="Enter your details"
-        android:textColor="@color/black"
+        android:textColor="?attr/colorOnBackground"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/name_input_layout"
         app:layout_constraintEnd_toEndOf="parent"
@@ -67,7 +67,7 @@
             android:background="@android:color/transparent"
             android:hint="Name"
             android:inputType="textPersonName"
-            android:textColor="@android:color/black" />
+            android:textColor="?attr/colorOnBackground" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Mobile Number TextField -->
@@ -88,7 +88,7 @@
             android:background="@android:color/transparent"
             android:hint="Mobile Number"
             android:inputType="phone"
-            android:textColor="@android:color/black" />
+            android:textColor="?attr/colorOnBackground" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Email TextField -->
@@ -109,7 +109,7 @@
             android:background="@android:color/transparent"
             android:hint="Email"
             android:inputType="textEmailAddress"
-            android:textColor="@android:color/black" />
+            android:textColor="?attr/colorOnBackground" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Password TextField -->
@@ -130,7 +130,7 @@
             android:background="@android:color/transparent"
             android:hint="Password"
             android:inputType="textPassword"
-            android:textColor="@android:color/black" />
+            android:textColor="?attr/colorOnBackground" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Confirm Password TextField -->
@@ -151,7 +151,7 @@
             android:background="@android:color/transparent"
             android:hint="Confirm Password"
             android:inputType="textPassword"
-            android:textColor="@android:color/black" />
+            android:textColor="?attr/colorOnBackground" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Upload Image Option (on the leftmost side) -->
@@ -168,9 +168,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginTop="44dp"
-        android:backgroundTint="#BBD4F6"
+        android:backgroundTint="?attr/buttonColor"
         android:text="Upload"
-        android:textColor="@android:color/black"
+        android:textColor="?attr/colorOnBackground"
         android:textStyle="bold"
         app:cornerRadius="16dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -195,9 +195,9 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_marginTop="36dp"
-        android:backgroundTint="#BBD4F6"
+        android:backgroundTint="?attr/buttonColor"
         android:text="Sign up"
-        android:textColor="@android:color/black"
+        android:textColor="?attr/colorOnBackground"
         android:textStyle="bold"
         app:cornerRadius="16dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -222,6 +222,7 @@
             android:layout_height="wrap_content"
             android:text="Already have an account?"
             android:textSize="16sp"
+            android:textColor="?attr/colorOnBackground"
             android:textStyle="normal" />
 
         <TextView
@@ -230,9 +231,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="0dp"
             android:clickable="true"
+            android:textColor="?attr/linkColor"
             android:focusable="true"
             android:text="Log in"
-            android:textColor="#2E20C9"
             android:textSize="16sp"
             android:textStyle="normal" />
     </LinearLayout>

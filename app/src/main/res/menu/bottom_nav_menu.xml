@@ -2,14 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     <item
         android:id="@+id/navigation_home"
-        android:icon="@drawable/house" />
+        android:icon="@drawable/house"
+        android:title=""/>
     <item
         android:id="@+id/navigation_search"
-        android:icon="@drawable/search_status" />
+        android:icon="@drawable/search_status"
+        android:title=""/>
     <item
         android:id="@+id/navigation_cart"
-        android:icon="@drawable/shopping_cart" />
+        android:icon="@drawable/shopping_cart"
+        android:title=""/>
     <item
         android:id="@+id/navigation_slider"
-        android:icon="@drawable/menu" />
+        android:icon="@drawable/menu" android:title=""/>
 </menu>

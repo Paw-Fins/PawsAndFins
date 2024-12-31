@@ -6,6 +6,7 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="buttonTextColor">#cc0000</color>
     <color name="primary">#FFFFFF</color> <!-- White background for light mode -->
     <color name="onBackground">#000000</color> <!-- Black text on primary background -->
     <color name="linkColor">#2196F3</color>

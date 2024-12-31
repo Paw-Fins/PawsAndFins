@@ -40,6 +40,10 @@ class MainActivity : AppCompatActivity() {
         // Update theme-related colors
         updateUIForTheme()
 
+        profileCircle.setOnClickListener {
+            loadFragment(UserProfile())
+        }
+
         fetchProfileImage { imageUrl ->
             if (imageUrl != null) {
                 Glide.with(this)
@@ -109,7 +113,6 @@ class MainActivity : AppCompatActivity() {
     private fun updateUIForTheme() {
         val isDarkMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 
-        // Use separate color resources for dark and light modes
         val textColor = if (isDarkMode) {
             resources.getColor(R.color.onBackground, theme)
         } else {
@@ -117,19 +120,10 @@ class MainActivity : AppCompatActivity() {
         }
         logoText.setTextColor(textColor)
 
-        // Update background color
-        val layoutColor = if (isDarkMode) {
-            resources.getColor(R.color.onBackground, theme)
-        } else {
-            resources.getColor(R.color.onBackground, theme)
-        }
-        layout.setBackgroundColor(layoutColor)
-
-        // Update other components as needed here...
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        updateUIForTheme() // Update UI on theme change
+        updateUIForTheme()
     }
 }

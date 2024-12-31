@@ -5,8 +5,8 @@
     android:layout_height="match_parent">
 
     <FrameLayout
-        android:layout_width="200dp"
-        android:layout_height="275dp"
+        android:layout_width="188dp"
+        android:layout_height="280dp"
         android:background="@drawable/border_container"
         android:padding="8dp"
         app:layout_constraintTop_toTopOf="parent"
