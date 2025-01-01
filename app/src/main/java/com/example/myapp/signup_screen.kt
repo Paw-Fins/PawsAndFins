@@ -178,11 +178,13 @@ class SignUpScreen : Fragment() {
 
 
     private fun saveImageUrlToFirestore(userId: String, imageUrl: String) {
+        val statusBan = false
         val userData = hashMapOf(
             "name" to nameInput.text.toString(),
             "mobile" to mobileInput.text.toString(),
             "email" to emailInput.text.toString(),
-            "imageUrl" to imageUrl
+            "imageUrl" to imageUrl,
+            "isBanned" to statusBan
         )
 
         firestore.collection("users")

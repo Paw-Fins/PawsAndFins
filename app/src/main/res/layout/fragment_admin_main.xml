@@ -13,7 +13,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -22,13 +21,26 @@
             android:textStyle="bold"
             android:textColor="#000000" />
 
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Welcome to Paws and Fins Admin Panel"
             android:textSize="16sp"
             android:textColor="#808080" />
+
+        <!-- Added Manage User Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnManageUsers"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:backgroundTint="#FF9800"
+            android:text="Manage Users"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -40,7 +52,7 @@
             android:textColor="#000000"
             android:textSize="18sp" />
 
-        <!-- Changed TextView to Button for Add Product -->
+        <!-- Button for Add Product -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnAddProduct"
             android:layout_width="match_parent"
@@ -52,9 +64,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/upload_image_button" />
-
-
+            app:layout_constraintTop_toBottomOf="@id/btnManageUsers" />
 
         <LinearLayout
             android:id="@+id/adminProductContainer"
@@ -65,7 +75,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Order Management"
+            android:text="Details"
             android:textStyle="bold"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"

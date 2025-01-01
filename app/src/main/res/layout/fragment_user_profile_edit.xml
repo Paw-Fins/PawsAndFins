@@ -1,4 +1,3 @@
-<!-- res/layout/fragment_edit_user_detail.xml -->
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,6 +9,8 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:paddingHorizontal="16dp">
+
+        <!-- Image Upload Section -->
         <LinearLayout
             android:layout_width="match_parent"
             android:orientation="horizontal"
@@ -23,16 +24,15 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="44dp"
                 android:layout_marginEnd="8dp"
-            android:backgroundTint="?attr/buttonColor"
-            android:text="Upload"
-            android:textColor="?attr/colorOnBackground"
-            android:textStyle="bold"
-            app:cornerRadius="16dp" />
+                android:backgroundTint="?attr/buttonColor"
+                android:text="Upload"
+                android:textColor="?attr/colorOnBackground"
+                android:textStyle="bold"
+                app:cornerRadius="16dp" />
 
             <ImageView
-                android:layout_width="0dp"
+                android:layout_width="100dp"
                 android:id="@+id/image_preview"
-                android:layout_weight="1"
                 android:layout_height="100dp"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="16dp"
@@ -42,60 +42,63 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/demo" />
         </LinearLayout>
+
+        <!-- Name Section -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Name"
                 android:textColor="?attr/colorOnBackground"
-                android:textSize="16dp"
-                />
+                android:textSize="16dp" />
 
-        <EditText
-            android:id="@+id/edit_user_name"
-            android:layout_width="match_parent"
-
-            android:layout_height="wrap_content"
-            android:hint="Enter your name" />
+            <EditText
+                android:id="@+id/edit_user_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter your name" />
         </LinearLayout>
+
+        <!-- Email Section (Static) -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginTop="20dp"
-            >
+            android:orientation="vertical">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Email"
                 android:textColor="?attr/colorOnBackground"
+                android:textSize="16dp" />
+
+            <!-- Static Email TextView -->
+            <TextView
+                android:id="@+id/user_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="user@example.com"
                 android:textSize="16dp"
-                />
-        <EditText
-            android:id="@+id/edit_user_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter your email"
-            android:inputType="textEmailAddress" />
+                android:textColor="?attr/colorOnBackground" />
         </LinearLayout>
+
+        <!-- Phone Number Section -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginTop="20dp"
-            >
+            android:orientation="vertical">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Phone Number"
                 android:textColor="?attr/colorOnBackground"
-                android:textSize="16dp"
-                />
+                android:textSize="16dp" />
+
             <EditText
                 android:id="@+id/edit_user_phoneNum"
                 android:layout_width="match_parent"
@@ -104,9 +107,27 @@
                 android:inputType="number" />
         </LinearLayout>
 
+        <!-- Pet Name Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pet Name"
+                android:textColor="?attr/colorOnBackground"
+                android:textSize="16dp" />
 
+            <EditText
+                android:id="@+id/edit_pet_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter your pet's name" />
+        </LinearLayout>
 
-
+        <!-- Submit Button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/save_button"
             android:layout_width="match_parent"
@@ -119,8 +140,7 @@
             app:cornerRadius="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            />
+            app:layout_constraintStart_toStartOf="parent" />
 
     </LinearLayout>
 </ScrollView>

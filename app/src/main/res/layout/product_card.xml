@@ -7,7 +7,6 @@
     <FrameLayout
         android:layout_width="188dp"
         android:layout_height="280dp"
-        android:background="@drawable/border_container"
         android:padding="8dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -42,21 +41,21 @@
             <!-- Price Section -->
             <TextView
                 android:id="@+id/dynamicPrice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="46dp"
+                android:layout_height="22dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:text="$150"
                 android:textColor="#000000"
                 android:textSize="14sp"
-                app:layout_constraintTop_toBottomOf="@id/imageView"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imageView" />
 
             <!-- Description Section -->
             <TextView
                 android:id="@+id/dynamicDes"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
                 android:layout_marginTop="8dp"
                 android:text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus...."
                 android:textSize="12sp"

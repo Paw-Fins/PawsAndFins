@@ -1,17 +1,19 @@
 package com.example.myapp
 
+import UserManagement
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
-import com.google.android.material.button.MaterialButton
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.android.material.button.MaterialButton
 
 class AdminScreenFragment : Fragment() {
 
@@ -30,8 +32,18 @@ class AdminScreenFragment : Fragment() {
         btnAddProduct.setOnClickListener {
             val addProductFragment = AddProductFragment() // Replace with your fragment class
             requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, addProductFragment) // Replace with your container ID
-                .addToBackStack(null) // Optional: To allow navigation back
+                .replace(R.id.fragment_container, addProductFragment)
+                .addToBackStack(null)
+                .commit()
+        }
+
+        // Handle Manage Users button click
+        val btnManageUsers: MaterialButton = view.findViewById(R.id.btnManageUsers)
+        btnManageUsers.setOnClickListener {
+            val userManagementFragment = UserManagement() // Replace with your fragment class
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, userManagementFragment)
+                .addToBackStack(null)
                 .commit()
         }
 
@@ -65,18 +77,37 @@ class AdminScreenFragment : Fragment() {
                     // Handle description with dynamic multiline support
                     val descriptionTextView: TextView = productCard.findViewById(R.id.dynamicDescription)
                     descriptionTextView.text = productData["description"].toString()
-                    descriptionTextView.maxLines = 3 // Max 3 lines shown, can expand if required
+                    descriptionTextView.maxLines = 3
                     descriptionTextView.ellipsize = android.text.TextUtils.TruncateAt.END
 
                     // Load product image using Glide
                     Glide.with(requireContext())
                         .load(productData["imageUrl"].toString())
-                        .placeholder(R.drawable.dummy_product) // Placeholder in case image is loading or fails
+                        .placeholder(R.drawable.dummy_product)
                         .into(productCard.findViewById(R.id.imageView))
 
-                    // Add delete functionality
-                    productCard.findViewById<View>(R.id.deleteButton).setOnClickListener {
-                        deleteProduct(document.id, productContainer)
+                    // Handle Edit button click
+                    productCard.findViewById<Button>(R.id.btnEdit).setOnClickListener {
+                        val editProductFragment = EditProductFragment().apply {
+                            arguments = Bundle().apply {
+                                putString("productId", document.id)
+                                putString("productName", productData["name"].toString())
+                                putString("productPrice", productData["price"].toString())
+                                putString("productDescription", productData["description"].toString())
+                                putString("productImageUrl", productData["imageUrl"].toString())
+                            }
+                        }
+
+                        requireActivity().supportFragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container, editProductFragment)
+                            .addToBackStack(null)
+                            .commit()
+                    }
+
+                    // Handle Delete button click
+                    productCard.findViewById<Button>(R.id.deleteButton).setOnClickListener {
+                        // Call deleteProduct method to remove product from Firestore
+                        deleteProduct(document.id, productCard, productContainer)
                     }
 
                     // Add product card to the row
@@ -135,15 +166,17 @@ class AdminScreenFragment : Fragment() {
             }
     }
 
-    // Delete a product from Firestore
-    private fun deleteProduct(productId: String, productContainer: LinearLayout) {
+    // Delete product from Firestore
+    private fun deleteProduct(productId: String, productCard: View, productContainer: LinearLayout) {
         val db = FirebaseFirestore.getInstance()
 
+        // Delete product from the products collection
         db.collection("products").document(productId)
             .delete()
             .addOnSuccessListener {
-                Toast.makeText(requireContext(), "Product deleted", Toast.LENGTH_SHORT).show()
-                fetchProducts(productContainer) // Refresh product list
+                // Show success message and remove the product card from the UI
+                Toast.makeText(requireContext(), "Product deleted successfully", Toast.LENGTH_SHORT).show()
+                productContainer.removeView(productCard) // Remove the product card from the container
             }
             .addOnFailureListener { e ->
                 Log.e("AdminScreenFragment", "Error deleting product", e)

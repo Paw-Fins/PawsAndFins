@@ -1,24 +1,25 @@
 package com.example.myapp
 
-import android.content.Intent
+
+import EditUserDetailFragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.google.android.material.button.MaterialButton
 import com.google.firebase.auth.FirebaseAuth
-import com.example.myapp.EditUserDetail
 import com.google.firebase.firestore.FirebaseFirestore
+import androidx.fragment.app.Fragment
 
 class UserProfile : Fragment() {
 
     private lateinit var userImage: ImageView
     private lateinit var userName: TextView
     private lateinit var userEmail: TextView
+    private lateinit var userMobile: TextView  // New TextView for mobile number
     private lateinit var logOutButton: MaterialButton
     private lateinit var editDetailBtn: MaterialButton
     private lateinit var auth: FirebaseAuth
@@ -32,12 +33,15 @@ class UserProfile : Fragment() {
         userImage = rootView.findViewById(R.id.user_image)
         userName = rootView.findViewById(R.id.user_name)
         userEmail = rootView.findViewById(R.id.user_email)
+        userMobile = rootView.findViewById(R.id.user_number)  // Initialize the new TextView
         logOutButton = rootView.findViewById(R.id.logOut)
         editDetailBtn = rootView.findViewById(R.id.editDetailBtn)
+
         val mainActivity = activity as? MainActivity
         mainActivity?.findViewById<ImageView>(R.id.logoImage)?.visibility = View.GONE
+
         editDetailBtn.setOnClickListener {
-            val editUser  = EditUserDetail()
+            val editUser = EditUserDetailFragment()
             val transaction = parentFragmentManager.beginTransaction()
             transaction.replace(R.id.fragment_container, editUser)
             transaction.addToBackStack(null)
@@ -68,12 +72,13 @@ class UserProfile : Fragment() {
                 .addOnSuccessListener { document ->
                     if (document.exists()) {
                         val name = document.getString("name") ?: "No Name"
-                        val email = currentUser.email ?: "No Email"
+                        val mobile = document.getString("mobile") ?: "No Mobile Number"
                         val imageUrl = document.getString("imageUrl")
 
                         // Set the data to views
                         userName.text = name
-                        userEmail.text = email
+                        userEmail.text = currentUser.email ?: "No Email"
+                        userMobile.text = mobile  // Display mobile number
 
                         if (imageUrl != null) {
                             Glide.with(this)
@@ -88,17 +93,29 @@ class UserProfile : Fragment() {
                 .addOnFailureListener {
                     userName.text = "Error loading user data"
                     userEmail.text = ""
+                    userMobile.text = ""
                 }
         } else {
             userName.text = "No User Logged In"
             userEmail.text = ""
+            userMobile.text = ""
         }
     }
 
     private fun logOutUser() {
+        // Sign out from Firebase
         auth.signOut()
-        val intent = Intent(requireContext(), LoginScreen::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK // Clear back stack
-        startActivity(intent)
+
+        // Call the method to navigate to the HomeScreenFragment
+        navigateToLogin()
+    }
+
+    private fun navigateToLogin() {
+        // Navigate to the HomeScreenFragment
+        val LoginFragment = LoginScreen()
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, LoginFragment)
+            .addToBackStack(null)
+            .commit()
     }
 }

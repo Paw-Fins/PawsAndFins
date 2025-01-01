@@ -10,6 +10,9 @@ import android.widget.Toast
 import com.google.android.material.textfield.TextInputEditText
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class LoginScreen : Fragment() {
 

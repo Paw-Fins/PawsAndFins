@@ -9,7 +9,6 @@
         android:layout_width="188dp"
         android:layout_height="310dp"
         android:layout_gravity="center"
-        android:background="@drawable/border_container"
         android:padding="8dp">
 
         <LinearLayout
@@ -23,8 +22,8 @@
 
                 <ImageView
                     android:id="@+id/imageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
                     android:layout_marginStart="8dp"
                     app:srcCompat="@drawable/dummy_product" />
             </LinearLayout>
@@ -58,14 +57,14 @@
             <TextView
                 android:id="@+id/dynamicDescription"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
                 android:layout_marginTop="8dp"
+                android:ellipsize="end"
+                android:maxLines="5"
+                android:scrollHorizontally="false"
                 android:text="Product Description"
                 android:textColor="#616161"
-                android:textSize="12sp"
-                android:maxLines="5"
-                android:ellipsize="end"
-                android:scrollHorizontally="false" />
+                android:textSize="12sp" />
 
 
             <LinearLayout
@@ -79,25 +78,26 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:orientation="horizontal"
->
+                    android:orientation="horizontal">
+
                     <Button
                         android:id="@+id/btnEdit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Edit"
-                        android:textSize="10sp"
+                        android:layout_width="75dp"
+                        android:layout_height="match_parent"
                         android:layout_marginRight="4dp"
-                        android:textStyle="bold"
                         android:backgroundTint="?attr/buttonColor"
+                        android:text="Edit"
                         android:textColor="?attr/colorOnBackground"
-                         />
+                        android:textSize="10dp"
+                        android:textStyle="bold" />
+
                     <Button
                         android:id="@+id/deleteButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Delete"
-                        android:textSize="10sp"
+                        android:textSize="10dp"
+                        android:layout_marginRight="20dp"
                         android:textStyle="bold"
                         android:backgroundTint="#FFB6B6"
                         android:textColor="@android:color/black"

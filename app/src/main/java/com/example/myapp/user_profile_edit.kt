@@ -1,37 +1,34 @@
-package com.example.myapp
-
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.cloudinary.Cloudinary
+import com.cloudinary.utils.ObjectUtils
+import com.example.myapp.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.UploadTask
+import kotlinx.coroutines.*
 
-class EditUserDetail : Fragment() {
+class EditUserDetailFragment : Fragment() {
 
     private lateinit var nameEditText: EditText
-    private lateinit var emailEditText: EditText
+    private lateinit var emailTextView: TextView
     private lateinit var phoneNumEditText: EditText
+    private lateinit var petNameEditText: EditText
     private lateinit var saveButton: Button
     private lateinit var uploadImageButton: Button
     private lateinit var imagePreview: ImageView
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
-    private lateinit var storage: FirebaseStorage
-    private lateinit var storageRef: StorageReference
-    private var imageUri: Uri? = null
+    private lateinit var cloudinary: Cloudinary
+    private var selectedImageUri: Uri? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,140 +38,156 @@ class EditUserDetail : Fragment() {
 
         // Initialize views
         nameEditText = rootView.findViewById(R.id.edit_user_name)
-        emailEditText = rootView.findViewById(R.id.edit_user_email)
+        emailTextView = rootView.findViewById(R.id.user_email)
         phoneNumEditText = rootView.findViewById(R.id.edit_user_phoneNum)
+        petNameEditText = rootView.findViewById(R.id.edit_pet_name)
         saveButton = rootView.findViewById(R.id.save_button)
         uploadImageButton = rootView.findViewById(R.id.upload_image_button)
         imagePreview = rootView.findViewById(R.id.image_preview)
 
-        // Initialize Firebase instances
+        // Initialize Firebase and Cloudinary
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
-        storage = FirebaseStorage.getInstance()
-        storageRef = storage.reference
+        initCloudinary()
 
-        // Fetch current user data
+        // Fetch user data and populate fields
         fetchCurrentUserData()
 
-        // Set up the save button click listener
-        saveButton.setOnClickListener {
-            saveUserData()
-        }
-
-        // Set up the upload image button click listener
-        uploadImageButton.setOnClickListener {
-            openImagePicker()
-        }
+        // Set up listeners
+        saveButton.setOnClickListener { saveUserData() }
+        uploadImageButton.setOnClickListener { openImagePicker() }
 
         return rootView
     }
 
-    private fun fetchCurrentUserData() {
-        val currentUser  = auth.currentUser
+    private fun initCloudinary() {
+        cloudinary = Cloudinary(
+            mapOf(
+                "cloud_name" to getString(R.string.cloud_name),
+                "api_key" to getString(R.string.api_key),
+                "api_secret" to getString(R.string.api_secret)
+            )
+        )
+    }
 
-        if (currentUser  != null) {
-            val userRef = firestore.collection("users").document(currentUser .uid)
+    private fun fetchCurrentUserData() {
+        val currentUser = auth.currentUser
+        currentUser?.let { user ->
+            val userRef = firestore.collection("users").document(user.uid)
             userRef.get()
                 .addOnSuccessListener { document ->
                     if (document.exists()) {
-                        val name = document.getString("name") ?: ""
-                        val email = currentUser .email ?: ""
-                        val phoneNum = document.getString("phoneNum") ?: ""
-
-                        // Set the data to input fields
-                        nameEditText.setText(name)
-                        emailEditText.setText(email)
-                        phoneNumEditText.setText(phoneNum)
-
-                        // Load the image if it exists
+                        nameEditText.setText(document.getString("name") ?: "")
+                        emailTextView.text = user.email
+                        phoneNumEditText.setText(document.getString("mobile") ?: "")
+                        petNameEditText.setText(document.getString("petName") ?: "")
                         val imageUrl = document.getString("imageUrl")
-                        if (imageUrl != null) {
-                            Glide.with(this)
-                                .load(imageUrl)
-                                .into(imagePreview)
+                        imageUrl?.let {
+                            Glide.with(this).load(it).into(imagePreview)
                         }
                     }
                 }
                 .addOnFailureListener {
                     Toast.makeText(requireContext(), "Error loading user data", Toast.LENGTH_SHORT).show()
                 }
-        } else {
-            Toast.makeText(requireContext(), "No User Logged In", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun saveUserData() {
-        val currentUser  = auth.currentUser
+        val currentUser = auth.currentUser
+        currentUser?.let { user ->
+            val userRef = firestore.collection("users").document(user.uid)
+            val updatedData = mutableMapOf<String, Any>()
 
-        if (currentUser  != null) {
-            val userRef = firestore.collection("users").document(currentUser .uid)
+            if (nameEditText.text.isNotEmpty()) updatedData["name"] = nameEditText.text.toString()
+            if (phoneNumEditText.text.isNotEmpty()) updatedData["mobile"] = phoneNumEditText.text.toString()
+            if (petNameEditText.text.isNotEmpty()) updatedData["petName"] = petNameEditText.text.toString()
 
-            val updatedName = nameEditText.text.toString()
-            val updatedEmail = emailEditText.text.toString()
-            val updatedPhoneNum = phoneNumEditText.text.toString()
-            userRef.update("name", updatedName, "email", updatedEmail, "phoneNum", updatedPhoneNum)
+            if (updatedData.isEmpty() && selectedImageUri == null) {
+                Toast.makeText(requireContext(), "No changes to save", Toast.LENGTH_SHORT).show()
+                return
+            }
+
+            userRef.update(updatedData)
                 .addOnSuccessListener {
-                    // If an image was selected, upload it
-                    if (imageUri != null) {
-                        uploadImageToFirebase(imageUri!!)
-                    } else {
-                        Toast.makeText(requireContext(), "User  data updated successfully", Toast.LENGTH_SHORT).show()
-                    }
+                    selectedImageUri?.let {
+                        uploadImageToCloudinary(user.uid)
+                    } ?: Toast.makeText(requireContext(), "Data updated successfully", Toast.LENGTH_SHORT).show()
                 }
                 .addOnFailureListener {
-                    Toast.makeText(requireContext(), "Error updating user data", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Error updating data", Toast.LENGTH_SHORT).show()
                 }
-        } else {
-            Toast.makeText(requireContext(), "No User Logged In", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun uploadImageToFirebase(imageUri: Uri) {
-        val currentUser  = auth.currentUser
-
-        if (currentUser  != null) {
-            // Create a reference to the location where the image will be stored
-            val imageRef = storageRef.child("user_images/${currentUser .uid}/profile_image.jpg")
-
-            // Upload the image
-            val uploadTask: UploadTask = imageRef.putFile(imageUri)
-
-            uploadTask.addOnSuccessListener {
-                // Get the download URL
-                imageRef.downloadUrl.addOnSuccessListener { uri ->
-                    // Update the Firestore document with the image URL
-                    val userRef = firestore.collection("users").document(currentUser .uid)
-                    userRef.update("imageUrl", uri.toString())
-                        .addOnSuccessListener {
-                            Toast.makeText(requireContext(), "User  data updated successfully", Toast.LENGTH_SHORT).show()
+    private fun uploadImageToCloudinary(userId: String) {
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                selectedImageUri?.let { uri ->
+                    val file = getFileFromUri(uri)
+                    file?.let {
+                        val uploadResult = withContext(Dispatchers.IO) {
+                            cloudinary.uploader().upload(it, ObjectUtils.emptyMap())
                         }
-                        .addOnFailureListener {
-                            Toast.makeText(requireContext(), "Error updating image URL", Toast.LENGTH_SHORT).show()
+
+                        uploadResult?.let {
+                            val imageUrl = it["url"].toString()
+                            saveImageUrlToFirestore(userId, imageUrl)
+                        } ?: run {
+                            showToast("Image upload failed")
                         }
+                    } ?: run {
+                        showToast("File not found")
+                    }
                 }
-            }.addOnFailureListener {
-                Toast.makeText(requireContext(), "Error uploading image", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                Log.e("Cloudinary", "Error uploading image: ${e.message}")
+                showToast("Error uploading image")
             }
-        } else {
-            Toast.makeText(requireContext(), "No User Logged In", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun saveImageUrlToFirestore(userId: String, imageUrl: String) {
+        firestore.collection("users").document(userId)
+            .update("imageUrl", imageUrl)
+            .addOnSuccessListener {
+                showToast("Image updated successfully")
+                Glide.with(this).load(imageUrl).into(imagePreview)
+            }
+            .addOnFailureListener {
+                showToast("Failed to update image URL")
+            }
     }
 
     private fun openImagePicker() {
-        val intent = Intent(Intent.ACTION_PICK)
-        intent.type = "image/*"
+        val intent = Intent(Intent.ACTION_PICK).apply { type = "image/*" }
         startActivityForResult(intent, IMAGE_PICK_CODE)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == IMAGE_PICK_CODE && resultCode == Activity.RESULT_OK) {
-            imageUri = data?.data
-            imagePreview.setImageURI(imageUri)
+            selectedImageUri = data?.data
+            imagePreview.setImageURI(selectedImageUri)
         }
     }
 
+    private fun getFileFromUri(uri: Uri): String? {
+        val filePathColumn = arrayOf(android.provider.MediaStore.Images.Media.DATA)
+        val cursor = requireContext().contentResolver.query(uri, filePathColumn, null, null, null)
+        cursor?.use {
+            it.moveToFirst()
+            val columnIndex = it.getColumnIndex(filePathColumn[0])
+            return it.getString(columnIndex)
+        }
+        return null
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
     companion object {
-        private const val IMAGE_PICK_CODE = 1000
+        private const val IMAGE_PICK_CODE = 1001
     }
 }
