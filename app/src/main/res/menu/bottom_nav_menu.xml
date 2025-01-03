@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/navigation_home"
         android:icon="@drawable/house"
-        android:title=""/>
+        android:title=""/> <!-- Title can be empty -->
     <item
-        android:id="@+id/navigation_search"
-        android:icon="@drawable/search_status"
-        android:title=""/>
+        android:id="@+id/navigation_product"
+        android:icon="@drawable/product"
+        android:title=""/> <!-- Title can be empty -->
     <item
         android:id="@+id/navigation_cart"
         android:icon="@drawable/shopping_cart"
-        android:title=""/>
+        android:title=""/> <!-- Title can be empty -->
     <item
         android:id="@+id/navigation_slider"
-        android:icon="@drawable/menu" android:title=""/>
+        android:icon="@drawable/menu"
+        android:title=""/> <!-- Title can be empty -->
 </menu>

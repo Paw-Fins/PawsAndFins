@@ -63,6 +63,12 @@ class UserProfile : Fragment() {
         return rootView
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        val mainActivity = activity as? MainActivity
+        mainActivity?.findViewById<ImageView>(R.id.logoImage)?.visibility = View.VISIBLE
+    }
+
     private fun fetchUserData() {
         val currentUser = auth.currentUser
 

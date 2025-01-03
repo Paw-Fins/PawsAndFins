@@ -39,4 +39,30 @@
         android:name="com.example.myapp.user_management"
         android:label="fragment_user_management"
         tools:layout="@layout/fragment_user_management" />
+    <fragment
+        android:id="@+id/product_detail"
+        android:name="com.example.myapp.product_detail"
+        android:label="fragment_product_detail"
+        tools:layout="@layout/fragment_product_detail"/>
+    <fragment
+        android:id="@+id/ngo"
+        android:name="com.example.myapp.ngo"
+        android:label="fragment_ngo"
+        tools:layout="@layout/fragment_ngo" />
+    <fragment
+        android:id="@+id/vets"
+        android:name="com.example.myapp.vets"
+        android:label="fragment_vets"
+        tools:layout="@layout/fragment_vets" />
+    <fragment
+        android:id="@+id/groomer"
+        android:name="com.example.myapp.groomer"
+        android:label="fragment_groomer"
+        tools:layout="@layout/fragment_groomer" />
+    <fragment
+        android:id="@+id/product"
+        android:name="com.example.myapp.product"
+        android:label="fragment_product"
+        tools:layout="@layout/fragment_product" />
+
 </navigation>

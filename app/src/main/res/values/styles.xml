@@ -5,7 +5,12 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
-
+        <style name="YourCustomTextAppearance" parent="TextAppearance.AppCompat.Body1">
+            <item name="android:lineSpacingExtra">4dp</item>
+            <item name="android:paddingStart">16dp</item>
+            <item name="android:paddingEnd">16dp</item>
+            <item name="android:gravity">center_vertical</item> <!-- Align text vertically -->
+        </style>
     <!-- Light theme for the app -->
 
 </resources>
