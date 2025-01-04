@@ -118,6 +118,16 @@ class SignUpScreen : Fragment() {
             return
         }
 
+        val passwordRegex = "^(?=.*[A-Z])(?=.*[!@#\$%^&*()_+=|<>?{}\\[\\]~-])(?=.*\\d).{8,}$".toRegex()
+        if (!password.matches(passwordRegex)) {
+            Toast.makeText(
+                requireContext(),
+                "Password must contain at least one uppercase letter, one special character, one number, and be at least 8 characters long",
+                Toast.LENGTH_SHORT
+            ).show()
+            return
+        }
+
         if (password != confirmPassword) {
             Toast.makeText(activity, "Passwords do not match", Toast.LENGTH_SHORT).show()
             return
