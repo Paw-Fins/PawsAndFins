@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (savedInstanceState == null) {
-            loadFragment(HomeScreenFragment())
+            loadFragment(LoginScreen())
         }
 
         bottomNavigationView.setOnNavigationItemSelectedListener { item ->
@@ -165,8 +165,10 @@ class MainActivity : AppCompatActivity() {
     }
     fun showBottomNavigation(show: Boolean) {
         if (show) {
+            layout.visibility = View.VISIBLE
             bottomNavigationView.visibility = View.VISIBLE
         } else {
+            layout.visibility = View.GONE
             bottomNavigationView.visibility = View.GONE
         }
     }

@@ -87,7 +87,6 @@ class LoginScreen : Fragment() {
             ).show()
             return
         }
-
         // Check for admin login
         if (email == adminCredentials.adminEmail && password == adminCredentials.adminPassword) {
             Toast.makeText(

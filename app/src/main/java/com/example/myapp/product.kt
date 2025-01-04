@@ -69,9 +69,16 @@ class ProductFragment : Fragment() {
         firestore.collection("products")
             .get()
             .addOnSuccessListener { documents ->
-                productContainer.removeAllViews() // Clear existing views
+                Log.d("ProductFragment", "Fetched ${documents.size()} products")
+
                 val inflater = LayoutInflater.from(requireContext())
 
+                if (documents.isEmpty()) {
+                    Log.d("ProductFragment", "No products available")
+                    Toast.makeText(requireContext(), "No products available", Toast.LENGTH_SHORT).show()
+                }
+
+                // Loop through all fetched products
                 for (document in documents) {
                     val productData = document.data
                     val productName = productData["name"].toString()
@@ -80,25 +87,28 @@ class ProductFragment : Fragment() {
                     val productImageUrl = productData["imageUrl"].toString()
                     val productId = document.id // Get the document ID to pass as a product identifier
 
-                    // Apply filter logic here
+                    // Apply filter logic (if any)
                     if (filter == null || productName.contains(filter, ignoreCase = true)) {
                         val productCard = inflater.inflate(R.layout.product_card, productContainer, false)
 
+                        // Bind product data to UI elements
                         productCard.findViewById<TextView>(R.id.dynamicTextView).text = productName
                         productCard.findViewById<TextView>(R.id.dynamicPrice).text = "$$productPrice"
                         productCard.findViewById<TextView>(R.id.dynamicDes).text = productDescription
 
-                        // Load image using Glide
+                        // Load product image using Glide (with placeholder/error handling)
                         val imageView = productCard.findViewById<ImageView>(R.id.imageView)
                         Glide.with(requireContext())
                             .load(productImageUrl)
+                            .placeholder(R.drawable.dummy_product)
+                            .error(R.drawable.dummy_product)
                             .into(imageView)
 
                         // Handle "Buy Now" button click
                         productCard.findViewById<Button>(R.id.buyNowButton).setOnClickListener {
-                            val currentUser  = auth.currentUser
-                            if (currentUser  != null) {
-                                val userId = currentUser .uid
+                            val currentUser = auth.currentUser
+                            if (currentUser != null) {
+                                val userId = currentUser.uid
                                 firestore.collection("orders")
                                     .whereEqualTo("userId", userId)
                                     .whereEqualTo("name", productName)
@@ -122,7 +132,7 @@ class ProductFragment : Fragment() {
                                         }
                                     }
                             } else {
-                                Toast.makeText(requireContext(), "User  not authenticated!", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(), "User not authenticated!", Toast.LENGTH_SHORT).show()
                             }
                         }
 
@@ -159,10 +169,10 @@ class ProductFragment : Fragment() {
     // Function to save product details to Firestore
     private fun saveProductToFirestore(product: Product) {
         val db = FirebaseFirestore.getInstance()
-        val currentUser  = auth.currentUser
+        val currentUser = auth.currentUser
 
-        if (currentUser  != null) {
-            val userId = currentUser .uid
+        if (currentUser != null) {
+            val userId = currentUser.uid
             val orderData = hashMapOf(
                 "name" to product.name,
                 "price" to product.price,
@@ -182,7 +192,7 @@ class ProductFragment : Fragment() {
                     Toast.makeText(requireContext(), "Failed to add product: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
         } else {
-            Toast.makeText(requireContext(), "User  not authenticated!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "User not authenticated!", Toast.LENGTH_SHORT).show()
         }
     }
 
