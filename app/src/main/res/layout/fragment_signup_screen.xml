@@ -182,7 +182,6 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:hint="Confirm Password"
-            android:drawableEnd="@drawable/open_eye"
             android:inputType="textPassword"
             android:textColor="?attr/colorOnBackground" />
     </com.google.android.material.textfield.TextInputLayout>

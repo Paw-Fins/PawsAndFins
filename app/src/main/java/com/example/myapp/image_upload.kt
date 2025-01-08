@@ -56,23 +56,15 @@ class ImageUploadFragment : Fragment() {
         uploadButton = view.findViewById(R.id.upload_image_button)
         skipButton = view.findViewById(R.id.skip_upload)
 
-        // Receive user data from the Bundle
         userData = arguments?.getSerializable("userData") as HashMap<String, String>
-
-        // Log to see the user data
         Log.d("ImageUploadFragment", "Email: ${userData["email"]}, Password: ${userData["password"]}, Name: ${userData["name"]}, Mobile: ${userData["mobile"]}")
-
-        // Upload image when the user clicks the upload button
         uploadButton.setOnClickListener {
             openImageChooser()
         }
 
-        // Skip button: sign up and skip the image upload
         skipButton.setOnClickListener {
             val email = userData["email"] ?: return@setOnClickListener
             val password = userData["password"] ?: return@setOnClickListener
-
-            // Sign up the user without uploading the image
             signUpUser(email, password)
         }
 
@@ -102,7 +94,6 @@ class ImageUploadFragment : Fragment() {
         firebaseAuth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    // No image upload, use fallback image URL
                     saveUserDataToFirestore(fallbackImageUrl, isNewUser = true)
                 } else {
                     Toast.makeText(activity, "Sign up failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
@@ -164,20 +155,17 @@ class ImageUploadFragment : Fragment() {
     // Save user data to Firestore (with or without image URL)
     private fun saveUserDataToFirestore(imageUrl: String, isNewUser: Boolean) {
         val userId = firebaseAuth.currentUser?.uid ?: return
-
-        // Include all user data
         val userMap: MutableMap<String, Any> = mutableMapOf()
         userMap["imageUrl"] = imageUrl
         userMap["email"] = userData["email"] ?: ""
-        userMap["password"] = userData["password"] ?: ""  // Optional: You might want to handle this securely
+        userMap["password"] = userData["password"] ?: ""
+        userMap["role"] = userData["role"] ?: "User"
         userMap["name"] = userData["name"] ?: ""
         userMap["mobile"] = userData["mobile"] ?: ""
-
         if (isNewUser) {
-            // Creating a new document for the user
             firestore.collection("users")
                 .document(userId)
-                .set(userMap)  // Use `set` to create a new user document
+                .set(userMap)
                 .addOnSuccessListener {
                     showToast("User data saved successfully")
                     navigateToHome()
@@ -186,7 +174,6 @@ class ImageUploadFragment : Fragment() {
                     showToast("Failed to save user data: ${e.message}")
                 }
         } else {
-            // If the image is skipped, the user is already created. You can update the document if needed.
             showToast("User signed up successfully")
             navigateToHome()
         }
@@ -197,11 +184,22 @@ class ImageUploadFragment : Fragment() {
     }
 
     private fun navigateToHome() {
+        val userMap: MutableMap<String, Any> = mutableMapOf()
+        if(userMap["role"] != "User" || userMap["role"] != "user" ){
+            val servicesDashborad = ServiceDashboard()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container,servicesDashborad)
+                .addToBackStack(null)
+                .commit()
+        }
+        else{
         val homeFragment = HomeScreenFragment()
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, homeFragment)
             .addToBackStack(null)
             .commit()
+        }
+
     }
 }
 

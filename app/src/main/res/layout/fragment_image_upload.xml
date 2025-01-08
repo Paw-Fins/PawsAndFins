@@ -28,7 +28,7 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="320dp"
         android:backgroundTint="#BBD4F6"
-        android:text="Upload"
+        android:text="Pick Image"
         android:textColor="?attr/colorOnBackground"
         android:textStyle="bold"
         app:cornerRadius="16dp"

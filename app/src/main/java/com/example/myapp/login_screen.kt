@@ -1,8 +1,10 @@
 package com.example.myapp
 
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -38,6 +40,16 @@ class LoginScreen : Fragment() {
 
         emailInput = view.findViewById(R.id.pasword_email_input)
         passwordInput = view.findViewById(R.id.password_input)
+        passwordInput.setOnTouchListener { v ,event ->
+            if (event.action == MotionEvent.ACTION_UP) {
+                if (event.rawX >= passwordInput.right - passwordInput.compoundDrawables[2].bounds.width()) {
+                    togglePasswordVisibility(passwordInput)
+                    return@setOnTouchListener true
+                }
+            }
+            false
+
+        }
 
         (requireActivity() as MainActivity).showBottomNavigation(false)
 
@@ -74,7 +86,16 @@ class LoginScreen : Fragment() {
 
         return view
     }
-
+    private fun togglePasswordVisibility(editText: TextInputEditText) {
+        if (editText.inputType == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) {
+            editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.open_eye, 0)
+        } else {
+            editText.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+            editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cross_open_eye, 0)
+        }
+        editText.setSelection(editText.text?.length ?: 0)
+    }
     private fun collectUser() {
         val email = emailInput.text.toString().trim()
         val password = passwordInput.text.toString().trim()

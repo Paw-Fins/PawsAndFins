@@ -48,15 +48,15 @@ class SignUpScreen : Fragment() {
             false
         }
 
-        confirmPasswordInput.setOnTouchListener { v, event ->
-            if (event.action == MotionEvent.ACTION_UP) {
-                if (event.rawX >= confirmPasswordInput.right - confirmPasswordInput.compoundDrawables[2].bounds.width()) {
-                    togglePasswordVisibility(confirmPasswordInput)
-                    return@setOnTouchListener true
-                }
-            }
-            false
-        }
+//        confirmPasswordInput.setOnTouchListener { v, event ->
+//            if (event.action == MotionEvent.ACTION_UP) {
+//                if (event.rawX >= confirmPasswordInput.right - confirmPasswordInput.compoundDrawables[2].bounds.width()) {
+//                    togglePasswordVisibility(confirmPasswordInput)
+//                    return@setOnTouchListener true
+//                }
+//            }
+//            false
+//        }
 
         val signUpButton: MaterialButton? = view.findViewById(R.id.sign_up_button)
         signUpButton?.setOnClickListener {
@@ -80,7 +80,7 @@ class SignUpScreen : Fragment() {
     }
 
     private fun populateRoleSpinner() {
-        val roles = arrayOf("Select Role", "User", "Doctor", "Groomer", "NGO Manager")
+        val roles = arrayOf( "User", "Doctor","Trainer", "Groomer", "NGO Manager")
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, roles)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         roleSpinner.adapter = object : ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_dropdown_item, roles) {

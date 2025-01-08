@@ -69,5 +69,10 @@
         android:name="com.example.myapp.image_upload"
         android:label="fragment_image_upload"
         tools:layout="@layout/fragment_image_upload" />
+    <fragment
+        android:id="@+id/serviceDashboard"
+        android:name="com.example.myapp.serviceDashboard"
+        android:label="fragment_service_dashboard"
+        tools:layout="@layout/fragment_service_dashboard" />
 
 </navigation>
