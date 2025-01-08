@@ -1,5 +1,6 @@
 package com.example.myapp
 
+import SignUpScreen
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment

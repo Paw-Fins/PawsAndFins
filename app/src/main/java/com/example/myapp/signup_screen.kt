@@ -1,5 +1,3 @@
-package com.example.myapp
-
 import android.os.Bundle
 import android.text.InputType
 import android.view.LayoutInflater
@@ -11,8 +9,13 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.myapp.HomeScreenFragment
+import com.example.myapp.ImageUploadFragment
+import com.example.myapp.R
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.button.MaterialButton
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class SignUpScreen : Fragment() {
 
@@ -22,12 +25,18 @@ class SignUpScreen : Fragment() {
     private lateinit var passwordInput: TextInputEditText
     private lateinit var confirmPasswordInput: TextInputEditText
     private lateinit var roleSpinner: Spinner
+    private lateinit var auth: FirebaseAuth
+    private lateinit var firestore: FirebaseFirestore
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_signup_screen, container, false)
+
+        // Initialize Firebase
+        auth = FirebaseAuth.getInstance()
+        firestore = FirebaseFirestore.getInstance()
 
         nameInput = view.findViewById(R.id.name_input)
         mobileInput = view.findViewById(R.id.mobile_input)
@@ -38,7 +47,7 @@ class SignUpScreen : Fragment() {
 
         populateRoleSpinner()
 
-        passwordInput.setOnTouchListener { v, event ->
+        passwordInput.setOnTouchListener { _, event ->
             if (event.action == MotionEvent.ACTION_UP) {
                 if (event.rawX >= passwordInput.right - passwordInput.compoundDrawables[2].bounds.width()) {
                     togglePasswordVisibility(passwordInput)
@@ -48,57 +57,19 @@ class SignUpScreen : Fragment() {
             false
         }
 
-//        confirmPasswordInput.setOnTouchListener { v, event ->
-//            if (event.action == MotionEvent.ACTION_UP) {
-//                if (event.rawX >= confirmPasswordInput.right - confirmPasswordInput.compoundDrawables[2].bounds.width()) {
-//                    togglePasswordVisibility(confirmPasswordInput)
-//                    return@setOnTouchListener true
-//                }
-//            }
-//            false
-//        }
-
         val signUpButton: MaterialButton? = view.findViewById(R.id.sign_up_button)
         signUpButton?.setOnClickListener {
             collectUserData()
-        }
-
-        val signInTextView: TextView = view.findViewById(R.id.sign_in)
-        signInTextView.setOnClickListener {
-            val signInFragment = LoginScreen()
-            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            val currentFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.fragment_container)
-            if (currentFragment != null) {
-                transaction.hide(currentFragment)
-            }
-            transaction.replace(R.id.fragment_container, signInFragment)
-            transaction.addToBackStack(null)
-            transaction.commit()
         }
 
         return view
     }
 
     private fun populateRoleSpinner() {
-        val roles = arrayOf( "User", "Doctor","Trainer", "Groomer", "NGO Manager")
+        val roles = arrayOf("User", "Doctor", "Trainer", "Groomer", "NGO Manager")
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, roles)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        roleSpinner.adapter = object : ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_dropdown_item, roles) {
-            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                val view = super.getView(position, convertView, parent)
-                val textView = view.findViewById<TextView>(android.R.id.text1)
-                textView.textSize = 12f
-                return view
-            }
-            override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
-                val view = super.getDropDownView(position, convertView, parent)
-                val textView = view.findViewById<TextView>(android.R.id.text1)
-                textView.textSize = 12f
-                return view
-            }
-        }
+        roleSpinner.adapter = adapter
     }
-
 
     private fun togglePasswordVisibility(editText: TextInputEditText) {
         if (editText.inputType == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) {
@@ -117,37 +88,64 @@ class SignUpScreen : Fragment() {
         val email = emailInput.text.toString().trim()
         val password = passwordInput.text.toString().trim()
         val confirmPassword = confirmPasswordInput.text.toString().trim()
+
         if (name.isEmpty() || mobile.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
             Toast.makeText(activity, "Please fill in all fields", Toast.LENGTH_SHORT).show()
             return
         }
+
         val passwordRegex = "^(?=.*[A-Z])(?=.*[!@#\$%^&*()_+=|<>?{}\\[\\]~-])(?=.*\\d).{8,}$".toRegex()
         if (!password.matches(passwordRegex)) {
-            Toast.makeText(
-                requireContext(),
-                "Password must contain at least one uppercase letter, one special character, one number, and be at least 8 characters long",
-                Toast.LENGTH_SHORT
-            ).show()
+            Toast.makeText(requireContext(), "Password must contain at least one uppercase letter, one special character, one number, and be at least 8 characters long", Toast.LENGTH_SHORT).show()
             return
         }
+
         if (password != confirmPassword) {
             Toast.makeText(activity, "Passwords do not match", Toast.LENGTH_SHORT).show()
             return
         }
-        val role = roleSpinner.selectedItem.toString()
-        val userData = hashMapOf(
-            "name" to name,
-            "mobile" to mobile,
-            "email" to email,
-            "password" to password,
-            "role" to role
-        )
-        val imageUploadFragment = ImageUploadFragment()
-        val bundle = Bundle()
-        bundle.putSerializable("userData", userData)
-        imageUploadFragment.arguments = bundle
+
+        // Register user with Firebase Authentication
+        auth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener(requireActivity()) { task ->
+                if (task.isSuccessful) {
+                    val user = auth.currentUser
+                    val role = roleSpinner.selectedItem.toString()
+
+                    // Save additional user data in Firestore
+                    val userData = hashMapOf(
+                        "name" to name,
+                        "mobile" to mobile,
+                        "email" to email,
+                        "role" to role
+                    )
+
+                    firestore.collection("users").document(user!!.uid)
+                        .set(userData)
+                        .addOnSuccessListener {
+                            Toast.makeText(requireContext(), "Sign Up Successful!", Toast.LENGTH_SHORT).show()
+                            redirectToRolePage(role)
+                        }
+                        .addOnFailureListener { e ->
+                            Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                        }
+                } else {
+                    Toast.makeText(requireContext(), "Sign Up Failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
+    private fun redirectToRolePage(role: String) {
+        val nextFragment = when (role) {
+            "Doctor" -> VetSignUpFragment()
+            "Trainer" -> TrainerSignUpFragment()
+            "NGO Manager" -> NGOSignUpFragment()
+            "Groomer" -> GroomerSignupFragment()
+            else -> ImageUploadFragment()
+        }
+
         requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, imageUploadFragment)
+            .replace(R.id.fragment_container, nextFragment)
             .addToBackStack(null)
             .commit()
     }

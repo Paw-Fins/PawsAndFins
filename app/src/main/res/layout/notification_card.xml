@@ -22,31 +22,31 @@
             android:layout_weight="1">
 
             <TextView
-                android:id="@+id/serviceName"
+                android:id="@+id/appointment_petname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Service Name" />
+                android:text="Pet Name" />
 
             <TextView
-                android:id="@+id/serviceAddress"
+                android:id="@+id/appointment_username"
                 android:layout_width="wrap_content"
                 android:layout_marginTop="12dp"
                 android:layout_height="wrap_content"
-                android:text="Address" />
+                android:text="User name" />
 
             <TextView
-                android:id="@+id/serviceOwnerName"
+                android:id="@+id/appointment_timeSlot"
                 android:layout_width="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_height="wrap_content"
-                android:text="Owner Name" />
+                android:text="Time slot" />
 
             <TextView
-                android:id="@+id/available"
+                android:id="@+id/appointment_problemdes"
                 android:layout_width="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_height="wrap_content"
-                android:text="Availablity time" />
+                android:text="problem des" />
 
             <!-- Spacer to push the button to the bottom -->
             <Space
@@ -60,7 +60,7 @@
                 android:layout_height="40dp"
                 android:layout_marginBottom="8dp"
                 android:backgroundTint="#BBD4F6"
-                android:text="Contact"
+                android:text="View more"
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:textSize="10sp" />

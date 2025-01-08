@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +25,7 @@ import java.io.File
 class ImageUploadFragment : Fragment() {
 
     private lateinit var imageView: ImageView
+    private lateinit var selectImageButton: Button
     private lateinit var uploadButton: Button
     private lateinit var skipButton: Button
     private lateinit var userData: HashMap<String, String>
@@ -34,17 +34,14 @@ class ImageUploadFragment : Fragment() {
 
     private val cloudinary: Cloudinary by lazy {
         Cloudinary(ObjectUtils.asMap(
-            "cloud_name", requireContext().getString(R.string.cloud_name),
-            "api_key", requireContext().getString(R.string.api_key),
-            "api_secret", requireContext().getString(R.string.api_secret)
+            "cloud_name", getString(R.string.cloud_name),
+            "api_key", getString(R.string.api_key),
+            "api_secret", getString(R.string.api_secret)
         ))
     }
 
     private val firestore = FirebaseFirestore.getInstance()
     private val firebaseAuth = FirebaseAuth.getInstance()
-
-    // Fallback image URL if the user skips uploading
-    private val fallbackImageUrl = "https://example.com/fallback-image.jpg" // Update with your default image URL
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,20 +50,13 @@ class ImageUploadFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_image_upload, container, false)
 
         imageView = view.findViewById(R.id.image_preview)
+        selectImageButton = view.findViewById(R.id.select_image_button)
         uploadButton = view.findViewById(R.id.upload_image_button)
         skipButton = view.findViewById(R.id.skip_upload)
 
-        userData = arguments?.getSerializable("userData") as HashMap<String, String>
-        Log.d("ImageUploadFragment", "Email: ${userData["email"]}, Password: ${userData["password"]}, Name: ${userData["name"]}, Mobile: ${userData["mobile"]}")
-        uploadButton.setOnClickListener {
-            openImageChooser()
-        }
-
-        skipButton.setOnClickListener {
-            val email = userData["email"] ?: return@setOnClickListener
-            val password = userData["password"] ?: return@setOnClickListener
-            signUpUser(email, password)
-        }
+        selectImageButton.setOnClickListener { openImageChooser() }
+        uploadButton.setOnClickListener { onSubmitImage() }
+        skipButton.setOnClickListener { registerUserAndNavigate(fallbackImageUrl = true) }
 
         return view
     }
@@ -81,125 +71,79 @@ class ImageUploadFragment : Fragment() {
         if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_REQUEST) {
             selectedImageUri = data?.data
             imageView.setImageURI(selectedImageUri)
-            val email = userData["email"] ?: ""
-            val password = userData["password"] ?: ""
-            signUpUserAndUploadImage(email, password)
-        } else {
-            Toast.makeText(activity, "Image selection failed", Toast.LENGTH_SHORT).show()
         }
     }
 
-    // Sign up user
-    private fun signUpUser(email: String, password: String) {
-        firebaseAuth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    saveUserDataToFirestore(fallbackImageUrl, isNewUser = true)
-                } else {
-                    Toast.makeText(activity, "Sign up failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
-                }
-            }
+    private fun onSubmitImage() {
+        selectedImageUri?.let {
+            uploadImageToCloudinary(it)
+        } ?: run {
+            Toast.makeText(activity, "Please select an image first", Toast.LENGTH_SHORT).show()
+        }
     }
 
-    // Sign up and upload image if available
-    private fun signUpUserAndUploadImage(email: String, password: String) {
-        firebaseAuth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    // User is signed up, proceed with image upload
-                    val userId = firebaseAuth.currentUser?.uid ?: return@addOnCompleteListener
+    private fun uploadImageToCloudinary(uri: Uri) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val file = File(uri.path)
+                val result = cloudinary.uploader().upload(file, ObjectUtils.emptyMap())
+                val imageUrl = result["url"].toString()
+                registerUserAndNavigate(fallbackImageUrl = false, imageUrl = imageUrl)
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(activity, "Image upload failed", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
 
-                    selectedImageUri?.let { uri ->
-                        val file = getFileFromUri(uri)
-                        file?.let {
-                            CoroutineScope(Dispatchers.Main).launch {
-                                try {
-                                    val uploadResult = withContext(Dispatchers.IO) {
-                                        cloudinary.uploader().upload(file, ObjectUtils.emptyMap())
-                                    }
+    private fun registerUserAndNavigate(fallbackImageUrl: Boolean, imageUrl: String = "") {
+        val userId = firebaseAuth.currentUser?.uid
 
-                                    uploadResult?.let {
-                                        val imageUrl = it["url"].toString()
-                                        saveUserDataToFirestore(imageUrl, isNewUser = true) // Save all user data (email, password, image)
-                                    } ?: run {
-                                        showToast("Image upload failed")
-                                    }
-                                } catch (e: Exception) {
-                                    showToast("Error uploading image: ${e.message}")
+        // If no image URL was uploaded, use a fallback image URL
+        val imageToUpload = if (fallbackImageUrl) {
+            "http://res.cloudinary.com/dmg3a821h/image/upload/v1736325853/hhtag3kjkpvag7qwqszo.jpg" // Replace with a default image URL
+        } else {
+            imageUrl
+        }
+
+        // Add the image URL to the user data
+        val userDataWithImage = hashMapOf<String, Any>(
+            "imageUrl" to imageToUpload
+        )
+
+        // Retrieve the user's role from Firestore
+        userId?.let { uid ->
+            firestore.collection("users").document(uid)
+                .get()
+                .addOnSuccessListener { document ->
+                    if (document.exists()) {
+                        val role = document.getString("role")
+
+                        // Add the image URL to Firestore
+                        firestore.collection("users").document(uid)
+                            .update(userDataWithImage)
+                            .addOnSuccessListener {
+                                // If the data was successfully saved, navigate to the appropriate screen
+                                val targetFragment = if (role.equals("User", ignoreCase = true)) {
+                                    HomeScreenFragment()
+                                } else {
+                                    ServiceDashboard()
                                 }
+                                requireActivity().supportFragmentManager.beginTransaction()
+                                    .replace(R.id.fragment_container, targetFragment)
+                                    .commit()
                             }
-                        } ?: run {
-                            showToast("File not found")
-                        }
+                            .addOnFailureListener { exception ->
+                                Toast.makeText(activity, "Failed to update user data: ${exception.message}", Toast.LENGTH_SHORT).show()
+                            }
+                    } else {
+                        Toast.makeText(activity, "User not found", Toast.LENGTH_SHORT).show()
                     }
-                } else {
-                    Toast.makeText(activity, "Sign up failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                 }
-            }
-    }
-
-    private fun getFileFromUri(uri: Uri): File? {
-        return try {
-            val fileDescriptor = activity?.contentResolver?.openFileDescriptor(uri, "r")
-            fileDescriptor?.let {
-                val inputStream = activity?.contentResolver?.openInputStream(uri)
-                val file = File(requireContext().cacheDir, "uploaded_image.jpg")
-                inputStream?.copyTo(file.outputStream())
-                file
-            }
-        } catch (e: Exception) {
-            null
-        }
-    }
-
-    // Save user data to Firestore (with or without image URL)
-    private fun saveUserDataToFirestore(imageUrl: String, isNewUser: Boolean) {
-        val userId = firebaseAuth.currentUser?.uid ?: return
-        val userMap: MutableMap<String, Any> = mutableMapOf()
-        userMap["imageUrl"] = imageUrl
-        userMap["email"] = userData["email"] ?: ""
-        userMap["password"] = userData["password"] ?: ""
-        userMap["role"] = userData["role"] ?: "User"
-        userMap["name"] = userData["name"] ?: ""
-        userMap["mobile"] = userData["mobile"] ?: ""
-        if (isNewUser) {
-            firestore.collection("users")
-                .document(userId)
-                .set(userMap)
-                .addOnSuccessListener {
-                    showToast("User data saved successfully")
-                    navigateToHome()
+                .addOnFailureListener { exception ->
+                    Toast.makeText(activity, "Error fetching user role: ${exception.message}", Toast.LENGTH_SHORT).show()
                 }
-                .addOnFailureListener { e ->
-                    showToast("Failed to save user data: ${e.message}")
-                }
-        } else {
-            showToast("User signed up successfully")
-            navigateToHome()
         }
-    }
-
-    private fun showToast(message: String) {
-        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun navigateToHome() {
-        val userMap: MutableMap<String, Any> = mutableMapOf()
-        if(userMap["role"] != "User" || userMap["role"] != "user" ){
-            val servicesDashborad = ServiceDashboard()
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container,servicesDashborad)
-                .addToBackStack(null)
-                .commit()
-        }
-        else{
-        val homeFragment = HomeScreenFragment()
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, homeFragment)
-            .addToBackStack(null)
-            .commit()
-        }
-
     }
 }
-

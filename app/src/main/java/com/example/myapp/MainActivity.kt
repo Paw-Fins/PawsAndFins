@@ -31,11 +31,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportActionBar?.hide()
-
         layout = findViewById(R.id.topLayout)
         bottomNavigationView = findViewById(R.id.bottom_navigation)
         profileCircle = findViewById(R.id.logoImage)

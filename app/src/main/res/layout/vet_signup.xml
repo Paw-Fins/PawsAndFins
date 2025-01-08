@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f4f4f4">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/tvVetSignup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vet Details"
+            android:textSize="26sp"
+            android:textColor="#4CAF50"
+            android:textStyle="bold"
+            android:layout_marginBottom="20dp" />
+
+        <!-- Experience Input -->
+        <EditText
+            android:id="@+id/etExperience"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Experience (in years)"
+            android:textColor="#333333"
+            android:textColorHint="#888888"
+            android:inputType="numberDecimal"
+            android:padding="16dp"
+            android:layout_marginTop="16dp" />
+
+        <!-- Availability Time -->
+        <EditText
+            android:id="@+id/etAvailabilityTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Availability Time"
+            android:textColor="#333333"
+            android:textColorHint="#888888"
+            android:inputType="text"
+            android:padding="16dp"
+            android:layout_marginTop="16dp" />
+
+        <!-- Clinic Address -->
+        <EditText
+            android:id="@+id/etClinicAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Clinic Address"
+            android:textColor="#333333"
+            android:textColorHint="#888888"
+            android:padding="16dp"
+            android:layout_marginTop="16dp" />
+
+        <!-- Clinic Name -->
+        <EditText
+            android:id="@+id/etClinicName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Clinic Name"
+            android:textColor="#333333"
+            android:textColorHint="#888888"
+            android:padding="16dp"
+            android:layout_marginTop="16dp" />
+
+        <!-- Available for Emergency Call (Radio Button) -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Available for Emergency Call?"
+            android:textColor="#333333"
+            android:textSize="16sp" />
+
+        <RadioGroup
+            android:id="@+id/radioGroupEmergency"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+            <RadioButton
+                android:id="@+id/rbAvailableYes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Yes"
+                android:textSize="16sp" />
+            <RadioButton
+                android:id="@+id/rbAvailableNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No"
+                android:textSize="16sp" />
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/btnVetSignup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Submit"
+            android:textColor="@color/black"
+            android:backgroundTint="@color/primary"
+            android:layout_marginTop="24dp" />
+    </LinearLayout>
+</ScrollView>

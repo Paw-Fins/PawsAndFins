@@ -186,10 +186,6 @@
             android:textColor="?attr/colorOnBackground" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Upload Image Option (on the leftmost side) -->
-
-    <!-- Image Preview (on the rightmost side) -->
-
     <!-- Sign Up Button -->
 
     <!-- Sign Up Row -->

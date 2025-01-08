@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f4f4f4">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/tvTrainerSignup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trainer Sign Up"
+            android:textSize="26sp"
+            android:textColor="#4CAF50"
+            android:textStyle="bold"
+            android:layout_marginBottom="20dp" />
+
+        <!-- Experience Input -->
+        <EditText
+            android:id="@+id/etExperience"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Experience (in years)"
+            android:textColor="#333333"
+            android:textColorHint="#888888"
+            android:inputType="numberDecimal"
+            android:padding="16dp"
+            android:layout_marginTop="16dp" />
+
+        <!-- Availability Time -->
+        <EditText
+            android:id="@+id/etAvailability"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Availability Time"
+            android:textColor="#333333"
+            android:textColorHint="#888888"
+            android:inputType="text"
+            android:padding="16dp"
+            android:layout_marginTop="16dp" />
+
+        <!-- Physical Address -->
+        <EditText
+            android:id="@+id/etPhysicalAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Physical Address"
+            android:textColor="#333333"
+            android:textColorHint="#888888"
+            android:padding="16dp"
+            android:layout_marginTop="16dp" />
+
+        <Button
+            android:id="@+id/btnTrainerSignup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sign Up"
+            android:textColor="@color/black"
+            android:backgroundTint="@color/primary"
+            android:layout_marginTop="24dp" />
+    </LinearLayout>
+</ScrollView>
