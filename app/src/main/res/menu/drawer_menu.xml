@@ -13,9 +13,10 @@
         android:id="@+id/nav_vet"
         android:icon="@drawable/vet"
         android:title="Vets" />
-<!--    <item-->
-<!--        android:id="@+id/nav_doctor"-->
-<!--        android:title="Doctors" />-->
+    <item
+        android:id="@+id/nav_trainer"
+        android:icon="@drawable/train"
+        android:title="Trainers" />
     <item
         android:id="@+id/nav_groomer"
         android:icon="@drawable/gromming"

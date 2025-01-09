@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity() {
                     loadFragment(ProductFragment())
                     true
                 }
-                R.id.navigation_slider -> { // Menu icon clicked
+                R.id.navigation_slider -> {
                     openDrawer()
                     true
                 }
@@ -106,10 +106,11 @@ class MainActivity : AppCompatActivity() {
                     drawerLayout.closeDrawer(Gravity.RIGHT)
                     true
                 }
-//                R.id.nav_doctor -> {
-//                    drawerLayout.closeDrawer(Gravity.RIGHT)
-//                    true
-//                }
+                R.id.nav_trainer -> {
+                    loadFragment(TrainerFragment())
+                    drawerLayout.closeDrawer(Gravity.RIGHT)
+                    true
+                }
                 R.id.nav_groomer -> {
                     loadFragment(GroomerFragment())
                     drawerLayout.closeDrawer(Gravity.RIGHT)

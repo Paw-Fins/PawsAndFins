@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".groomer">
+    tools:context=".trainer">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,10 +16,10 @@
             android:textSize="18sp"
             android:textStyle="bold"
             android:layout_marginHorizontal="16dp"
-            android:text="Groomers Near You" />
+            android:text="Trainers Near You" />
 
         <LinearLayout
-            android:id="@+id/groomerContainer"
+            android:id="@+id/trainerContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"

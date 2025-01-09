@@ -1,5 +1,6 @@
 package com.example.myapp
 
+import VetContactFragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,7 +8,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.google.firebase.firestore.FirebaseFirestore
 
 // Data class to represent an NGO
 data class NGO(
@@ -20,6 +23,7 @@ data class NGO(
 class NGOFragment : Fragment() {
 
     private lateinit var ngoContainer: LinearLayout
+    private val firestore = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,20 +38,34 @@ class NGOFragment : Fragment() {
 
         ngoContainer = view.findViewById(R.id.ngoContainer)
 
-        // Create a list of NGOs
-        val ngos = listOf(
-            NGO("1", "Helping Hands", "123 NGO Street, City, Country", "John Doe"),
-            NGO("2", "Care for All", "456 Charity Ave, City, Country", "Jane Smith"),
-            NGO("3", "Hope Foundation", "789 Hope Rd, City, Country", "Alice Johnson"),
-            NGO("4", "Community Support", "321 Community St, City, Country", "Bob Brown")
-        )
-
-        // Populate the LinearLayout with NGO data
-        for (ngo in ngos) {
-            addNGOView(ngo)
-        }
+        // Fetch data from Firestore
+        fetchNGOData()
 
         return view
+    }
+
+    private fun fetchNGOData() {
+        firestore.collection("users")
+            .whereEqualTo("role", "NGO") // Filter documents by role "NGO"
+            .get()
+            .addOnSuccessListener { result ->
+                if (result.isEmpty) {
+                    Toast.makeText(requireContext(), "No NGOs found.", Toast.LENGTH_SHORT).show()
+                } else {
+                    for (document in result) {
+                        val id = document.id
+                        val name = document.getString("name") ?: "Unknown"
+                        val address = document.getString("address") ?: "Not Available"
+                        val ownerName = document.getString("ngoName") ?: "Unknown"
+
+                        // Add each NGO data to the view
+                        addNGOView(NGO(id, name, address, ownerName))
+                    }
+                }
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(requireContext(), "Error fetching data: ${exception.message}", Toast.LENGTH_SHORT).show()
+            }
     }
 
     private fun addNGOView(ngo: NGO) {
@@ -62,8 +80,12 @@ class NGOFragment : Fragment() {
         serviceAddressTextView.text = ngo.address
         serviceOwnerNameTextView.text = ngo.ownerName
 
+        // Ensure "Contact NGO" option is always visible and functional
+        contactButton.text = "Contact NGO"
         contactButton.setOnClickListener {
-            // Handle contact action here
+            // Show the detailed contact page in a BottomSheet
+            val contactFragment = VetContactFragment()
+            contactFragment.show(childFragmentManager, contactFragment.tag)
         }
 
         // Set layout parameters to add top margin
