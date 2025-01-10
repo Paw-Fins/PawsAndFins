@@ -31,7 +31,7 @@ class LoginScreen : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        firebaseHelperLogin = FirebaseHelperLogin(requireContext())  // Initialize FirebaseHelperLogin
+        firebaseHelperLogin = FirebaseHelperLogin(requireContext())
     }
 
     override fun onCreateView(

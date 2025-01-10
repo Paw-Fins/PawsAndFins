@@ -113,12 +113,11 @@ class AppointmentAdapter(private val appointments: List<Appointment>) :
             timeSlotTextView.text = appointment.timeSlot
             problemDescTextView.text = appointment.problemDesc
 
-            // Set onClick listener for "View More" button
             viewMoreButton.setOnClickListener {
                 val transaction = itemView.context as AppCompatActivity
                 transaction.supportFragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, AppointmentDetailsFragment())
-                    .addToBackStack(null) // Allow back navigation
+                    .addToBackStack(null)
                     .commit()
             }
         }

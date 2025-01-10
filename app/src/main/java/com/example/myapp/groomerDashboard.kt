@@ -36,41 +36,32 @@ class GroomerDashboard : Fragment() {
         groomingAppointmentsRecyclerView = view.findViewById(R.id.productContainer)
         groomingAppointmentsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        // Fetch the current groomer's appointments
+        // Populate with dummy data for testing
         fetchGroomerAppointments()
 
         return view
     }
 
     private fun fetchGroomerAppointments() {
-        val currentUser = auth.currentUser
+        // Adding dummy data to the list for now
+        groomingAppointmentsList.clear() // Clear any existing data
 
-        if (currentUser != null) {
-            val userId = currentUser.uid
+        val dummyAppointments = listOf(
+            GroomingAppointment("Bella", "John Doe", "10:00 AM - 11:00 AM", "Haircut"),
+            GroomingAppointment("Max", "Jane Smith", "12:00 PM - 1:00 PM", "Nail Trim"),
+            GroomingAppointment("Charlie", "Robert Brown", "2:00 PM - 3:00 PM", "Bath and Groom"),
+            GroomingAppointment("Lucy", "Emily White", "3:30 PM - 4:30 PM", "Teeth Cleaning")
+        )
 
-            firestore.collection("appointments")
-                .whereEqualTo("groomerId", userId) // Match appointments where groomerId == current user's ID
-                .get()
-                .addOnSuccessListener { documents ->
-                    for (document in documents) {
-                        val petName = document.getString("petName") ?: "No pet name"
-                        val ownerName = document.getString("parentName") ?: "No owner name"
-                        val timeSlot = document.getString("timeSlot") ?: "No time slot"
-                        val groomingService = document.getString("groomingService") ?: "No grooming service"
+        // Add the dummy data to the list
+        groomingAppointmentsList.addAll(dummyAppointments)
 
-                        // Create a GroomingAppointment object and add it to the list
-                        val groomingAppointment = GroomingAppointment(petName, ownerName, timeSlot, groomingService)
-                        groomingAppointmentsList.add(groomingAppointment)
-                    }
-                    // Update RecyclerView with the adapter
-                    groomingAppointmentsRecyclerView.adapter = GroomingAppointmentAdapter(groomingAppointmentsList)
-                }
-                .addOnFailureListener { exception ->
-                    Log.e("GroomerDashboard", "Error fetching grooming appointments: ", exception)
-                }
-        } else {
-            Log.w("GroomerDashboard", "No user is logged in")
-        }
+        // Update the RecyclerView
+        groomingAppointmentsRecyclerView.adapter = GroomingAppointmentAdapter(groomingAppointmentsList)
+        groomingAppointmentsRecyclerView.adapter?.notifyDataSetChanged()
+
+        // Log the number of appointments
+        Log.d("GroomerDashboard", "Dummy appointments list size: ${groomingAppointmentsList.size}")
     }
 }
 

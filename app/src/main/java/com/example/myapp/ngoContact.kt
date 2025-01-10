@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.example.myapp.NgoAppointmentFragment
 import com.example.myapp.R
 
 class NgoctFragment : Fragment() {
