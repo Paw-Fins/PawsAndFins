@@ -83,9 +83,6 @@ class NGOFragment : Fragment() {
         // Ensure "Contact NGO" option is always visible and functional
         contactButton.text = "Contact NGO"
         contactButton.setOnClickListener {
-            // Show the detailed contact page in a BottomSheet
-            val contactFragment = VetContactFragment()
-            contactFragment.show(childFragmentManager, contactFragment.tag)
         }
 
         // Set layout parameters to add top margin

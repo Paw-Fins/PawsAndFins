@@ -1,8 +1,10 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:padding="16dp"
-    android:background="#FFFFFF">
+    android:background="#FFFFFF"
+    tools:context=".VetAppointmentFragment">
 
     <LinearLayout
         android:orientation="vertical"
@@ -11,12 +13,12 @@
 
         <!-- Pet Information Title -->
         <TextView
-            android:text="Pet Appointment Details"
-            android:textSize="20sp"
-            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="16dp"
+            android:text="Vet Appointment"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <!-- Pet Name -->
         <TextView
@@ -24,15 +26,15 @@
             android:textSize="18sp"
             android:textStyle="bold"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
         <TextView
-            android:id="@+id/petName"
+            android:id="@+id/txtpetName"
             android:text="Max"
             android:textSize="16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="16dp" />
 
         <!-- Pet Age -->
         <TextView
@@ -40,15 +42,15 @@
             android:textSize="18sp"
             android:textStyle="bold"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
         <TextView
-            android:id="@+id/petAge"
+            android:id="@+id/txtpetAge"
             android:text="5 years"
             android:textSize="16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="16dp" />
 
         <!-- Pet Breed -->
         <TextView
@@ -56,15 +58,15 @@
             android:textSize="18sp"
             android:textStyle="bold"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
         <TextView
-            android:id="@+id/petBreed"
+            android:id="@+id/txtpetBreed"
             android:text="Golden Retriever"
             android:textSize="16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="16dp" />
 
         <!-- Pet Gender -->
         <TextView
@@ -72,15 +74,15 @@
             android:textSize="18sp"
             android:textStyle="bold"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
         <TextView
-            android:id="@+id/petGender"
+            android:id="@+id/txtpetGender"
             android:text="Male"
             android:textSize="16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="16dp" />
 
         <!-- Appointment Date -->
         <TextView
@@ -88,15 +90,15 @@
             android:textSize="18sp"
             android:textStyle="bold"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
         <TextView
-            android:id="@+id/appointmentDate"
+            android:id="@+id/txtappointmentDate"
             android:text="15 Jan 2025"
             android:textSize="16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="16dp" />
 
         <!-- Customer Phone Number -->
         <TextView
@@ -104,15 +106,63 @@
             android:textSize="18sp"
             android:textStyle="bold"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
         <TextView
-            android:id="@+id/customerPhoneNumber"
+            android:id="@+id/txtcustomerPhoneNumber"
             android:text="+1 234 567 890"
             android:textSize="16sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="16dp" />
+
+        <!-- Parent Name -->
+        <TextView
+            android:text="Parent Name:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/txtparentName"
+            android:text="John Doe"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Time Slot -->
+        <TextView
+            android:text="Time Slot:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/txttimeSlot"
+            android:text="10:00 AM - 11:00 AM"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Problem Description -->
+        <TextView
+            android:text="Problem Description:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/txtproblemDescription"
+            android:text="Routine check-up"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
 
         <!-- Accept and Decline Buttons -->
         <LinearLayout

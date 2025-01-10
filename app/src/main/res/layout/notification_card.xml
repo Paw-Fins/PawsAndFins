@@ -3,17 +3,18 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="wrap_content">
+
     <!-- Card Background -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:padding="8dp"
         android:layout_height="200dp"
         android:layout_marginTop="10dp"
         android:layout_marginHorizontal="16dp"
+        android:padding="8dp"
+        android:orientation="horizontal"
         android:background="@drawable/border_container"
-        android:orientation="horizontal">
+        android:layout_marginBottom="16dp">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -21,32 +22,45 @@
             android:orientation="vertical"
             android:layout_weight="1">
 
+            <!-- Pet Name -->
             <TextView
                 android:id="@+id/appointment_petname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Pet Name" />
+                android:text="Pet Name"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black" />
 
+            <!-- User Name -->
             <TextView
                 android:id="@+id/appointment_username"
                 android:layout_width="wrap_content"
-                android:layout_marginTop="12dp"
                 android:layout_height="wrap_content"
-                android:text="User name" />
+                android:layout_marginTop="12dp"
+                android:text="User name"
+                android:textSize="14sp"
+                android:textColor="@android:color/black" />
 
+            <!-- Time Slot -->
             <TextView
                 android:id="@+id/appointment_timeSlot"
                 android:layout_width="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_height="wrap_content"
-                android:text="Time slot" />
+                android:layout_marginTop="10dp"
+                android:text="Time Slot"
+                android:textSize="14sp"
+                android:textColor="@android:color/darker_gray" />
 
+            <!-- Problem Description -->
             <TextView
                 android:id="@+id/appointment_problemdes"
                 android:layout_width="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_height="wrap_content"
-                android:text="problem des" />
+                android:layout_marginTop="10dp"
+                android:text="Problem description"
+                android:textSize="14sp"
+                android:textColor="@android:color/darker_gray" />
 
             <!-- Spacer to push the button to the bottom -->
             <Space
@@ -54,14 +68,15 @@
                 android:layout_height="0dp"
                 android:layout_weight="1" />
 
+            <!-- View More Button -->
             <Button
-                android:id="@+id/buyNowButton"
+                android:id="@+id/viewMoreButton"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginBottom="8dp"
                 android:backgroundTint="#BBD4F6"
-                android:text="View more"
-                android:textColor="@color/black"
+                android:text="View More"
+                android:textColor="@android:color/black"
                 android:textStyle="bold"
                 android:textSize="10sp" />
         </LinearLayout>

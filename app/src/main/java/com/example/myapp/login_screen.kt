@@ -96,8 +96,7 @@ class LoginScreen : Fragment() {
             editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cross_open_eye, 0)
         }
         editText.setSelection(editText.text?.length ?: 0)
-    }
-    private fun collectUser() {
+    }private fun collectUser() {
         val email = emailInput.text.toString().trim()
         val password = passwordInput.text.toString().trim()
 
@@ -109,6 +108,7 @@ class LoginScreen : Fragment() {
             ).show()
             return
         }
+
         // Check for admin login
         if (email == adminCredentials.adminEmail && password == adminCredentials.adminPassword) {
             Toast.makeText(
@@ -118,16 +118,40 @@ class LoginScreen : Fragment() {
             ).show()
             navigateToAdminScreen()
         } else {
-            // Use FirebaseHelperLogin for regular user login
-            firebaseHelperLogin.loginUser(email, password, {
-                Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
-                navigateToHome()
+            // Log in using Firebase authentication
+            firebaseHelperLogin.loginUser(email, password, { firebaseUser ->
+                if (firebaseUser != null) {
+                    Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
+                    val userId = firebaseUser.uid
+
+                    // Fetch the user's role from Firestore
+                    FirebaseFirestore.getInstance().collection("users")
+                        .document(userId)
+                        .get()
+                        .addOnSuccessListener { document ->
+                            if (document.exists()) {
+                                val userRole = document.getString("role") // Assuming "role" field exists in the user document
+                                when (userRole) {
+                                    "User" -> navigateToHome()  // Navigate to Home screen if role is "User"
+                                    else -> navigateToService()  // For any other role, navigate to Service Dashboard
+                                }
+                            } else {
+                                // Document not found
+                                Toast.makeText(requireContext(), "User document not found!", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                        .addOnFailureListener { exception ->
+                            // Handle error while fetching the user role
+                            Toast.makeText(requireContext(), "Error fetching user role: ${exception.message}", Toast.LENGTH_SHORT).show()
+                        }
+                }
             }, { errorMessage ->
-                // Show error message if login fails
                 Toast.makeText(requireContext(), "Login failed: $errorMessage", Toast.LENGTH_SHORT).show()
             })
         }
     }
+
+
 
     private fun navigateToAdminScreen() {
         try {
@@ -156,4 +180,17 @@ class LoginScreen : Fragment() {
         transaction.addToBackStack(null)
         transaction.commit()
     }
+
+    private fun navigateToService() {
+        val homeScreenFragment = ServiceDashboard()
+        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+        val currentFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.fragment_container)
+        if (currentFragment != null) {
+            transaction.hide(currentFragment)
+        }
+        transaction.replace(R.id.fragment_container, homeScreenFragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
+    }
+
 }

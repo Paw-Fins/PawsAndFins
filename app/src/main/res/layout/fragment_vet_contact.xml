@@ -1,76 +1,137 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_gravity="bottom"
-    android:layout_marginTop="16dp"
-    android:layout_marginBottom="16dp"
+    android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_weight="0.97">
+    android:padding="16dp">
 
-    <TextView
-        android:id="@+id/serviceOwnerName"
-        android:layout_width="wrap_content"
+    <!-- Container for Vet Cards -->
+    <LinearLayout
+        android:id="@+id/vetContainer"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Owner Name"
-        android:textSize="16sp"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        android:orientation="vertical" />
 
-    <TextView
-        android:id="@+id/serviceAddress"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/detailsContainer"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Address"
-        android:textSize="14sp"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintTop_toBottomOf="@id/serviceOwnerName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        android:layout_marginTop="90dp"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/available"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Availability"
-        android:textSize="14sp"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintTop_toBottomOf="@id/serviceAddress"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        <!-- Vet Profile Picture -->
+        <ImageView
+            android:id="@+id/vetProfileImage"
+            android:layout_width="181dp"
+            android:layout_height="172dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/profile_circle"
+            android:contentDescription="Vet Profile Picture"
+            android:scaleType="centerCrop" />
 
-    <Button
-        android:id="@+id/callDoctorButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Call Doctor"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintTop_toBottomOf="@id/available"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/bookAppointmentButton"
-        app:layout_constraintWidth_percent="0.48"/>
+        <!-- Vet Name -->
+        <TextView
+            android:id="@+id/vetName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="8dp"
+            android:text="Dr. Sarah Johnson"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/bookAppointmentButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Book Appointment"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="8dp"
-        app:layout_constraintTop_toBottomOf="@id/available"
-        app:layout_constraintStart_toEndOf="@id/callDoctorButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintWidth_percent="0.48"/>
+        <!-- Vet Specialty -->
+        <TextView
+            android:id="@+id/vetSpecialty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="8dp"
+            android:text="Specialty: Small Animal Medicine"
+            android:textColor="#757575"
+            android:textSize="14sp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- Vet Contact Info -->
+        <TextView
+            android:id="@+id/vetContactInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="16dp"
+            android:text="Contact: +1 234 567 890"
+            android:textColor="#757575"
+            android:textSize="14sp" />
+
+        <!-- Address -->
+        <TextView
+            android:id="@+id/vetAddressLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Address"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:id="@+id/vetAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="123 Veterinary Lane, Pet City, PC 12345"
+            android:textColor="#757575"
+            android:textSize="14sp" />
+
+        <!-- Services -->
+        <TextView
+            android:id="@+id/vetServicesLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Services Offered"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:id="@+id/vetServices"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="- General Checkups\n- Vaccinations\n- Surgery\n- Emergency Care"
+            android:textColor="#757575"
+            android:textSize="14sp" />
+
+        <!-- Action Buttons -->
+        <LinearLayout
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/bookAppointmentButton"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="#BBD4F6"
+                android:text="Book Appointment"
+                android:textColor="#000000" />
+
+            <Button
+                android:id="@+id/callVetButton"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:backgroundTint="#BBD4F6"
+                android:text="Call Vet"
+                android:textColor="#000000" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

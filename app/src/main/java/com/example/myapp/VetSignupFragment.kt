@@ -4,7 +4,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
-import com.example.myapp.HomeScreenFragment
 import com.example.myapp.ImageUploadFragment
 import com.example.myapp.R
 import com.google.firebase.auth.FirebaseAuth
@@ -16,6 +15,8 @@ class VetSignUpFragment : Fragment() {
     private lateinit var etAvailabilityTime: EditText
     private lateinit var etClinicAddress: EditText
     private lateinit var etClinicName: EditText
+    private lateinit var etSpeciality: EditText
+    private lateinit var etServices: EditText
     private lateinit var radioGroupEmergency: RadioGroup
     private lateinit var btnVetSignup: Button
 
@@ -33,6 +34,8 @@ class VetSignUpFragment : Fragment() {
         etAvailabilityTime = rootView.findViewById(R.id.etAvailabilityTime)
         etClinicAddress = rootView.findViewById(R.id.etClinicAddress)
         etClinicName = rootView.findViewById(R.id.etClinicName)
+        etSpeciality = rootView.findViewById(R.id.etSpeciality)
+        etServices = rootView.findViewById(R.id.etServices)
         radioGroupEmergency = rootView.findViewById(R.id.radioGroupEmergency)
         btnVetSignup = rootView.findViewById(R.id.btnVetSignup)
 
@@ -51,6 +54,8 @@ class VetSignUpFragment : Fragment() {
         val availabilityTime = etAvailabilityTime.text.toString()
         val clinicAddress = etClinicAddress.text.toString()
         val clinicName = etClinicName.text.toString()
+        val speciality = etSpeciality.text.toString()
+        val services = etServices.text.toString()
         val isEmergencyAvailable = when (radioGroupEmergency.checkedRadioButtonId) {
             R.id.rbAvailableYes -> true
             R.id.rbAvailableNo -> false
@@ -58,7 +63,9 @@ class VetSignUpFragment : Fragment() {
         }
 
         // Validate input data
-        if (experience.isEmpty() || availabilityTime.isEmpty() || clinicAddress.isEmpty() || clinicName.isEmpty()) {
+        if (experience.isEmpty() || availabilityTime.isEmpty() || clinicAddress.isEmpty() ||
+            clinicName.isEmpty() || speciality.isEmpty() || services.isEmpty()
+        ) {
             Toast.makeText(requireContext(), "Please fill all fields", Toast.LENGTH_SHORT).show()
             return
         }
@@ -73,6 +80,8 @@ class VetSignUpFragment : Fragment() {
                 "availabilityTime" to availabilityTime,
                 "clinicAddress" to clinicAddress,
                 "clinicName" to clinicName,
+                "speciality" to speciality,
+                "services" to services,
                 "isEmergencyAvailable" to isEmergencyAvailable
             )
 
@@ -89,17 +98,16 @@ class VetSignUpFragment : Fragment() {
         } ?: run {
             Toast.makeText(requireContext(), "User not authenticated", Toast.LENGTH_SHORT).show()
         }
-
     }
 
     private fun navigateToImage() {
-        val homeScreenFragment = ImageUploadFragment()
+        val imageUploadFragment = ImageUploadFragment()
         val transaction = requireActivity().supportFragmentManager.beginTransaction()
         val currentFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.fragment_container)
         if (currentFragment != null) {
             transaction.hide(currentFragment)
         }
-        transaction.replace(R.id.fragment_container, homeScreenFragment)
+        transaction.replace(R.id.fragment_container, imageUploadFragment)
         transaction.addToBackStack(null)
         transaction.commit()
     }

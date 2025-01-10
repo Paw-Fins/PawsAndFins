@@ -1,8 +1,10 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:padding="16dp"
-    android:background="#FFFFFF">
+    android:background="#FFFFFF"
+    tools:context=".VetAppointmentFragment">
 
     <LinearLayout
         android:orientation="vertical"
@@ -109,6 +111,54 @@
         <EditText
             android:id="@+id/customerPhoneNumber"
             android:hint="Enter Customer Phone Number"
+            android:textSize="16sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Parent Name -->
+        <TextView
+            android:text="Parent Name:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/parentName"
+            android:hint="Enter Parent's Name"
+            android:textSize="16sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Time Slot -->
+        <TextView
+            android:text="Time Slot:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/timeSlot"
+            android:hint="Enter Time Slot"
+            android:textSize="16sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Problem Description -->
+        <TextView
+            android:text="Problem Description:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/problemDescription"
+            android:hint="Enter Problem Description"
             android:textSize="16sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

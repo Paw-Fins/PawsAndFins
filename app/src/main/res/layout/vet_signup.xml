@@ -68,6 +68,28 @@
             android:padding="16dp"
             android:layout_marginTop="16dp" />
 
+        <!-- Speciality -->
+        <EditText
+            android:id="@+id/etSpeciality"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Speciality"
+            android:textColor="#333333"
+            android:textColorHint="#888888"
+            android:padding="16dp"
+            android:layout_marginTop="16dp" />
+
+        <!-- Services -->
+        <EditText
+            android:id="@+id/etServices"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Services (comma-separated)"
+            android:textColor="#333333"
+            android:textColorHint="#888888"
+            android:padding="16dp"
+            android:layout_marginTop="16dp" />
+
         <!-- Available for Emergency Call (Radio Button) -->
         <TextView
             android:layout_width="wrap_content"

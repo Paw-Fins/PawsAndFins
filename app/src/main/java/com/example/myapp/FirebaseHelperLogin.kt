@@ -2,6 +2,7 @@ package com.example.myapp
 
 import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 
 class FirebaseHelperLogin(private val context: Context) {
@@ -9,47 +10,31 @@ class FirebaseHelperLogin(private val context: Context) {
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
 
-    // Function to log in the user
     fun loginUser(
         email: String,
         password: String,
-        onSuccess: () -> Unit,
+        onSuccess: (FirebaseUser) -> Unit,  // Pass FirebaseUser to callback
         onFailure: (String) -> Unit
     ) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    val userId = auth.currentUser?.uid
-                    if (userId != null) {
-                        // Check if the user is banned
-                        checkIfUserIsBanned(userId, { isBanned ->
-                            if (isBanned) {
-                                // User is banned, sign out and notify
-                                auth.signOut()
-                                onFailure("Your account is banned. Please contact support.")
-                            } else {
-                                // User is not banned, proceed with login
-                                onSuccess()
-                            }
-                        }, { errorMessage ->
-                            // Failed to check the banned status
-                            auth.signOut()
-                            onFailure(errorMessage)
-                        })
+                    val user = auth.currentUser
+                    if (user != null) {
+                        onSuccess(user)  // Pass the FirebaseUser object on success
                     } else {
-                        onFailure("User ID is null. Unable to verify banned status.")
+                        onFailure("User not found")
                     }
                 } else {
-                    // Login failed, handle the error
                     val errorMessage = task.exception?.localizedMessage ?: "Unknown error"
                     onFailure(errorMessage)
                 }
             }
             .addOnFailureListener { exception ->
-                // Handle any failures (e.g., network failure)
                 onFailure(exception.localizedMessage ?: "Network error")
             }
     }
+
 
     private fun checkIfUserIsBanned(
         userId: String,

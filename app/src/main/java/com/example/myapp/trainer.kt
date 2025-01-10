@@ -87,9 +87,6 @@ class TrainerFragment : Fragment() {
         // Ensure "Call Trainer" option is always visible and functional
         contactButton.text = "Call Trainer"
         contactButton.setOnClickListener {
-            // Show the detailed contact page in a BottomSheet
-            val contactFragment = VetContactFragment()
-            contactFragment.show(childFragmentManager, contactFragment.tag)
         }
 
         // Set layout parameters to add top margin

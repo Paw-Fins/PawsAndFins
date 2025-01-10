@@ -1,7 +1,6 @@
 package com.example.myapp
 
 import VetContactFragment
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -20,7 +19,10 @@ data class Vet(
     val address: String,
     val ownerName: String,
     val available: String,
-    val isEmergencyAvailable: Boolean // Add the emergency availability flag
+    val specialty: String, // Added specialty
+    val contact: String, // Added contact
+    val services: String, // Added services
+    val isEmergencyAvailable: Boolean
 )
 
 class VetFragment : Fragment() {
@@ -61,10 +63,13 @@ class VetFragment : Fragment() {
                         val address = document.getString("clinicAddress") ?: ""
                         val ownerName = document.getString("name") ?: ""
                         val available = document.getString("availabilityTime") ?: ""
+                        val specialty = document.getString("specialty") ?: ""
+                        val contact = document.getString("mobile") ?: ""
+                        val services = document.getString("services") ?: ""
                         val isEmergencyAvailable = document.getBoolean("isEmergencyAvailable") ?: false
 
                         // Add each vet data to the view
-                        addVetView(Vet(id, name, address, ownerName, available, isEmergencyAvailable))
+                        addVetView(Vet(id, name, address, ownerName, available, specialty, contact, services, isEmergencyAvailable))
                     }
                 }
             }
@@ -89,9 +94,7 @@ class VetFragment : Fragment() {
 
         // Handle contact button click
         contactButton.setOnClickListener {
-            // Show the detailed contact page in a BottomSheet
-            val contactFragment = VetContactFragment()
-            contactFragment.show(childFragmentManager, contactFragment.tag)
+            navigateToContact(vet)
         }
 
         // Set layout parameters to add top margin
@@ -104,5 +107,29 @@ class VetFragment : Fragment() {
 
         // Add the inflated view to the LinearLayout
         vetContainer.addView(vetView)
+    }
+
+    private fun navigateToContact(vet: Vet) {
+        val homeScreenFragment = VetContactFragment()
+        val bundle = Bundle().apply {
+            putString("vetId", vet.id)
+            putString("doctorName", vet.name)
+            putString("doctorSpecialty", vet.specialty)  // Passing specialty
+            putString("doctorContact", vet.contact)  // Passing contact info
+            putString("doctorAddress", vet.address)
+            putString("doctorServices", vet.services)  // Passing services info
+            putBoolean("isEmergencyAvailable", vet.isEmergencyAvailable)
+        }
+
+        homeScreenFragment.arguments = bundle
+
+        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+        val currentFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.fragment_container)
+        if (currentFragment != null) {
+            transaction.hide(currentFragment)
+        }
+        transaction.replace(R.id.fragment_container, homeScreenFragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
     }
 }
