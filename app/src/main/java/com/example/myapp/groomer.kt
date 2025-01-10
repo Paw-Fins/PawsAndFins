@@ -1,5 +1,7 @@
 package com.example.myapp
 
+import GroomerAppointmentFragment
+import GroomerContactFragment
 import VetContactFragment
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -87,6 +89,8 @@ class GroomerFragment : Fragment() {
         // Ensure "Call" option is always visible and functional
         contactButton.text = "Call Groomer"
         contactButton.setOnClickListener {
+            // Send the groomer's data to another fragment or activity
+            navigateToContact(groomer)
         }
 
         // Set layout parameters to add top margin
@@ -99,5 +103,27 @@ class GroomerFragment : Fragment() {
 
         // Add the inflated view to the LinearLayout
         groomerContainer.addView(groomerView)
+    }
+
+    private fun navigateToContact(groomer: Groomer) {
+        val homeScreenFragment = GroomerContactFragment()
+        val bundle = Bundle().apply {
+            putString("groomerId", groomer.id) // Pass groomer ID
+            putString("groomerShopName", groomer.shopName) // Pass shop name
+            putString("groomerLocation", groomer.location) // Pass location
+            putString("groomerOwnerName", groomer.ownerName) // Pass owner name
+            putString("groomerAvailability", groomer.availabilityTime) // Pass availability
+        }
+
+        homeScreenFragment.arguments = bundle
+
+        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+        val currentFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.fragment_container)
+        if (currentFragment != null) {
+            transaction.hide(currentFragment)
+        }
+        transaction.replace(R.id.fragment_container, homeScreenFragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
     }
 }

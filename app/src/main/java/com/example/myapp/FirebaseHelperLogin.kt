@@ -35,7 +35,6 @@ class FirebaseHelperLogin(private val context: Context) {
             }
     }
 
-
     private fun checkIfUserIsBanned(
         userId: String,
         onSuccess: (Boolean) -> Unit,

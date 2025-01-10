@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.messaging.FirebaseMessaging
 
 class LoginScreen : Fragment() {
 
@@ -49,7 +50,6 @@ class LoginScreen : Fragment() {
                 }
             }
             false
-
         }
 
         (requireActivity() as MainActivity).showBottomNavigation(false)
@@ -87,6 +87,7 @@ class LoginScreen : Fragment() {
 
         return view
     }
+
     private fun togglePasswordVisibility(editText: TextInputEditText) {
         if (editText.inputType == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) {
             editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
@@ -96,7 +97,9 @@ class LoginScreen : Fragment() {
             editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cross_open_eye, 0)
         }
         editText.setSelection(editText.text?.length ?: 0)
-    }private fun collectUser() {
+    }
+
+    private fun collectUser() {
         val email = emailInput.text.toString().trim()
         val password = passwordInput.text.toString().trim()
 
@@ -121,6 +124,11 @@ class LoginScreen : Fragment() {
             // Log in using Firebase authentication
             firebaseHelperLogin.loginUser(email, password, { firebaseUser ->
                 if (firebaseUser != null) {
+                    // Fetch the FCM token and store it in Firestore
+                    FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
+                        storeFcmToken(firebaseUser.uid, token)
+                    }
+
                     Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
                     val userId = firebaseUser.uid
 
@@ -133,7 +141,13 @@ class LoginScreen : Fragment() {
                                 val userRole = document.getString("role") // Assuming "role" field exists in the user document
                                 when (userRole) {
                                     "User" -> navigateToHome()  // Navigate to Home screen if role is "User"
-                                    else -> navigateToService()  // For any other role, navigate to Service Dashboard
+                                    "Doctor" -> navigateToDoctorDashboard()  // Navigate to Doctor Dashboard
+                                    "Groomer" -> navigateToGroomerDashboard()  // Navigate to Groomer Dashboard
+                                    "Trainer" -> navigateToTrainerDashboard()  // Navigate to Trainer Dashboard
+                                    "Ngo" -> navigateToNgoDashboard()  // Navigate to Ngo Dashboard
+                                    else -> {
+                                        Toast.makeText(requireContext(), "Role not recognized.", Toast.LENGTH_SHORT).show()
+                                    }
                                 }
                             } else {
                                 // Document not found
@@ -151,7 +165,17 @@ class LoginScreen : Fragment() {
         }
     }
 
-
+    private fun storeFcmToken(userId: String, token: String) {
+        FirebaseFirestore.getInstance().collection("users")
+            .document(userId)
+            .update("fcmToken", token)
+            .addOnSuccessListener {
+                Log.d("LoginScreen", "FCM token stored successfully.")
+            }
+            .addOnFailureListener { e ->
+                Log.e("LoginScreen", "Error storing FCM token: ${e.message}")
+            }
+    }
 
     private fun navigateToAdminScreen() {
         try {
@@ -181,16 +205,51 @@ class LoginScreen : Fragment() {
         transaction.commit()
     }
 
-    private fun navigateToService() {
-        val homeScreenFragment = ServiceDashboard()
+    private fun navigateToDoctorDashboard() {
+        val doctorDashboardFragment = ServiceDashboard()
         val transaction = requireActivity().supportFragmentManager.beginTransaction()
         val currentFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.fragment_container)
         if (currentFragment != null) {
             transaction.hide(currentFragment)
         }
-        transaction.replace(R.id.fragment_container, homeScreenFragment)
+        transaction.replace(R.id.fragment_container, doctorDashboardFragment)
         transaction.addToBackStack(null)
         transaction.commit()
     }
 
+    private fun navigateToGroomerDashboard() {
+        val groomerDashboardFragment = GroomerDashboard()
+        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+        val currentFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.fragment_container)
+        if (currentFragment != null) {
+            transaction.hide(currentFragment)
+        }
+        transaction.replace(R.id.fragment_container, groomerDashboardFragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
+    }
+
+    private fun navigateToTrainerDashboard() {
+        val trainerDashboardFragment = GroomerDashboard()
+        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+        val currentFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.fragment_container)
+        if (currentFragment != null) {
+            transaction.hide(currentFragment)
+        }
+        transaction.replace(R.id.fragment_container, trainerDashboardFragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
+    }
+
+    private fun navigateToNgoDashboard() {
+        val ngoDashboardFragment = GroomerDashboard()
+        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+        val currentFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.fragment_container)
+        if (currentFragment != null) {
+            transaction.hide(currentFragment)
+        }
+        transaction.replace(R.id.fragment_container, ngoDashboardFragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
+    }
 }

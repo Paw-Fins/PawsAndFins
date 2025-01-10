@@ -83,6 +83,7 @@ class NGOFragment : Fragment() {
         // Ensure "Contact NGO" option is always visible and functional
         contactButton.text = "Contact NGO"
         contactButton.setOnClickListener {
+
         }
 
         // Set layout parameters to add top margin

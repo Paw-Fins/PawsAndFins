@@ -16,6 +16,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.button.MaterialButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.messaging.FirebaseMessaging
 
 class SignUpScreen : Fragment() {
 
@@ -112,23 +113,34 @@ class SignUpScreen : Fragment() {
                     val user = auth.currentUser
                     val role = roleSpinner.selectedItem.toString()
 
-                    // Save additional user data in Firestore
-                    val userData = hashMapOf(
-                        "name" to name,
-                        "mobile" to mobile,
-                        "email" to email,
-                        "role" to role
-                    )
+                    // Get FCM Token
+                    FirebaseMessaging.getInstance().token.addOnCompleteListener { tokenTask ->
+                        if (tokenTask.isSuccessful) {
+                            val fcmToken = tokenTask.result
 
-                    firestore.collection("users").document(user!!.uid)
-                        .set(userData)
-                        .addOnSuccessListener {
-                            Toast.makeText(requireContext(), "Sign Up Successful!", Toast.LENGTH_SHORT).show()
-                            redirectToRolePage(role)
+                            // Save additional user data in Firestore along with FCM token
+                            val userData = hashMapOf(
+                                "name" to name,
+                                "mobile" to mobile,
+                                "email" to email,
+                                "role" to role,
+                                "fcmToken" to fcmToken // Add FCM token here
+                            )
+
+                            firestore.collection("users").document(user!!.uid)
+                                .set(userData)
+                                .addOnSuccessListener {
+                                    Toast.makeText(requireContext(), "Sign Up Successful!", Toast.LENGTH_SHORT).show()
+                                    redirectToRolePage(role)
+                                }
+                                .addOnFailureListener { e ->
+                                    Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                                }
+                        } else {
+                            // Handle error in getting FCM token
+                            Toast.makeText(requireContext(), "Failed to get FCM token", Toast.LENGTH_SHORT).show()
                         }
-                        .addOnFailureListener { e ->
-                            Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_SHORT).show()
-                        }
+                    }
                 } else {
                     Toast.makeText(requireContext(), "Sign Up Failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                 }

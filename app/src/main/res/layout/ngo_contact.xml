@@ -1,0 +1,137 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Container for Groomer Cards -->
+    <LinearLayout
+        android:id="@+id/groomerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" />
+
+    <LinearLayout
+        android:id="@+id/detailsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="90dp"
+        android:orientation="vertical">
+
+        <!-- Groomer Profile Picture -->
+        <ImageView
+            android:id="@+id/groomerProfileImage"
+            android:layout_width="181dp"
+            android:layout_height="172dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/profile_circle"
+            android:contentDescription="Groomer Profile Picture"
+            android:scaleType="centerCrop" />
+
+        <!-- Groomer Name -->
+        <TextView
+            android:id="@+id/groomerName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="8dp"
+            android:text="Ngo Name"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <!-- Groomer Specialty -->
+        <TextView
+            android:id="@+id/groomerSpecialty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="8dp"
+            android:text="Specialty: Pet Grooming"
+            android:textColor="#757575"
+            android:textSize="14sp" />
+
+        <!-- Groomer Contact Info -->
+        <TextView
+            android:id="@+id/groomerContactInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="16dp"
+            android:text="Contact: +1 234 567 890"
+            android:textColor="#757575"
+            android:textSize="14sp" />
+
+        <!-- Address -->
+        <TextView
+            android:id="@+id/groomerAddressLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Address"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:id="@+id/groomerAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="123 Grooming Avenue, Pet City, PC 12345"
+            android:textColor="#757575"
+            android:textSize="14sp" />
+
+        <!-- Services -->
+        <TextView
+            android:id="@+id/groomerServicesLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Services Offered"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:id="@+id/groomerServices"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="- Haircuts\n- Nail Trimming\n- Bathing\n- Teeth Cleaning"
+            android:textColor="#757575"
+            android:textSize="14sp" />
+
+        <!-- Action Buttons -->
+        <LinearLayout
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/bookGroomingButton"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="#BBD4F6"
+                android:text="Book Grooming"
+                android:textColor="#000000" />
+
+            <Button
+                android:id="@+id/callGroomerButton"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:backgroundTint="#BBD4F6"
+                android:text="Call Groomer"
+                android:textColor="#000000" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

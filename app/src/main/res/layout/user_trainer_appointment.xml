@@ -1,0 +1,191 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="16dp"
+    android:background="#FFFFFF"
+    tools:context=".TrainerAppointmentFragment">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Trainer Appointment Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="Trainer Appointment"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:textColor="#050000" />
+
+        <!-- Pet Name -->
+        <TextView
+            android:text="Pet Name:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#050000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/txtPetName"
+            android:text="Max"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Pet Breed -->
+        <TextView
+            android:text="Pet Breed:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#050000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/txtPetBreed"
+            android:text="Labrador"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Training Goals -->
+        <TextView
+            android:text="Training Goals:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#050000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/txtTrainingGoals"
+            android:text="Obedience Training"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Appointment Date -->
+        <TextView
+            android:text="Appointment Date:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#050000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/txtAppointmentDate"
+            android:text="22 Jan 2025"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Time Slot -->
+        <TextView
+            android:text="Time Slot:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#050000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/txtTimeSlot"
+            android:text="10:00 AM - 11:00 AM"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Customer Phone Number -->
+        <TextView
+            android:text="Customer Phone Number:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#050000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/txtCustomerPhoneNumber"
+            android:text="+1 123 456 789"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Parent Name -->
+        <TextView
+            android:text="Parent Name:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#050000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/txtParentName"
+            android:text="John Smith"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Additional Instructions -->
+        <TextView
+            android:text="Additional Instructions:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#050000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/txtAdditionalInstructions"
+            android:text="Ensure focus on leash training"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Accept and Decline Buttons -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="24dp">
+
+            <!-- Accept Button -->
+            <Button
+                android:id="@+id/acceptButton"
+                android:text="Accept"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#4CAF50"
+                android:textColor="#FFFFFF"
+                android:layout_marginEnd="8dp" />
+
+            <!-- Decline Button -->
+            <Button
+                android:id="@+id/declineButton"
+                android:text="Decline"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#FF5733"
+                android:textColor="#FFFFFF" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

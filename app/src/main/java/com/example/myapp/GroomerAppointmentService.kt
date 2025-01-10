@@ -11,20 +11,19 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QueryDocumentSnapshot
 
-class AppointmentDetailsFragment : Fragment() {
+class GroomerAppointmentService : Fragment() {
 
     private lateinit var db: FirebaseFirestore
     private lateinit var auth: FirebaseAuth
 
     private lateinit var txtPetName: TextView
-    private lateinit var txtPetAge: TextView
     private lateinit var txtPetBreed: TextView
-    private lateinit var txtPetGender: TextView
+    private lateinit var txtGroomingService: TextView
     private lateinit var txtAppointmentDate: TextView
+    private lateinit var txtTimeSlot: TextView
     private lateinit var txtCustomerPhoneNumber: TextView
     private lateinit var txtParentName: TextView
-    private lateinit var txtTimeSlot: TextView
-    private lateinit var txtProblemDescription: TextView
+    private lateinit var txtAdditionalInstructions: TextView
     private lateinit var acceptButton: Button
     private lateinit var declineButton: Button
 
@@ -32,42 +31,41 @@ class AppointmentDetailsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_vet_appointment, container, false)
+        val view = inflater.inflate(R.layout.user_groomer_appointment, container, false)
 
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
 
-        txtPetName = view.findViewById(R.id.txtpetName)
-        txtPetAge = view.findViewById(R.id.txtpetAge)
-        txtPetBreed = view.findViewById(R.id.txtpetBreed)
-        txtPetGender = view.findViewById(R.id.txtpetGender)
-        txtAppointmentDate = view.findViewById(R.id.txtappointmentDate)
-        txtCustomerPhoneNumber = view.findViewById(R.id.txtcustomerPhoneNumber)
-        txtParentName = view.findViewById(R.id.txtparentName)
-        txtTimeSlot = view.findViewById(R.id.txttimeSlot)
-        txtProblemDescription = view.findViewById(R.id.txtproblemDescription)
+        txtPetName = view.findViewById(R.id.txtPetName)
+        txtPetBreed = view.findViewById(R.id.txtPetBreed)
+        txtGroomingService = view.findViewById(R.id.txtGroomingService)
+        txtAppointmentDate = view.findViewById(R.id.txtAppointmentDate)
+        txtTimeSlot = view.findViewById(R.id.txtTimeSlot)
+        txtCustomerPhoneNumber = view.findViewById(R.id.txtCustomerPhoneNumber)
+        txtParentName = view.findViewById(R.id.txtParentName)
+        txtAdditionalInstructions = view.findViewById(R.id.txtAdditionalInstructions)
         acceptButton = view.findViewById(R.id.acceptButton)
         declineButton = view.findViewById(R.id.declineButton)
 
         val userId = auth.currentUser?.uid
 
         if (userId != null) {
-            fetchAppointmentData(userId)
+            fetchGroomingAppointmentData(userId)
         }
 
         acceptButton.setOnClickListener {
-            updateAppointmentStatus("Accepted")
+            updateGroomingAppointmentStatus("Accepted")
         }
 
         declineButton.setOnClickListener {
-            updateAppointmentStatus("Declined")
+            updateGroomingAppointmentStatus("Declined")
         }
 
         return view
     }
 
-    private fun fetchAppointmentData(serviceId: String) {
-        val appointmentsRef = db.collection("appointments")
+    private fun fetchGroomingAppointmentData(serviceId: String) {
+        val appointmentsRef = db.collection("groomingAppointments")
 
         appointmentsRef.whereEqualTo("serviceId", serviceId)
             .get()
@@ -75,25 +73,22 @@ class AppointmentDetailsFragment : Fragment() {
                 if (documents != null && !documents.isEmpty) {
                     for (document: QueryDocumentSnapshot in documents) {
                         val petName = document.getString("petName") ?: "Unknown"
-                        val petAge = document.getString("petAge") ?: "Unknown"
                         val petBreed = document.getString("petBreed") ?: "Unknown"
-                        val petGender = document.getString("petGender") ?: "Unknown"
+                        val groomingService = document.getString("groomingService") ?: "Unknown"
                         val appointmentDate = document.getString("appointmentDate") ?: "Unknown"
-                        val customerPhoneNumber =
-                            document.getString("customerPhoneNumber") ?: "Unknown"
-                        val parentName = document.getString("parentName") ?: "Unknown"
                         val timeSlot = document.getString("timeSlot") ?: "Unknown"
-                        val problemDescription = document.getString("problemDesc") ?: "Unknown"
+                        val customerPhoneNumber = document.getString("customerPhoneNumber") ?: "Unknown"
+                        val parentName = document.getString("parentName") ?: "Unknown"
+                        val additionalInstructions = document.getString("additionalInstructions") ?: "None"
 
                         txtPetName.text = petName
-                        txtPetAge.text = petAge
                         txtPetBreed.text = petBreed
-                        txtPetGender.text = petGender
+                        txtGroomingService.text = groomingService
                         txtAppointmentDate.text = appointmentDate
+                        txtTimeSlot.text = timeSlot
                         txtCustomerPhoneNumber.text = customerPhoneNumber
                         txtParentName.text = parentName
-                        txtTimeSlot.text = timeSlot
-                        txtProblemDescription.text = problemDescription
+                        txtAdditionalInstructions.text = additionalInstructions
                     }
                 }
             }
@@ -102,8 +97,8 @@ class AppointmentDetailsFragment : Fragment() {
             }
     }
 
-    private fun updateAppointmentStatus(status: String) {
-        val appointmentRef = db.collection("appointments")
+    private fun updateGroomingAppointmentStatus(status: String) {
+        val appointmentRef = db.collection("groomingAppointments")
 
         appointmentRef.whereEqualTo("serviceId", auth.currentUser?.uid)
             .get()
@@ -125,11 +120,11 @@ class AppointmentDetailsFragment : Fragment() {
                             }
                     }
                 } else {
-                    Toast.makeText(requireContext(), "No appointments found", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "No grooming appointments found", Toast.LENGTH_SHORT).show()
                 }
             }
             .addOnFailureListener { exception ->
-                Toast.makeText(requireContext(), "Failed to retrieve appointments", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Failed to retrieve grooming appointments", Toast.LENGTH_SHORT).show()
                 exception.printStackTrace()
             }
     }

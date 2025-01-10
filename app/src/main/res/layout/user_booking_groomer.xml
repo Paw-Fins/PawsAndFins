@@ -1,0 +1,170 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="16dp"
+    android:background="#FFFFFF"
+    tools:context=".GroomerAppointmentFragment">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Grooming Appointment Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="Groomer Appointment"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#050000"/>
+
+        <!-- Pet Name -->
+        <TextView
+            android:text="Pet Name:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#050000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/petName"
+            android:hint="Enter Pet's Name"
+            android:textSize="16sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Pet Breed -->
+        <TextView
+            android:text="Pet Breed:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#050000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/petBreed"
+            android:hint="Enter Pet's Breed"
+            android:textSize="16sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Grooming Service -->
+        <TextView
+            android:text="Grooming Service:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#050000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/groomingService"
+            android:hint="Enter Desired Service"
+            android:textSize="16sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Appointment Date -->
+        <TextView
+            android:text="Appointment Date:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#050000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/appointmentDate"
+            android:hint="Enter Appointment Date"
+            android:textSize="16sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Time Slot -->
+        <TextView
+            android:text="Time Slot:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#050000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/timeSlot"
+            android:hint="Enter Time Slot"
+            android:textSize="16sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Customer Phone Number -->
+        <TextView
+            android:text="Customer Phone Number:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#050000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/customerPhoneNumber"
+            android:hint="Enter Customer Phone Number"
+            android:textSize="16sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Parent Name -->
+        <TextView
+            android:text="Parent Name:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#050000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/txtParentName"
+            android:hint="Enter Pet Parent Name"
+            android:textSize="16sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Additional Instructions -->
+        <TextView
+            android:text="Additional Instructions:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#050000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <!-- Submit Button -->
+        <EditText
+            android:id="@+id/additionalInstructions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="26dp"
+            android:hint="Enter Additional Instructions"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/submitButton"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="#FF5733"
+            android:text="Submit Appointment"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+</ScrollView>

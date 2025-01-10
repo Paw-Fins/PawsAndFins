@@ -1,0 +1,146 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="16dp"
+    android:background="#FFFFFF"
+    tools:context=".NGOAppointmentFragment">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- NGO Appointment Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="NGO Appointment Details"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:textColor="#050000"/>
+
+        <!-- NGO Name -->
+        <TextView
+            android:text="Name:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#050000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/txtNGOName"
+            android:text="Happy Paws Shelter"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+
+
+        <!-- Appointment Purpose -->
+        <TextView
+            android:text="Purpose of Appointment:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#050000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/appointmentPurpose"
+            android:text="Happy Paws Shelter"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+
+
+
+
+        <!-- Contact Number -->
+        <TextView
+            android:text="Contact Number:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#050000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/txtContactNumber"
+            android:text="+1 123 456 789"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Email Address -->
+        <TextView
+            android:text="Email Address:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#050000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/txtEmailAddress"
+            android:text="contact@happypaws.org"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Additional Instructions -->
+        <TextView
+            android:text="Additional Instructions:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#050000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/txtAdditionalInstructions"
+            android:text="Bring necessary documents for animal registration."
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Accept and Decline Buttons -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="24dp">
+
+            <!-- Accept Button -->
+            <Button
+                android:id="@+id/acceptButton"
+                android:text="Accept"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#4CAF50"
+                android:textColor="#FFFFFF"
+                android:layout_marginEnd="8dp" />
+
+            <!-- Decline Button -->
+            <Button
+                android:id="@+id/declineButton"
+                android:text="Decline"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="#FF5733"
+                android:textColor="#FFFFFF" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

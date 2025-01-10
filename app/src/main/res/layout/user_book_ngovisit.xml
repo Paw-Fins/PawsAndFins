@@ -1,0 +1,125 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="16dp"
+    android:background="#FFFFFF"
+    tools:context=".NGOAppointmentFragment">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- NGO Appointment Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="NGO Appointment Form"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:textColor="#050000" />
+
+        <!-- NGO Name -->
+        <TextView
+            android:text="Name:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#050000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/ngoName"
+            android:hint="Enter Name"
+            android:textSize="16sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+
+
+        <!-- Appointment Purpose -->
+        <TextView
+            android:text="Purpose of Appointment:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#050000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/appointmentPurpose"
+            android:hint="Enter Purpose of the Appointment"
+            android:textSize="16sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+
+
+
+
+        <!-- Contact Number -->
+        <TextView
+            android:text="Contact Number:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#050000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/contactNumber"
+            android:hint="Enter Contact Number"
+            android:textSize="16sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Email Address -->
+        <TextView
+            android:text="Email Address:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#050000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/emailAddress"
+            android:hint="Enter Email Address"
+            android:textSize="16sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Additional Instructions -->
+        <TextView
+            android:text="Additional Instructions:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#050000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:id="@+id/additionalInstructions"
+            android:hint="Enter Any Additional Instructions"
+            android:textSize="16sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Submit Button -->
+        <Button
+            android:id="@+id/submitButton"
+            android:text="Submit Appointment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="#4CAF50"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+</ScrollView>
