@@ -57,10 +57,16 @@ class AppointmentDetailsFragment : Fragment() {
 
         acceptButton.setOnClickListener {
             updateAppointmentStatus("Accepted")
+            declineButton.visibility = View.GONE
+            acceptButton.text = "Accepted"
+            acceptButton.isEnabled = false
         }
 
         declineButton.setOnClickListener {
             updateAppointmentStatus("Declined")
+            acceptButton.visibility = View.GONE
+            declineButton.text = "Declined"
+            declineButton.isEnabled = false
         }
 
         return view

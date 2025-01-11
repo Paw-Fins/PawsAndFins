@@ -1,5 +1,6 @@
 package com.example.myapp
 
+import AdminAppointmentHistoryFragment
 import UserManagement
 import android.os.Bundle
 import android.util.Log
@@ -23,6 +24,15 @@ class AdminScreenFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_admin_main, container, false)
         val productContainer: LinearLayout = view.findViewById(R.id.adminProductContainer)
+        val appointment : Button = view.findViewById(R.id.btnAppointmentHistory)
+
+        appointment.setOnClickListener{
+            val adminAppointment =AdminAppointmentHistoryFragment()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, adminAppointment)
+                .addToBackStack(null)
+                .commit()
+        }
 
         // Fetch and display products dynamically
         fetchProducts(productContainer)

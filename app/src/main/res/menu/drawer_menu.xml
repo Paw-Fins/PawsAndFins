@@ -21,4 +21,8 @@
         android:id="@+id/nav_groomer"
         android:icon="@drawable/gromming"
         android:title="Groomers" />
+    <item
+        android:id="@+id/history"
+        android:icon="@drawable/gromming"
+        android:title="History" />
 </menu>

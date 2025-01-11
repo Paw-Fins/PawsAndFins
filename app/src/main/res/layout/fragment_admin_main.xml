@@ -41,6 +41,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAppointmentHistory"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:backgroundTint="#BBD4F6"
+            android:text="Appointment history"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:layout_width="wrap_content"

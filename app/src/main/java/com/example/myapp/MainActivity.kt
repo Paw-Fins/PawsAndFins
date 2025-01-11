@@ -1,5 +1,6 @@
 package com.example.myapp
 
+import AppointmentHistoryFragment
 import CartFragment
 import android.content.res.Configuration
 import android.os.Bundle
@@ -113,6 +114,11 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.nav_groomer -> {
                     loadFragment(GroomerFragment())
+                    drawerLayout.closeDrawer(Gravity.RIGHT)
+                    true
+                }
+                R.id.history -> {
+                    loadFragment(AppointmentHistoryFragment())
                     drawerLayout.closeDrawer(Gravity.RIGHT)
                     true
                 }
