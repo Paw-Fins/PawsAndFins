@@ -13,31 +13,23 @@
         android:backgroundTint="@color/primary"
         android:orientation="vertical">
 
-        <!-- Banner Image -->
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:src="@drawable/banner" />
-
         <!-- Filter Section -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Latest Request"
+            android:text="All the Request"
             android:textColor="#000000" />
 
         <!-- RecyclerView for Dynamic Appointment Cards -->
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/productContainer"
+            android:id="@+id/all_appoinment_request"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-        android:layout_marginTop="20dp"
-        android:orientation="vertical"
-        android:layout_weight="1" 
-        android:paddingBottom="16dp" />
+            android:layout_marginTop="20dp"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:paddingBottom="16dp" />
 
     </LinearLayout>
 </ScrollView>

@@ -10,7 +10,7 @@
         android:title=""
          />
     <item
-        android:id="@+id/navigation_settings"
+        android:id="@+id/navigation_payment"
         android:icon="@drawable/money"
         android:title=""
          />

@@ -283,7 +283,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupNavigationForRole(role: String) {
         bottomNavigationView.menu.clear()
 
-        if (role != "user") {
+        if (role.toLowerCase() != "user") {
             bottomNavigationView.inflateMenu(R.menu.service_provider_navigation)
             navigationView.menu.clear()
             navigationView.inflateMenu(R.menu.service_provider_drawer_menu)
@@ -295,58 +295,96 @@ class MainActivity : AppCompatActivity() {
             loadFragment(HomeScreenFragment())
         }
 
-        bottomNavigationView.setOnNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.navigation_home -> {
-                    loadFragment(HomeScreenFragment())
-                    true
+        if(role.toLowerCase() != "user"){
+            bottomNavigationView.setOnNavigationItemSelectedListener { item ->
+                when (item.itemId) {
+                    R.id.navigation_dashboard -> {
+                        loadFragment(ServiceDashboard())
+                        true
+                    }
+                    R.id.navigation_requests -> {
+                        loadFragment(AppoinmentRequestFragment())
+                        true
+                    }
+                    R.id.navigation_payment -> {
+                        loadFragment(PaymentHistoryFragment())
+                        true
+                    }
+                    R.id.navigation_slider -> {
+                        openDrawer()
+                        true
+                    }
+                    else -> false
                 }
-                R.id.navigation_cart -> {
-                    loadFragment(CartFragment())
-                    true
+            }
+
+            navigationView.setNavigationItemSelectedListener { item ->
+                when (item.itemId) {
+                    R.id.nav_organization_profile -> {
+                        loadFragment(UserProfile())
+                        drawerLayout.closeDrawer(Gravity.RIGHT)
+                        true
+                    }
+
+                    else -> false
                 }
-                R.id.navigation_product -> {
-                    loadFragment(ProductFragment())
-                    true
+            }
+        }
+        else{
+            bottomNavigationView.setOnNavigationItemSelectedListener { item ->
+                when (item.itemId) {
+                    R.id.navigation_home -> {
+                        loadFragment(HomeScreenFragment())
+                        true
+                    }
+                    R.id.navigation_cart -> {
+                        loadFragment(CartFragment())
+                        true
+                    }
+                    R.id.navigation_product -> {
+                        loadFragment(ProductFragment())
+                        true
+                    }
+                    R.id.navigation_slider -> {
+                        openDrawer()
+                        true
+                    }
+                    else -> false
                 }
-                R.id.navigation_slider -> {
-                    openDrawer()
-                    true
+            }
+
+            navigationView.setNavigationItemSelectedListener { item ->
+                when (item.itemId) {
+                    R.id.nav_profile -> {
+                        loadFragment(UserProfile())
+                        drawerLayout.closeDrawer(Gravity.RIGHT)
+                        true
+                    }
+                    R.id.nav_ngo -> {
+                        loadFragment(NGOFragment())
+                        drawerLayout.closeDrawer(Gravity.RIGHT)
+                        true
+                    }
+                    R.id.nav_vet -> {
+                        loadFragment(VetFragment())
+                        drawerLayout.closeDrawer(Gravity.RIGHT)
+                        true
+                    }
+                    R.id.nav_groomer -> {
+                        loadFragment(GroomerFragment())
+                        drawerLayout.closeDrawer(Gravity.RIGHT)
+                        true
+                    }
+                    R.id.history -> {
+                        loadFragment(AppointmentHistoryFragment())
+                        drawerLayout.closeDrawer(Gravity.RIGHT)
+                        true
+                    }
+                    else -> false
                 }
-                else -> false
             }
         }
 
-        navigationView.setNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_profile -> {
-                    loadFragment(UserProfile())
-                    drawerLayout.closeDrawer(Gravity.RIGHT)
-                    true
-                }
-                R.id.nav_ngo -> {
-                    loadFragment(NGOFragment())
-                    drawerLayout.closeDrawer(Gravity.RIGHT)
-                    true
-                }
-                R.id.nav_vet -> {
-                    loadFragment(VetFragment())
-                    drawerLayout.closeDrawer(Gravity.RIGHT)
-                    true
-                }
-                R.id.nav_groomer -> {
-                    loadFragment(GroomerFragment())
-                    drawerLayout.closeDrawer(Gravity.RIGHT)
-                    true
-                }
-                R.id.history -> {
-                    loadFragment(AppointmentHistoryFragment())
-                    drawerLayout.closeDrawer(Gravity.RIGHT)
-                    true
-                }
-                else -> false
-            }
-        }
     }
 
     private fun loadFragment(fragment: Fragment) {
