@@ -13,7 +13,7 @@ class ErrorFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val rootView = inflater.inflate(R.layout.fragment_error_page, container, false)
+        val rootView = inflater.inflate(R.layout.fragment_payment_error, container, false)
 
         // Redirect to Cart after 10 seconds
         Handler(Looper.getMainLooper()).postDelayed({
