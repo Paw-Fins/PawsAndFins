@@ -193,6 +193,8 @@ package com.example.myapp
 
 import AppointmentHistoryFragment
 import CartFragment
+import ErrorFragment
+import SuccessFragment
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
