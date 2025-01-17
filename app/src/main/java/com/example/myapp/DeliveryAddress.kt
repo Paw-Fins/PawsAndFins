@@ -175,41 +175,12 @@ class DeliveryAddressFragment : Fragment(), PaymentResultListener {
     }
 
     override fun onPaymentSuccess(paymentId: String?) {
-        Log.d("PaymentSuccess", "Payment successful: $paymentId")
-        Toast.makeText(requireContext(), "Payment Successful!", Toast.LENGTH_SHORT).show()
-        val user = auth.currentUser
-        if (user != null && paymentId != null) {
-            val paymentData = mapOf(
-                "userId" to user.uid,
-                "paymentId" to paymentId,
-                "totalAmount" to totalPrice,
-                "timestamp" to System.currentTimeMillis()
-            )
-
-            firestore.collection("payment_history").add(paymentData)
-                .addOnSuccessListener {
-                    Log.d("PaymentHistory", "Payment history updated successfully")
-                }
-                .addOnFailureListener { e ->
-                    Log.e("PaymentHistory", "Error updating payment history: ${e.message}", e)
-                }
-
-            firestore.collection("users").document(user.uid)
-                .update("lastPaymentId", paymentId)
-                .addOnSuccessListener {
-                    Log.d("UserUpdate", "User's last payment ID updated successfully")
-                }
-                .addOnFailureListener { e ->
-                    Log.e("UserUpdate", "Error updating user's last payment ID: ${e.message}", e)
-                }
-        }
+        (activity as? PaymentResultListener)?.onPaymentSuccess(paymentId)
     }
 
     override fun onPaymentError(errorCode: Int, errorDescription: String?) {
-        Log.e("PaymentError", "Payment failed: $errorDescription (Error code: $errorCode)")
-        Toast.makeText(requireContext(), "Payment Failed: $errorDescription", Toast.LENGTH_LONG).show()
+        (activity as? PaymentResultListener)?.onPaymentError(errorCode, errorDescription)
     }
-
 
     private fun clearForm() {
         inputFullName.text.clear()
