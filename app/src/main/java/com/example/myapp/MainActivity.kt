@@ -210,8 +210,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.razorpay.PaymentResultListener
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), PaymentResultListener {
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var layout: LinearLayout
     private lateinit var profileCircle: ImageView
@@ -447,4 +448,19 @@ class MainActivity : AppCompatActivity() {
             super.onBackPressed()
         }
     }
+
+    override fun onPaymentSuccess(paymentId: String?) {
+        val successFragment = SuccessFragment()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, successFragment)
+            .commit()
+    }
+
+    override fun onPaymentError(errorCode: Int, errorDescription: String?) {
+        val errorFragment = ErrorFragment()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, errorFragment)
+            .commit()
+    }
+
 }
