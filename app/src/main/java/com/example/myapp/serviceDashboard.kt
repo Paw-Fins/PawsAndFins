@@ -28,6 +28,7 @@ class ServiceDashboard : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_service_dashboard, container, false)
+        (requireActivity() as MainActivity).showBottomNavigation(true)
 
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
@@ -38,6 +39,7 @@ class ServiceDashboard : Fragment() {
 
         // Fetch the current user's appointments
         fetchUserAppointments()
+
 
         return view
     }

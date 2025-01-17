@@ -31,6 +31,7 @@ class GroomerDashboard : Fragment() {
 
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
+        (requireActivity() as MainActivity).showBottomNavigation(true)
 
         // Initialize RecyclerView
         groomingAppointmentsRecyclerView = view.findViewById(R.id.productContainer)
