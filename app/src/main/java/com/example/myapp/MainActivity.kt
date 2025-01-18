@@ -12,6 +12,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.drawerlayout.widget.DrawerLayout
@@ -187,8 +188,18 @@ class MainActivity : AppCompatActivity(), PaymentResultListener {
                         drawerLayout.closeDrawer(Gravity.RIGHT)
                         true
                     }
-                    R.id.history -> {
+                    R.id.appointhistory -> {
                         loadFragment(AppointmentHistoryFragment())
+                        drawerLayout.closeDrawer(Gravity.RIGHT)
+                        true
+                    }
+                    R.id.nav_trainer -> {
+                        loadFragment(TrainerFragment())
+                        drawerLayout.closeDrawer(Gravity.RIGHT)
+                        true
+                    }
+                    R.id.payhistory -> {
+                        loadFragment(PaymentHistoryUserFragment())
                         drawerLayout.closeDrawer(Gravity.RIGHT)
                         true
                     }
@@ -259,19 +270,72 @@ class MainActivity : AppCompatActivity(), PaymentResultListener {
             super.onBackPressed()
         }
     }
-
     override fun onPaymentSuccess(paymentId: String?) {
-        val successFragment = SuccessFragment()
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, successFragment)
-            .commit()
+        val currentUser = auth.currentUser
+        if (currentUser != null && paymentId != null) {
+            val userId = currentUser.uid
+
+            // Get current time in hours
+            val currentTimeInHours = System.currentTimeMillis() / (1000 * 60 * 60)
+
+            val updatedData = mapOf(
+                "paymentId" to paymentId,
+                "timestampHours" to currentTimeInHours // Time in hours
+            )
+
+            // Update the existing payment record
+            firestore.collection("payment_history")
+                .whereEqualTo("userId", userId)
+                .whereEqualTo("status", "PENDING")
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                    if (!querySnapshot.isEmpty) {
+                        for (document in querySnapshot.documents) {
+                            document.reference.update(updatedData)
+                                .addOnSuccessListener {
+                                    // Navigate to the SuccessFragment on successful database update
+                                    val successFragment = SuccessFragment()
+                                    val bundle = Bundle().apply {
+                                        putString("paymentId", paymentId)
+                                    }
+                                    successFragment.arguments = bundle
+                                    supportFragmentManager.beginTransaction()
+                                        .replace(R.id.fragment_container, successFragment)
+                                        .commit()
+                                }
+                                .addOnFailureListener { exception ->
+                                    Toast.makeText(
+                                        this,
+                                        "Payment successful, but failed to update database: ${exception.message}",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
+                        }
+                    } else {
+                        Toast.makeText(this, "No pending payment record found to update.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Toast.makeText(
+                        this,
+                        "Failed to retrieve payment record: ${exception.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+        } else {
+            Toast.makeText(this, "Payment successful, but user not authenticated.", Toast.LENGTH_SHORT).show()
+        }
     }
 
+
+
     override fun onPaymentError(errorCode: Int, errorDescription: String?) {
+        Toast.makeText(this, "Payment failed: $errorDescription", Toast.LENGTH_SHORT).show()
         val errorFragment = ErrorFragment()
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, errorFragment)
             .commit()
     }
+
 
 }
