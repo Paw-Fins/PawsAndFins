@@ -1,0 +1,25 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Title TextView -->
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingBottom="16dp"
+        android:text="User Reviews"
+        android:textAlignment="center"
+        android:textColor="#03A9F4"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <!-- RecyclerView to display reviews -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/reviewRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

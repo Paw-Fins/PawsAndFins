@@ -1,6 +1,8 @@
 package com.example.myapp
 
+import android.Manifest
 import android.app.Activity
+import android.content.ContentResolver
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -11,6 +13,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.cloudinary.Cloudinary
 import com.cloudinary.utils.ObjectUtils
@@ -58,7 +62,18 @@ class ImageUploadFragment : Fragment() {
         uploadButton.setOnClickListener { onSubmitImage() }
         skipButton.setOnClickListener { registerUserAndNavigate(fallbackImageUrl = true) }
 
+        // Request permissions for reading external storage
+        checkPermissions()
+
         return view
+    }
+
+    private fun checkPermissions() {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+            != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(),
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1)
+        }
     }
 
     private fun openImageChooser() {
@@ -85,16 +100,37 @@ class ImageUploadFragment : Fragment() {
     private fun uploadImageToCloudinary(uri: Uri) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val file = File(uri.path)
+                val filePath = getFilePathFromUri(uri)
+                if (filePath == null) {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(activity, "Invalid file path", Toast.LENGTH_SHORT).show()
+                    }
+                    return@launch
+                }
+                val file = File(filePath)
                 val result = cloudinary.uploader().upload(file, ObjectUtils.emptyMap())
                 val imageUrl = result["url"].toString()
                 registerUserAndNavigate(fallbackImageUrl = false, imageUrl = imageUrl)
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(activity, "Image upload failed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity, "Image upload failed: ${e.message}", Toast.LENGTH_LONG).show()
+                    e.printStackTrace()  // Print stack trace for debugging
                 }
             }
         }
+    }
+
+    private fun getFilePathFromUri(uri: Uri): String? {
+        var path: String? = null
+        val projection = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor = requireActivity().contentResolver.query(uri, projection, null, null, null)
+        cursor?.use {
+            if (it.moveToFirst()) {
+                val columnIndex = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+                path = it.getString(columnIndex)
+            }
+        }
+        return path
     }
 
     private fun registerUserAndNavigate(fallbackImageUrl: Boolean, imageUrl: String = "") {
@@ -102,7 +138,7 @@ class ImageUploadFragment : Fragment() {
 
         // If no image URL was uploaded, use a fallback image URL
         val imageToUpload = if (fallbackImageUrl) {
-            "http://res.cloudinary.com/dmg3a821h/image/upload/v1736325853/hhtag3kjkpvag7qwqszo.jpg" // Replace with a default image URL
+            "http://res.cloudinary.com/dmg3a821h/image/upload/v1736325853/hhtag3kjkpvag7qwqszo.jpg" // Default image URL
         } else {
             imageUrl
         }

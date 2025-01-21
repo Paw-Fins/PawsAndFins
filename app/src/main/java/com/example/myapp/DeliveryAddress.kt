@@ -40,6 +40,13 @@ class DeliveryAddressFragment : Fragment(), PaymentResultListener {
         val postalCode: String
     )
 
+    data class Product(
+        val name: String = "",
+        val price: Int = 0,
+        val imageUrl: String = "",
+        var quantity: Int = 1
+    )
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -121,7 +128,7 @@ class DeliveryAddressFragment : Fragment(), PaymentResultListener {
                         val product = document.toObject(Product::class.java)
                         totalPrice += product.price * product.quantity
                     }
-                    initiatePayment()
+                    savePaymentDetailsAndInitiateCheckout()
                 }
                 .addOnFailureListener { e ->
                     Toast.makeText(requireContext(), "Error fetching cart items: ${e.message}", Toast.LENGTH_SHORT).show()
@@ -129,7 +136,7 @@ class DeliveryAddressFragment : Fragment(), PaymentResultListener {
         }
     }
 
-    private fun initiatePayment() {
+    private fun savePaymentDetailsAndInitiateCheckout() {
         val user = auth.currentUser
         if (user != null) {
             firestore.collection("users").document(user.uid).get()
@@ -137,17 +144,33 @@ class DeliveryAddressFragment : Fragment(), PaymentResultListener {
                     if (document.exists()) {
                         val email = document.getString("email") ?: "example@domain.com"
                         val contact = document.getString("mobile") ?: "9876543210"
-                        startRazorpayCheckout(email, contact)
+                        val name = document.getString("name") ?: "Unknown Name"
+
+                        val paymentData = mapOf(
+                            "userId" to user.uid,
+                            "name" to name,
+                            "email" to email,
+                            "contact" to contact,
+                            "amount" to totalPrice,
+                            "status" to "PENDING",
+                            "timestamp" to System.currentTimeMillis()
+                        )
+
+                        firestore.collection("payment_history")
+                            .add(paymentData)
+                            .addOnSuccessListener {
+                                startRazorpayCheckout(email, contact)
+                            }
+                            .addOnFailureListener { e ->
+                                Toast.makeText(requireContext(), "Error saving payment details: ${e.message}", Toast.LENGTH_SHORT).show()
+                            }
                     } else {
                         Toast.makeText(requireContext(), "User data not found in Firestore.", Toast.LENGTH_SHORT).show()
                     }
                 }
                 .addOnFailureListener { e ->
-                    Log.e("UserDataError", "Error fetching user data: ${e.message}", e)
-                    Toast.makeText(requireContext(), "Error fetching user details.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Error fetching user details: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
-        } else {
-            Toast.makeText(requireContext(), "User not authenticated.", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -169,47 +192,19 @@ class DeliveryAddressFragment : Fragment(), PaymentResultListener {
 
             checkout.open(requireActivity(), options)
         } catch (e: Exception) {
-            Log.e("PaymentError", "Error during payment initiation: ${e.message}", e)
             Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_LONG).show()
         }
     }
 
     override fun onPaymentSuccess(paymentId: String?) {
-        Log.d("PaymentSuccess", "Payment successful: $paymentId")
-        Toast.makeText(requireContext(), "Payment Successful!", Toast.LENGTH_SHORT).show()
-        val user = auth.currentUser
-        if (user != null && paymentId != null) {
-            val paymentData = mapOf(
-                "userId" to user.uid,
-                "paymentId" to paymentId,
-                "totalAmount" to totalPrice,
-                "timestamp" to System.currentTimeMillis()
-            )
-
-            firestore.collection("payment_history").add(paymentData)
-                .addOnSuccessListener {
-                    Log.d("PaymentHistory", "Payment history updated successfully")
-                }
-                .addOnFailureListener { e ->
-                    Log.e("PaymentHistory", "Error updating payment history: ${e.message}", e)
-                }
-
-            firestore.collection("users").document(user.uid)
-                .update("lastPaymentId", paymentId)
-                .addOnSuccessListener {
-                    Log.d("UserUpdate", "User's last payment ID updated successfully")
-                }
-                .addOnFailureListener { e ->
-                    Log.e("UserUpdate", "Error updating user's last payment ID: ${e.message}", e)
-                }
-        }
+        (activity as? PaymentResultListener)?.onPaymentSuccess(paymentId)
     }
+
+
 
     override fun onPaymentError(errorCode: Int, errorDescription: String?) {
-        Log.e("PaymentError", "Payment failed: $errorDescription (Error code: $errorCode)")
-        Toast.makeText(requireContext(), "Payment Failed: $errorDescription", Toast.LENGTH_LONG).show()
+        (activity as? PaymentResultListener)?.onPaymentError(errorCode, errorDescription)
     }
-
 
     private fun clearForm() {
         inputFullName.text.clear()
@@ -219,11 +214,4 @@ class DeliveryAddressFragment : Fragment(), PaymentResultListener {
         inputState.text.clear()
         inputPostalCode.text.clear()
     }
-
-    data class Product(
-        val name: String = "",
-        val price: Int = 0,
-        val imageUrl: String = "",
-        var quantity: Int = 1
-    )
 }

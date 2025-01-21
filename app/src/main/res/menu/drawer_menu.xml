@@ -22,7 +22,11 @@
         android:icon="@drawable/gromming"
         android:title="Groomers" />
     <item
-        android:id="@+id/history"
-        android:icon="@drawable/gromming"
-        android:title="History" />
+        android:id="@+id/appointhistory"
+        android:icon="@drawable/appoint"
+        android:title="Appointment History" />
+    <item
+        android:id="@+id/payhistory"
+        android:icon="@drawable/payment_h"
+        android:title="Payment History" />
 </menu>

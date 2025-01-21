@@ -94,5 +94,10 @@
         android:name="com.example.myapp.appoinment_request"
         android:label="fragment_appoinment_request"
         tools:layout="@layout/fragment_appoinment_request" />
+    <fragment
+        android:id="@+id/payment_history_user"
+        android:name="com.example.myapp.payment_history_user"
+        android:label="fragment_payment_history_user"
+        tools:layout="@layout/fragment_payment_history_user" />
 
 </navigation>

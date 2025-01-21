@@ -2,6 +2,7 @@ package com.example.myapp
 
 import VetContactFragment
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,9 +20,9 @@ data class Vet(
     val address: String,
     val ownerName: String,
     val available: String,
-    val specialty: String, // Added specialty
-    val contact: String, // Added contact
-    val services: String, // Added services
+    val specialty: String,
+    val contact: String,
+    val services: String,
     val isEmergencyAvailable: Boolean
 )
 
@@ -29,10 +30,6 @@ class VetFragment : Fragment() {
 
     private lateinit var vetContainer: LinearLayout
     private val firestore = FirebaseFirestore.getInstance()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,7 +52,7 @@ class VetFragment : Fragment() {
             .get()
             .addOnSuccessListener { result ->
                 if (result.isEmpty) {
-                    Toast.makeText(requireContext(), "No doctors found.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "No Vets", Toast.LENGTH_SHORT).show()
                 } else {
                     for (document in result) {
                         val id = document.id
@@ -67,7 +64,6 @@ class VetFragment : Fragment() {
                         val contact = document.getString("mobile") ?: ""
                         val services = document.getString("services") ?: ""
                         val isEmergencyAvailable = document.getBoolean("isEmergencyAvailable") ?: false
-
                         // Add each vet data to the view
                         addVetView(Vet(id, name, address, ownerName, available, specialty, contact, services, isEmergencyAvailable))
                     }
