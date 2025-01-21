@@ -1,137 +1,111 @@
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:fillViewport="true"
     android:padding="16dp">
 
-    <!-- Container for Vet Cards -->
     <LinearLayout
         android:id="@+id/vetContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" />
+        android:orientation="vertical"
+        android:padding="8dp">
 
-    <LinearLayout
-        android:id="@+id/detailsContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="90dp"
-        android:orientation="vertical">
-
-        <!-- Vet Profile Picture -->
+        <!-- Vet Profile Section -->
         <ImageView
             android:id="@+id/vetProfileImage"
-            android:layout_width="181dp"
-            android:layout_height="172dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/profile_circle"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal"
             android:contentDescription="Vet Profile Picture"
-            android:scaleType="centerCrop" />
+            android:src="@drawable/ic_launcher_foreground" />
 
-        <!-- Vet Name -->
         <TextView
             android:id="@+id/vetName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="8dp"
-            android:text="Dr. Sarah Johnson"
-            android:textColor="#000000"
-            android:textSize="20sp"
+            android:layout_marginTop="8dp"
+            android:text="Vet Name"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
-        <!-- Vet Specialty -->
         <TextView
             android:id="@+id/vetSpecialty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="8dp"
-            android:text="Specialty: Small Animal Medicine"
-            android:textColor="#757575"
-            android:textSize="14sp" />
+            android:layout_marginTop="4dp"
+            android:text="Specialty"
+            android:textSize="16sp" />
 
-        <!-- Vet Contact Info -->
         <TextView
             android:id="@+id/vetContactInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="16dp"
-            android:text="Contact: +1 234 567 890"
-            android:textColor="#757575"
-            android:textSize="14sp" />
-
-        <!-- Address -->
-        <TextView
-            android:id="@+id/vetAddressLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Address"
-            android:textColor="#000000"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="4dp" />
+            android:layout_marginTop="4dp"
+            android:text="Contact Information"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/vetAddress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="123 Veterinary Lane, Pet City, PC 12345"
-            android:textColor="#757575"
-            android:textSize="14sp" />
-
-        <!-- Services -->
-        <TextView
-            android:id="@+id/vetServicesLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Services Offered"
-            android:textColor="#000000"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="4dp" />
+            android:layout_marginTop="4dp"
+            android:text="Address"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/vetServices"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Services Offered"
+            android:textSize="16sp" />
+
+        <!-- New detailsContainer for dynamic visibility -->
+        <LinearLayout
+            android:id="@+id/detailsContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="- General Checkups\n- Vaccinations\n- Surgery\n- Emergency Care"
-            android:textColor="#757575"
-            android:textSize="14sp" />
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:padding="8dp">
+
+            <!-- Add any additional details here that should appear in the details container -->
+
+        </LinearLayout>
 
         <!-- Action Buttons -->
-        <LinearLayout
-            style="?android:attr/buttonBarStyle"
+        <Button
+            android:id="@+id/bookAppointmentButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_marginTop="16dp"
+            android:text="Book Appointment" />
 
-            <Button
-                android:id="@+id/bookAppointmentButton"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:layout_marginEnd="8dp"
-                android:backgroundTint="#BBD4F6"
-                android:text="Book Appointment"
-                android:textColor="#000000" />
+        <Button
+            android:id="@+id/callVetButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Call Vet" />
 
-            <Button
-                android:id="@+id/callVetButton"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:backgroundTint="#BBD4F6"
-                android:text="Call Vet"
-                android:textColor="#000000" />
-        </LinearLayout>
+        <!-- Reviews Section -->
+        <TextView
+            android:id="@+id/addReviewText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="+ Add Review"
+            android:textColor="#007BFF"
+            android:textSize="16sp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/reviewRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:scrollbars="vertical" />
+
     </LinearLayout>
-</LinearLayout>
+</ScrollView>

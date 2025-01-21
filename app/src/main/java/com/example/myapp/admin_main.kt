@@ -25,6 +25,7 @@ class AdminScreenFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_admin_main, container, false)
         val productContainer: LinearLayout = view.findViewById(R.id.adminProductContainer)
         val appointment : Button = view.findViewById(R.id.btnAppointmentHistory)
+        val payment : Button = view.findViewById(R.id.btnPayments)
 
         appointment.setOnClickListener{
             val adminAppointment =AdminAppointmentHistoryFragment()
@@ -33,6 +34,7 @@ class AdminScreenFragment : Fragment() {
                 .addToBackStack(null)
                 .commit()
         }
+        
 
         // Fetch and display products dynamically
         fetchProducts(productContainer)

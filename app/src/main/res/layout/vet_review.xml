@@ -1,0 +1,40 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/review_card_background"
+    android:layout_marginBottom="8dp">
+
+    <!-- User Name -->
+    <TextView
+        android:id="@+id/reviewerName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="John Doe"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="4dp" />
+
+    <!-- Review Date -->
+    <TextView
+        android:id="@+id/reviewDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2025-01-20"
+        android:textColor="#757575"
+        android:textSize="12sp"
+        android:layout_marginBottom="8dp" />
+
+    <!-- Review Text -->
+    <TextView
+        android:id="@+id/reviewText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="The vet was extremely professional and took great care of my dog. Highly recommended!"
+        android:textColor="#333333"
+        android:textSize="14sp" />
+
+</LinearLayout>

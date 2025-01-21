@@ -139,6 +139,13 @@ class MainActivity : AppCompatActivity(), PaymentResultListener {
                         true
                     }
 
+                    R.id.nav_organization_review -> {
+                        loadFragment(VetReviewFragment())
+                        drawerLayout.closeDrawer(Gravity.RIGHT)
+                        true
+                    }
+
+
                     else -> false
                 }
             }

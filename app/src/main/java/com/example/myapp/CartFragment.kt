@@ -33,7 +33,6 @@ class CartFragment : Fragment() {
         cartContainer = view.findViewById(R.id.cartContainer)
         val checkoutButton: MaterialButton = view.findViewById(R.id.checkoutButton)
 
-        // Fetch the user's cart items
         fetchCartItems()
 
         checkoutButton.setOnClickListener {
@@ -131,7 +130,6 @@ class CartFragment : Fragment() {
             .update(
                 "quantity", product.quantity
             ).addOnSuccessListener {
-                // Re-fetch cart to reflect the updates in real-time
                 fetchCartItems()
             }.addOnFailureListener { e ->
                 Toast.makeText(requireContext(), "Error updating cart: ${e.message}", Toast.LENGTH_SHORT).show()

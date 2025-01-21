@@ -4,4 +4,10 @@
     android:id="@+id/nav_organization_profile"
     android:icon="@drawable/profile_circle"
     android:title="Organization Profile" />
+
+    <item
+        android:id="@+id/nav_organization_review"
+        android:icon="@drawable/review"
+        android:title="Organization Review" />
+
 </menu>
