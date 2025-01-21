@@ -230,7 +230,7 @@ class LoginScreen : Fragment() {
     }
 
     private fun navigateToTrainerDashboard() {
-        val trainerDashboardFragment = GroomerDashboard()
+        val trainerDashboardFragment = TrainerDashboard()
         val transaction = requireActivity().supportFragmentManager.beginTransaction()
         val currentFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.fragment_container)
         if (currentFragment != null) {
@@ -242,7 +242,7 @@ class LoginScreen : Fragment() {
     }
 
     private fun navigateToNgoDashboard() {
-        val ngoDashboardFragment = GroomerDashboard()
+        val ngoDashboardFragment = NGODashboard()
         val transaction = requireActivity().supportFragmentManager.beginTransaction()
         val currentFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.fragment_container)
         if (currentFragment != null) {

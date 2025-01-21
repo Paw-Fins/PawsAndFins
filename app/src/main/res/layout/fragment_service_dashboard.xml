@@ -17,9 +17,9 @@
         <ImageView
             android:id="@+id/imageView3"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="200dp"
             android:layout_marginTop="10dp"
-            android:src="@drawable/banner" />
+            android:src="@drawable/vet_banner" />
 
         <!-- Filter Section -->
         <TextView

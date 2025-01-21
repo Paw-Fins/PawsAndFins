@@ -287,12 +287,10 @@ class MainActivity : AppCompatActivity() {
             bottomNavigationView.inflateMenu(R.menu.service_provider_navigation)
             navigationView.menu.clear()
             navigationView.inflateMenu(R.menu.service_provider_drawer_menu)
-            loadFragment(ServiceDashboard())
         } else {
             bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu)
             navigationView.menu.clear()
             navigationView.inflateMenu(R.menu.drawer_menu)
-            loadFragment(HomeScreenFragment())
         }
 
         if(role.toLowerCase() != "user"){

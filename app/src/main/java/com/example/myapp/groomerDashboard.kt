@@ -27,14 +27,14 @@ class GroomerDashboard : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_service_dashboard, container, false)
+        val view = inflater.inflate(R.layout.fragment_groomer_dashboard_main, container, false)
 
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
         (requireActivity() as MainActivity).showBottomNavigation(true)
 
         // Initialize RecyclerView
-        groomingAppointmentsRecyclerView = view.findViewById(R.id.productContainer)
+        groomingAppointmentsRecyclerView = view.findViewById(R.id.pendingAppointmentsRecyclerView)
         groomingAppointmentsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         // Populate with dummy data for testing
