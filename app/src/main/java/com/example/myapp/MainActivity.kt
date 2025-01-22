@@ -15,6 +15,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
@@ -33,6 +34,7 @@ class MainActivity : AppCompatActivity(), PaymentResultListener {
     private lateinit var auth: FirebaseAuth
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navigationView: NavigationView
+    private lateinit var dashboardFrag
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
@@ -96,6 +98,13 @@ class MainActivity : AppCompatActivity(), PaymentResultListener {
     private fun setupNavigationForRole(role: String) {
         bottomNavigationView.menu.clear()
 
+        when (role) {
+            "Doctor" -> dashboardFrag = ServiceDashboard()
+            "Groomer" -> dashboardFrag = GroomerDashboard()
+            "Trainer" -> dashboardFrag = TrainerDashboard()
+            "Ngo" -> dashboardFrag = NGODashboard()
+        }
+
         if (role.toLowerCase() != "user") {
             bottomNavigationView.inflateMenu(R.menu.service_provider_navigation)
             navigationView.menu.clear()
@@ -110,7 +119,7 @@ class MainActivity : AppCompatActivity(), PaymentResultListener {
             bottomNavigationView.setOnNavigationItemSelectedListener { item ->
                 when (item.itemId) {
                     R.id.navigation_dashboard -> {
-                        loadFragment(ServiceDashboard())
+                        loadFragment(dashboardFrag)
                         true
                     }
                     R.id.navigation_requests -> {
