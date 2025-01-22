@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity(), PaymentResultListener {
     private lateinit var auth: FirebaseAuth
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navigationView: NavigationView
-    private lateinit var dashboardFrag
+    private lateinit var dashboardFrag :Fragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
@@ -98,11 +98,11 @@ class MainActivity : AppCompatActivity(), PaymentResultListener {
     private fun setupNavigationForRole(role: String) {
         bottomNavigationView.menu.clear()
 
-        when (role) {
-            "Doctor" -> dashboardFrag = ServiceDashboard()
-            "Groomer" -> dashboardFrag = GroomerDashboard()
-            "Trainer" -> dashboardFrag = TrainerDashboard()
-            "Ngo" -> dashboardFrag = NGODashboard()
+        when (role.toLowerCase()) {
+            "Doctor".toLowerCase() -> dashboardFrag = ServiceDashboard()
+            "Groomer".toLowerCase() -> dashboardFrag = GroomerDashboard()
+            "Trainer".toLowerCase() -> dashboardFrag = TrainerDashboard()
+            "Ngo".toLowerCase() -> dashboardFrag = NGODashboard()
         }
 
         if (role.toLowerCase() != "user") {
