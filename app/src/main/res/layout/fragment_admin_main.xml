@@ -50,12 +50,12 @@
                 android:id="@+id/btnAppointmentHistory"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
+                android:layout_marginStart="16dp"
                 android:layout_weight="1"
                 android:backgroundTint="#BBD4F6"
                 android:text="Appointment history"
                 android:textColor="@android:color/black"
-                android:textStyle="bold"
-                android:layout_marginStart="16dp" />
+                android:textStyle="bold" />
         </LinearLayout>
 
         <!-- Buttons Row 2: Payments and Reviews -->

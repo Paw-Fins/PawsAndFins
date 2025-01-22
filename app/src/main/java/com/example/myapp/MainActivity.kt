@@ -104,7 +104,6 @@ class MainActivity : AppCompatActivity(), PaymentResultListener {
         navigationView.menu.clear()
 
 
-
         if (role.toLowerCase() != "user") {
             bottomNavigationView.inflateMenu(R.menu.service_provider_navigation)
             navigationView.menu.clear()
