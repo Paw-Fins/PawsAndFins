@@ -42,6 +42,7 @@ class MainActivity : AppCompatActivity(), PaymentResultListener {
         setContentView(R.layout.activity_main)
         supportActionBar?.hide()
 
+
         layout = findViewById(R.id.topLayout)
         bottomNavigationView = findViewById(R.id.bottom_navigation)
         profileCircle = findViewById(R.id.logoImage)
@@ -61,6 +62,8 @@ class MainActivity : AppCompatActivity(), PaymentResultListener {
         profileCircle.setOnClickListener {
             loadFragment(UserProfile())
         }
+        bottomNavigationView.menu.clear()
+        navigationView.menu.clear()
 
         fetchProfileImage { imageUrl ->
             if (imageUrl != null) {
@@ -97,6 +100,7 @@ class MainActivity : AppCompatActivity(), PaymentResultListener {
 
     private fun setupNavigationForRole(role: String) {
         bottomNavigationView.menu.clear()
+        navigationView.menu.clear()
 
         when (role.toLowerCase()) {
             "Doctor".toLowerCase() -> dashboardFrag = ServiceDashboard()
@@ -114,7 +118,6 @@ class MainActivity : AppCompatActivity(), PaymentResultListener {
             navigationView.menu.clear()
             navigationView.inflateMenu(R.menu.drawer_menu)
         }
-
         if(role.toLowerCase() != "user"){
             bottomNavigationView.setOnNavigationItemSelectedListener { item ->
                 when (item.itemId) {

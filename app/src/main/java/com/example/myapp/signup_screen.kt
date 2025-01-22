@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.myapp.HomeScreenFragment
 import com.example.myapp.ImageUploadFragment
+import com.example.myapp.LoginScreen
 import com.example.myapp.R
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.button.MaterialButton
@@ -25,6 +26,7 @@ class SignUpScreen : Fragment() {
     private lateinit var emailInput: TextInputEditText
     private lateinit var passwordInput: TextInputEditText
     private lateinit var confirmPasswordInput: TextInputEditText
+    private  lateinit var logIn : TextView
     private lateinit var roleSpinner: Spinner
     private lateinit var auth: FirebaseAuth
     private lateinit var firestore: FirebaseFirestore
@@ -40,13 +42,23 @@ class SignUpScreen : Fragment() {
         firestore = FirebaseFirestore.getInstance()
 
         nameInput = view.findViewById(R.id.name_input)
+        logIn = view.findViewById(R.id.sign_in)
         mobileInput = view.findViewById(R.id.mobile_input)
         emailInput = view.findViewById(R.id.email_input)
         passwordInput = view.findViewById(R.id.password_input)
         confirmPasswordInput = view.findViewById(R.id.confirm_password_input)
         roleSpinner = view.findViewById(R.id.role_spinner)
 
+        logIn.setOnClickListener {
+            val signUpFragment = LoginScreen()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, signUpFragment)
+                .addToBackStack(null)
+                .commit()
+        }
+
         populateRoleSpinner()
+
 
         passwordInput.setOnTouchListener { _, event ->
             if (event.action == MotionEvent.ACTION_UP) {
