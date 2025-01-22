@@ -27,6 +27,14 @@ class AdminScreenFragment : Fragment() {
         val appointment : Button = view.findViewById(R.id.btnAppointmentHistory)
         val payment : Button = view.findViewById(R.id.btnPayments)
 
+        payment.setOnClickListener{
+            val adminpay =PaymentHistoryAdminFragment()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, adminpay)
+                .addToBackStack(null)
+                .commit()
+        }
+
         appointment.setOnClickListener{
             val adminAppointment =AdminAppointmentHistoryFragment()
             requireActivity().supportFragmentManager.beginTransaction()

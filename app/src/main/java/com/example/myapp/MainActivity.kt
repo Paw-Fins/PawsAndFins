@@ -57,6 +57,7 @@ class MainActivity : AppCompatActivity(), PaymentResultListener {
             setupNavigationForRole(role)
         }
 
+
         updateUIForTheme()
 
         profileCircle.setOnClickListener {
@@ -102,12 +103,7 @@ class MainActivity : AppCompatActivity(), PaymentResultListener {
         bottomNavigationView.menu.clear()
         navigationView.menu.clear()
 
-        when (role.toLowerCase()) {
-            "Doctor".toLowerCase() -> dashboardFrag = ServiceDashboard()
-            "Groomer".toLowerCase() -> dashboardFrag = GroomerDashboard()
-            "Trainer".toLowerCase() -> dashboardFrag = TrainerDashboard()
-            "Ngo".toLowerCase() -> dashboardFrag = NGODashboard()
-        }
+
 
         if (role.toLowerCase() != "user") {
             bottomNavigationView.inflateMenu(R.menu.service_provider_navigation)
@@ -118,6 +114,15 @@ class MainActivity : AppCompatActivity(), PaymentResultListener {
             navigationView.menu.clear()
             navigationView.inflateMenu(R.menu.drawer_menu)
         }
+
+        when (role.toLowerCase()) {
+            "Doctor".toLowerCase() -> dashboardFrag = ServiceDashboard()
+            "Groomer".toLowerCase() -> dashboardFrag = GroomerDashboard()
+            "Trainer".toLowerCase() -> dashboardFrag = TrainerDashboard()
+            "Ngo".toLowerCase() -> dashboardFrag = NGODashboard()
+        }
+
+
         if(role.toLowerCase() != "user"){
             bottomNavigationView.setOnNavigationItemSelectedListener { item ->
                 when (item.itemId) {

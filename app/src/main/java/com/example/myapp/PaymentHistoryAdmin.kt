@@ -5,15 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
-class PaymentHistoryUserFragment : Fragment() {
+class PaymentHistoryAdminFragment : Fragment() {
 
     private lateinit var firestore: FirebaseFirestore
     private lateinit var payuserContainer: LinearLayout
@@ -33,10 +31,7 @@ class PaymentHistoryUserFragment : Fragment() {
     }
 
     private fun fetchPaymentHistory() {
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        val userId = currentUser?.uid
         firestore.collection("payment_history")
-            .whereEqualTo("userId", userId)
             .get()
             .addOnSuccessListener { querySnapshot ->
                 for (document in querySnapshot.documents) {
@@ -91,13 +86,15 @@ class PaymentHistoryUserFragment : Fragment() {
         tvUserPhone.text = "Phone: $contact"
         tvPaymentStatus.text = "Payment Status: $status"
 
-        // Update status text color dynamically
-        tvPaymentStatus.setTextColor(
-            if (status.equals("success", ignoreCase = true))
-                requireContext().getColor(android.R.color.holo_green_dark)
-            else
-                requireContext().getColor(android.R.color.holo_red_dark)
-        )
+        // Check if the fragment is attached before accessing the context
+        context?.let {
+            tvPaymentStatus.setTextColor(
+                if (status.equals("success", ignoreCase = true))
+                    it.getColor(android.R.color.holo_green_dark)
+                else
+                    it.getColor(android.R.color.holo_red_dark)
+            )
+        }
 
         return cardView
     }
