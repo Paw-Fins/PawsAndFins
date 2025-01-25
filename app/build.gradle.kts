@@ -68,6 +68,8 @@ dependencies {
     implementation("androidx.navigation:navigation-ui:2.7.7")
     implementation("com.google.android.material:material:1.9.0")
     implementation ("com.razorpay:checkout:1.6.38")
+    implementation ("com.itextpdf:itext7-core:7.2.5")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
 }
 
 // Add the Google services plugin at the bottom of your app-level build.gradle

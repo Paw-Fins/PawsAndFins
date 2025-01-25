@@ -114,7 +114,6 @@ class CartFragment : Fragment() {
             removeProductFromCart(documentId)
         }
 
-        // Add the product to the cart container
         cartContainer.addView(productView)
         totalPrice += product.price * product.quantity
     }
