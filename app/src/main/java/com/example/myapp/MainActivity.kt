@@ -16,6 +16,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -28,9 +29,9 @@ import com.razorpay.PaymentResultListener
 
 class MainActivity : AppCompatActivity(), PaymentResultListener {
     private lateinit var bottomNavigationView: BottomNavigationView
-    private lateinit var layout: LinearLayout
+    private lateinit var layout: ConstraintLayout
     private lateinit var profileCircle: ImageView
-    private lateinit var logoText: TextView
+    private lateinit var logo: ImageView
     private lateinit var firestore: FirebaseFirestore
     private lateinit var auth: FirebaseAuth
     private lateinit var drawerLayout: DrawerLayout
@@ -47,7 +48,7 @@ class MainActivity : AppCompatActivity(), PaymentResultListener {
         layout = findViewById(R.id.topLayout)
         bottomNavigationView = findViewById(R.id.bottom_navigation)
         profileCircle = findViewById(R.id.logoImage)
-        logoText = findViewById(R.id.logo2)
+        logo = findViewById(R.id.logoImage)
         drawerLayout = findViewById(R.id.drawer_layout)
         navigationView = findViewById(R.id.navigation_view)
 
@@ -276,7 +277,6 @@ class MainActivity : AppCompatActivity(), PaymentResultListener {
         } else {
             resources.getColor(R.color.onBackground, theme)
         }
-        logoText.setTextColor(textColor)
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
