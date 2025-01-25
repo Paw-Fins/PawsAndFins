@@ -4,6 +4,7 @@ import AppointmentHistoryFragment
 import CartFragment
 import ErrorFragment
 import SuccessFragment
+import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
@@ -53,8 +54,40 @@ class MainActivity : AppCompatActivity(), PaymentResultListener {
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
 
-        fetchUserRole { role ->
-            setupNavigationForRole(role)
+        val currentUser = FirebaseAuth.getInstance().currentUser
+
+        if (currentUser != null) {
+            // Fetch user role from Firestore
+            FirebaseFirestore.getInstance().collection("users")
+                .document(currentUser.uid)
+                .get()
+                .addOnSuccessListener { document ->
+                    if (document.exists()) {
+                        val userRole = document.getString("role")?.toLowerCase()
+
+                        // Handle redirection based on role
+                        when (userRole) {
+                            "admin" -> navigateToAdminScreen()
+                            "doctor" -> navigateToDoctorDashboard()
+                            "groomer" -> navigateToGroomerDashboard()
+                            "trainer" -> navigateToTrainerDashboard()
+                            else -> navigateToHomeScreen()
+                        }
+
+                        // Set up bottom navigation after role is fetched
+                        if (userRole != null) {
+                            setupNavigationForRole(userRole)
+                        }
+                    } else {
+                        Toast.makeText(this, "User role not found", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this, "Failed to fetch user data", Toast.LENGTH_SHORT).show()
+                }
+        } else {
+            // If user is not logged in, show login screen
+            navigateToLoginScreen()
         }
 
 
@@ -63,8 +96,6 @@ class MainActivity : AppCompatActivity(), PaymentResultListener {
         profileCircle.setOnClickListener {
             loadFragment(UserProfile())
         }
-        bottomNavigationView.menu.clear()
-        navigationView.menu.clear()
 
         fetchProfileImage { imageUrl ->
             if (imageUrl != null) {
@@ -82,47 +113,25 @@ class MainActivity : AppCompatActivity(), PaymentResultListener {
         }
     }
 
-    private fun fetchUserRole(callback: (String) -> Unit) {
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
-            firestore.collection("users").document(currentUser.uid)
-                .get()
-                .addOnSuccessListener { document ->
-                    val role = document.getString("role")?.toLowerCase() ?: "user"
-                    callback(role)
-                }
-                .addOnFailureListener {
-                    callback("user")
-                }
-        } else {
-            callback("user")
-        }
-    }
-
     private fun setupNavigationForRole(role: String) {
+        // Clear existing menus
         bottomNavigationView.menu.clear()
         navigationView.menu.clear()
 
-
-        if (role.toLowerCase() != "user") {
+        // Role-specific bottom navigation and drawer menus
+        if (role.lowercase() != "user") {
+            bottomNavigationView.menu.clear()
+            navigationView.menu.clear()
             bottomNavigationView.inflateMenu(R.menu.service_provider_navigation)
-            navigationView.menu.clear()
             navigationView.inflateMenu(R.menu.service_provider_drawer_menu)
-        } else {
-            bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu)
-            navigationView.menu.clear()
-            navigationView.inflateMenu(R.menu.drawer_menu)
-        }
 
-        when (role.toLowerCase()) {
-            "Doctor".toLowerCase() -> dashboardFrag = ServiceDashboard()
-            "Groomer".toLowerCase() -> dashboardFrag = GroomerDashboard()
-            "Trainer".toLowerCase() -> dashboardFrag = TrainerDashboard()
-            "Ngo".toLowerCase() -> dashboardFrag = NGODashboard()
-        }
+            when (role.lowercase()) {
+                "doctor" -> dashboardFrag = ServiceDashboard()
+                "groomer" -> dashboardFrag = GroomerDashboard()
+                "trainer" -> dashboardFrag = TrainerDashboard()
+                "ngo" -> dashboardFrag = NGODashboard()
+            }
 
-
-        if(role.toLowerCase() != "user"){
             bottomNavigationView.setOnNavigationItemSelectedListener { item ->
                 when (item.itemId) {
                     R.id.navigation_dashboard -> {
@@ -152,19 +161,20 @@ class MainActivity : AppCompatActivity(), PaymentResultListener {
                         drawerLayout.closeDrawer(Gravity.RIGHT)
                         true
                     }
-
                     R.id.nav_organization_review -> {
                         loadFragment(VetReviewFragment())
                         drawerLayout.closeDrawer(Gravity.RIGHT)
                         true
                     }
-
-
                     else -> false
                 }
             }
-        }
-        else{
+        } else {
+            bottomNavigationView.menu.clear()
+            navigationView.menu.clear()
+            bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu)
+            navigationView.inflateMenu(R.menu.drawer_menu)
+
             bottomNavigationView.setOnNavigationItemSelectedListener { item ->
                 when (item.itemId) {
                     R.id.navigation_home -> {
@@ -228,8 +238,8 @@ class MainActivity : AppCompatActivity(), PaymentResultListener {
                 }
             }
         }
-
     }
+
 
     private fun loadFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
@@ -348,6 +358,28 @@ class MainActivity : AppCompatActivity(), PaymentResultListener {
         }
     }
 
+    fun resetUI() {
+        // Clear back stack before replacing the fragment
+        clearBackStack()
+
+        // Load the LoginFragment
+        loadFragment(LoginScreen())
+
+        // Clear the menus
+        bottomNavigationView.menu.clear()
+        navigationView.menu.clear()
+
+        // Reset the navigation based on user role
+        setupNavigationForRole("user")
+    }
+
+
+    private fun clearBackStack() {
+        val fragmentManager = supportFragmentManager
+        for (i in 0 until fragmentManager.backStackEntryCount) {
+            fragmentManager.popBackStack()
+        }
+    }
 
 
     override fun onPaymentError(errorCode: Int, errorDescription: String?) {
@@ -358,5 +390,46 @@ class MainActivity : AppCompatActivity(), PaymentResultListener {
             .commit()
     }
 
+    private fun navigateToHomeScreen() {
+        val homeFragment = HomeScreenFragment()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, homeFragment)
+            .commit()
+    }
+
+    private fun navigateToAdminScreen() {
+        val adminFragment = AdminScreenFragment()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, adminFragment)
+            .commit()
+    }
+
+    private fun navigateToDoctorDashboard() {
+        val doctorDashboardFragment = ServiceDashboard()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, doctorDashboardFragment)
+            .commit()
+    }
+
+    private fun navigateToGroomerDashboard() {
+        val groomerDashboardFragment = GroomerDashboard()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, groomerDashboardFragment)
+            .commit()
+    }
+
+    private fun navigateToTrainerDashboard() {
+        val trainerDashboardFragment = TrainerDashboard()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, trainerDashboardFragment)
+            .commit()
+    }
+
+    private fun navigateToLoginScreen() {
+        val trainerDashboardFragment = LoginScreen()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, trainerDashboardFragment)
+            .commit()
+    }
 
 }

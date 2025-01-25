@@ -1,6 +1,7 @@
 package com.example.myapp
 
 import SignUpScreen
+import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
@@ -32,6 +33,8 @@ class LoginScreen : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         firebaseHelperLogin = FirebaseHelperLogin(requireContext())
+
+
     }
 
     override fun onCreateView(
@@ -88,6 +91,8 @@ class LoginScreen : Fragment() {
         return view
     }
 
+
+
     private fun togglePasswordVisibility(editText: TextInputEditText) {
         if (editText.inputType == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) {
             editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
@@ -104,77 +109,27 @@ class LoginScreen : Fragment() {
         val password = passwordInput.text.toString().trim()
 
         if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(
-                requireContext(),
-                "Please enter both email and password",
-                Toast.LENGTH_SHORT
-            ).show()
+            Toast.makeText(requireContext(), "Please enter both email and password", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // Check for admin login
-        if (email == adminCredentials.adminEmail && password == adminCredentials.adminPassword) {
-            Toast.makeText(
-                requireContext(),
-                "Admin Login Successful!\nEmail: $email",
-                Toast.LENGTH_SHORT
-            ).show()
+        if (email == adminCredentials.adminEmail && password == adminCredentials.adminPassword){
             navigateToAdminScreen()
-        } else {
-            // Log in using Firebase authentication
+        }
+        else {
+            // Authenticate with Firebase
             firebaseHelperLogin.loginUser(email, password, { firebaseUser ->
                 if (firebaseUser != null) {
-                    // Fetch the FCM token and store it in Firestore
-                    FirebaseMessaging.getInstance().token.addOnSuccessListener { token ->
-                        storeFcmToken(firebaseUser.uid, token)
-                    }
-
-                    Toast.makeText(requireContext(), "Login successful!", Toast.LENGTH_SHORT).show()
-                    val userId = firebaseUser.uid
-
-                    // Fetch the user's role from Firestore
-                    FirebaseFirestore.getInstance().collection("users")
-                        .document(userId)
-                        .get()
-                        .addOnSuccessListener { document ->
-                            if (document.exists()) {
-                                val userRole = document.getString("role") // Assuming "role" field exists in the user document
-                                when (userRole) {
-                                    "User" -> navigateToHome()  // Navigate to Home screen if role is "User"
-                                    "Doctor" -> navigateToDoctorDashboard()  // Navigate to Doctor Dashboard
-                                    "Groomer" -> navigateToGroomerDashboard()  // Navigate to Groomer Dashboard
-                                    "Trainer" -> navigateToTrainerDashboard()  // Navigate to Trainer Dashboard
-                                    "Ngo" -> navigateToNgoDashboard()  // Navigate to Ngo Dashboard
-                                    else -> {
-                                        Toast.makeText(requireContext(), "Role not recognized.", Toast.LENGTH_SHORT).show()
-                                    }
-                                }
-                            } else {
-                                // Document not found
-                                Toast.makeText(requireContext(), "User document not found!", Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                        .addOnFailureListener { exception ->
-                            // Handle error while fetching the user role
-                            Toast.makeText(requireContext(), "Error fetching user role: ${exception.message}", Toast.LENGTH_SHORT).show()
-                        }
+                    // Navigate to MainActivity after successful login
+                    val intent = Intent(requireContext(), MainActivity::class.java)
+                    startActivity(intent)
+                    requireActivity().finish() // Close login screen
                 }
             }, { errorMessage ->
-                Toast.makeText(requireContext(), "Login failed: $errorMessage", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Login failed: $errorMessage", Toast.LENGTH_SHORT)
+                    .show()
             })
         }
-    }
-
-    private fun storeFcmToken(userId: String, token: String) {
-        FirebaseFirestore.getInstance().collection("users")
-            .document(userId)
-            .update("fcmToken", token)
-            .addOnSuccessListener {
-                Log.d("LoginScreen", "FCM token stored successfully.")
-            }
-            .addOnFailureListener { e ->
-                Log.e("LoginScreen", "Error storing FCM token: ${e.message}")
-            }
     }
 
     private fun navigateToAdminScreen() {
@@ -191,65 +146,5 @@ class LoginScreen : Fragment() {
         } catch (e: Exception) {
             Log.e("LoginScreen", "Error during fragment transaction", e)
         }
-    }
-
-    private fun navigateToHome() {
-        val homeScreenFragment = HomeScreenFragment()
-        val transaction = requireActivity().supportFragmentManager.beginTransaction()
-        val currentFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.fragment_container)
-        if (currentFragment != null) {
-            transaction.hide(currentFragment)
-        }
-        transaction.replace(R.id.fragment_container, homeScreenFragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
-    }
-
-    private fun navigateToDoctorDashboard() {
-        val doctorDashboardFragment = ServiceDashboard()
-        val transaction = requireActivity().supportFragmentManager.beginTransaction()
-        val currentFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.fragment_container)
-        if (currentFragment != null) {
-            transaction.hide(currentFragment)
-        }
-        transaction.replace(R.id.fragment_container, doctorDashboardFragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
-    }
-
-    private fun navigateToGroomerDashboard() {
-        val groomerDashboardFragment = GroomerDashboard()
-        val transaction = requireActivity().supportFragmentManager.beginTransaction()
-        val currentFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.fragment_container)
-        if (currentFragment != null) {
-            transaction.hide(currentFragment)
-        }
-        transaction.replace(R.id.fragment_container, groomerDashboardFragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
-    }
-
-    private fun navigateToTrainerDashboard() {
-        val trainerDashboardFragment = TrainerDashboard()
-        val transaction = requireActivity().supportFragmentManager.beginTransaction()
-        val currentFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.fragment_container)
-        if (currentFragment != null) {
-            transaction.hide(currentFragment)
-        }
-        transaction.replace(R.id.fragment_container, trainerDashboardFragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
-    }
-
-    private fun navigateToNgoDashboard() {
-        val ngoDashboardFragment = NGODashboard()
-        val transaction = requireActivity().supportFragmentManager.beginTransaction()
-        val currentFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.fragment_container)
-        if (currentFragment != null) {
-            transaction.hide(currentFragment)
-        }
-        transaction.replace(R.id.fragment_container, ngoDashboardFragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
     }
 }

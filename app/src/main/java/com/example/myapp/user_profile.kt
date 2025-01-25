@@ -2,7 +2,11 @@ package com.example.myapp
 
 
 import EditUserDetailFragment
+import android.content.Context
+import android.content.Context.MODE_PRIVATE
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -107,14 +111,29 @@ class UserProfile : Fragment() {
             userMobile.text = ""
         }
     }
-
     private fun logOutUser() {
         // Sign out from Firebase
-        auth.signOut()
+        FirebaseAuth.getInstance().signOut()
 
-        // Call the method to navigate to the HomeScreenFragment
-        navigateToLogin()
+        val firebaseUser = FirebaseAuth.getInstance().currentUser
+        if (firebaseUser == null) {
+            Log.d("Logout", "User is logged out successfully")
+        } else {
+            Log.d("Logout", "User session still active")
+        }
+
+        // Explicitly clear shared preferences if you're using them for role/session storage
+        val sharedPreferences = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        sharedPreferences.edit().clear().apply()
+
+        // Restart the activity after logout
+        val intent = Intent(requireActivity(), MainActivity::class.java)  // Use requireActivity() here
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        requireActivity().finish()  // Use requireActivity() to finish the activity
     }
+
+
 
     private fun navigateToLogin() {
         // Navigate to the HomeScreenFragment
