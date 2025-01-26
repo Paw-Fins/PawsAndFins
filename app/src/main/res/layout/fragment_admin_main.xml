@@ -41,6 +41,7 @@
                 android:layout_width="0dp"
                 android:layout_height="56dp"
                 android:layout_weight="1"
+                android:textSize="10sp"
                 android:backgroundTint="#FF9800"
                 android:text="Manage Users"
                 android:textColor="@android:color/white"
@@ -50,6 +51,7 @@
                 android:id="@+id/btnAppointmentHistory"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
+                android:textSize="10sp"
                 android:layout_marginStart="16dp"
                 android:layout_weight="1"
                 android:backgroundTint="#BBD4F6"
@@ -72,6 +74,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="#B3E5FC"
                 android:text="Payments"
+                android:textSize="10sp"
                 android:textColor="@android:color/black"
                 android:textStyle="bold" />
 
@@ -79,6 +82,7 @@
                 android:id="@+id/btnReviews"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
+                android:textSize="10sp"
                 android:layout_weight="1"
                 android:backgroundTint="#FFEB3B"
                 android:text="Reviews"
@@ -184,6 +188,78 @@
                     android:layout_marginTop="4dp" />
             </LinearLayout>
         </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NGO register"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:textColor="#000000"
+            android:textSize="18sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnViewAllNgo"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:backgroundTint="#BBD4F6"
+            android:text="View All Ngo"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+             />
+        <LinearLayout
+            android:id="@+id/adminNgoRegisterContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Vet's register"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:textColor="#000000"
+            android:textSize="18sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnViewAllVet"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:backgroundTint="#BBD4F6"
+            android:text="View All Vets"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            />
+        <LinearLayout
+            android:id="@+id/adminVetRegisterContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Groomer register"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:textColor="#000000"
+            android:textSize="18sp" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnViewAllGroomer"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:backgroundTint="#BBD4F6"
+            android:text="View All Groomer"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            />
+        <LinearLayout
+            android:id="@+id/adminGroomerRegisterContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
 
     </LinearLayout>
 </ScrollView>
