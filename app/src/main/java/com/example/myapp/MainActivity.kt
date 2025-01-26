@@ -4,7 +4,8 @@ import AppointmentHistoryFragment
 import CartFragment
 import ErrorFragment
 import SuccessFragment
-import android.content.Intent
+import android.Manifest
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
@@ -17,7 +18,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
@@ -28,6 +31,11 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.razorpay.PaymentResultListener
 
 class MainActivity : AppCompatActivity(), PaymentResultListener {
+
+    companion object {
+        private const val PERMISSION_REQUEST_CODE = 100
+    }
+
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var layout: ConstraintLayout
     private lateinit var profileCircle: ImageView
@@ -44,6 +52,7 @@ class MainActivity : AppCompatActivity(), PaymentResultListener {
         setContentView(R.layout.activity_main)
         supportActionBar?.hide()
 
+        checkAndRequestPermissions()
 
         layout = findViewById(R.id.topLayout)
         bottomNavigationView = findViewById(R.id.bottom_navigation)
@@ -430,6 +439,58 @@ class MainActivity : AppCompatActivity(), PaymentResultListener {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, trainerDashboardFragment)
             .commit()
+    }
+
+    private fun checkAndRequestPermissions() {
+        val permissionsNeeded = mutableListOf<String>()
+
+        // List of permissions to check
+        val permissions = arrayOf(
+            Manifest.permission.INTERNET,
+            Manifest.permission.ACCESS_NETWORK_STATE,
+            Manifest.permission.ACCESS_WIFI_STATE,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.CALL_PHONE,
+            Manifest.permission.MANAGE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_MEDIA_IMAGES
+        )
+
+        // Add permissions that are not granted to the list
+        for (permission in permissions) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                permissionsNeeded.add(permission)
+            }
+        }
+
+        // Request permissions if any are needed
+        if (permissionsNeeded.isNotEmpty()) {
+            ActivityCompat.requestPermissions(
+                this,
+                permissionsNeeded.toTypedArray(),
+                PERMISSION_REQUEST_CODE
+            )
+        }
+    }
+
+    // Handle the result of the permission request
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            val deniedPermissions = mutableListOf<String>()
+
+            // Check which permissions were denied
+            for ((index, result) in grantResults.withIndex()) {
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    deniedPermissions.add(permissions[index])
+                }
+            }
+        }
     }
 
 }

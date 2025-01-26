@@ -1,8 +1,3 @@
-import android.Manifest
-import android.app.DownloadManager
-import android.content.Context
-import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
@@ -11,8 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import com.example.myapp.HomeScreenFragment
+import com.example.myapp.MainActivity
 import com.example.myapp.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -20,6 +16,9 @@ import com.itextpdf.kernel.pdf.PdfDocument
 import com.itextpdf.kernel.pdf.PdfWriter
 import com.itextpdf.layout.Document
 import com.itextpdf.layout.element.Paragraph
+import com.itextpdf.layout.element.Table
+import com.itextpdf.layout.properties.TextAlignment
+import com.itextpdf.layout.properties.UnitValue
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
@@ -34,6 +33,8 @@ class SuccessFragment : Fragment() {
     private val auth = FirebaseAuth.getInstance()
     private lateinit var paymentId: String
     private lateinit var orderid: String
+    private lateinit var date: String
+    private lateinit var time:String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,19 +45,24 @@ class SuccessFragment : Fragment() {
         val buttonDownloadPdf: Button = rootView.findViewById(R.id.button_download_pdf)
         val buttonBackToHome: Button = rootView.findViewById(R.id.button_back_to_home)
 
+        (requireActivity() as MainActivity).showBottomNavigation(false)
+
         paymentId = arguments?.getString("paymentId").toString()
         orderid = generateUniqueOrderId()
-
+        date = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date()).toString()
+        time = SimpleDateFormat("hh:mm:ss a", Locale.getDefault()).format(Date()).toString()
+        statusPass()
         processOrderAndClearCart()
-
-        // Button to download the PDF
         buttonDownloadPdf.setOnClickListener {
             generateOrderPdf()
         }
 
         // Navigate to home screen
         buttonBackToHome.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
+            val homeFragment = HomeScreenFragment()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, homeFragment)
+                .commit()
         }
 
         return rootView
@@ -98,7 +104,8 @@ class SuccessFragment : Fragment() {
                             "totalAmount" to totalAmount,
                             "paymentId" to paymentId,
                             "orderId" to orderid,
-                            "date" to SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+                            "date" to SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date()),
+                            "time" to SimpleDateFormat("hh:mm:ss a", Locale.getDefault()).format(Date())
                         )
 
                         if (isAdded) {  // Check if fragment is attached before showing Toast or accessing context
@@ -162,62 +169,103 @@ class SuccessFragment : Fragment() {
                     file.parentFile?.mkdirs()
                 }
 
-                // Initialize PDF writer and document
                 val pdfWriter = PdfWriter(FileOutputStream(file))
                 val pdfDocument = PdfDocument(pdfWriter)
                 val document = Document(pdfDocument)
 
-                document.add(Paragraph("Order Details").setTextAlignment(com.itextpdf.layout.properties.TextAlignment.CENTER))
+                // Get current date and time
+
+                // Add Title
+                val title = Paragraph("Order Details")
+                    .setBold()
+                    .setTextAlignment(TextAlignment.CENTER)
+                    .setFontSize(18f)
+                document.add(title)
+
+
+                val Datetime = Paragraph()
+                    .add("Date: $date\n")
+                    .add("Time: $time")
+                    .setTextAlignment(TextAlignment.RIGHT)
+                    .setMarginBottom(10f)
+                document.add(Datetime)
+
+                val orderInfo = Paragraph()
+                    .add("Payment ID: $paymentId\n")
+                    .add("Order ID: $orderid\n")
+                    .setTextAlignment(TextAlignment.LEFT)
+                    .setMarginBottom(10f)
+                document.add(orderInfo)
+
+                val table = Table(floatArrayOf(3f, 2f, 2f, 3f))
+                    .setWidth(UnitValue.createPercentValue(100f)) // Correct method for setting width
+
+                table.addHeaderCell(Paragraph("Product Name").setBold())
+                table.addHeaderCell(Paragraph("Quantity").setBold())
+                table.addHeaderCell(Paragraph("Price/Unit Rs.").setBold())
+                table.addHeaderCell(Paragraph("Total Price Rs.").setBold())
 
                 val userId = auth.currentUser?.uid
+                var grandTotal = 0
 
                 if (userId != null) {
-                    try {
-                        val querySnapshot = withContext(Dispatchers.IO) {
-                            firestore.collection("order_history")
-                                .whereEqualTo("userId", userId)
-                                .get()
-                                .await()
+                    val querySnapshot = withContext(Dispatchers.IO) {
+                        firestore.collection("order_history")
+                            .whereEqualTo("userId", userId)
+                            .whereEqualTo("orderId",orderid)
+                            .get()
+                            .await()
+                    }
+
+                    if (!querySnapshot.isEmpty) {
+                        val order = querySnapshot.documents[0]
+                        val products = order["products"] as List<Map<String, Any>>
+
+                        // Add product rows to the table
+                        products.forEach { product ->
+                            val name = product["name"].toString()
+                            val quantity = product["quantity"].toString().toInt()
+                            val pricePerUnit = product["price"].toString().toInt()
+                            val totalPrice = quantity * pricePerUnit
+                            grandTotal += totalPrice
+
+                            table.addCell(name)
+                            table.addCell(quantity.toString())
+                            table.addCell(pricePerUnit.toString())
+                            table.addCell(totalPrice.toString())
                         }
 
-                        if (!querySnapshot.isEmpty) {
-                            val order = querySnapshot.documents[0]
-                            val products = order["products"] as List<Map<String, Any>>
+                        document.add(Paragraph("Products").setBold().setFontSize(14f).setMarginBottom(5f).setTextAlignment(TextAlignment.CENTER))
+                        document.add(table)
 
-                            // Add product details to the PDF
-                            products.forEach { product ->
-                                val name = product["name"]
-                                val price = product["price"]
-                                val quantity = product["quantity"]
-                                document.add(Paragraph("Product: $name, Price: ₹$price, Quantity: $quantity"))
-                            }
+                        val tax = (grandTotal * 0).toInt()
+                        val totalWithTax = grandTotal + tax
 
-                            val totalAmount = order["totalAmount"]
-                            val paymentId = order["paymentId"]
-                            val date = order["date"]
-                            val orderid = order["orderId"]
+                        val totalParagraph = Paragraph()
+                            .add("Grand Total: $grandTotal Rs.\n")
+                            .add("Tax (Included): $tax Rs.\n")
+                            .add("Total Amount: $totalWithTax Rs.\n")
+                            .add("Delivery charges: Free")
+                            .setTextAlignment(TextAlignment.RIGHT)
+                            .setMarginTop(10f)
+                        document.add(totalParagraph)
 
-                            document.add(Paragraph("\nTotal Amount: ₹$totalAmount"))
-                            document.add(Paragraph("Payment ID: $paymentId"))
-                            document.add(Paragraph("Order ID: $orderid"))
-                            document.add(Paragraph("Date: $date"))
+                        val footer = Paragraph("Paws & Fins Invoice")
+                            .setTextAlignment(TextAlignment.CENTER)
+                            .setFontSize(12f)
+                            .setMarginTop(20f)
+                        document.add(footer)
 
-                            document.close()
+                        document.close()
 
-                            // Switch to main thread to show Toast and trigger the download
-                            withContext(Dispatchers.Main) {
-                                activity?.let { context ->
-                                    Toast.makeText(context, "PDF saved at ${file.absolutePath}", Toast.LENGTH_SHORT).show()
-                                }
-
-                                // Trigger the download
-                                triggerDownload(requireContext(), file.absolutePath)
-                            }
-                        }
-                    } catch (e: Exception) {
+                        // Notify user on main thread
                         withContext(Dispatchers.Main) {
-                            Log.e("SuccessFragment", "Error fetching data from Firestore", e)
-                            Toast.makeText(requireContext(), "Error generating PDF: ${e.message}", Toast.LENGTH_SHORT).show()
+                            activity?.let { context ->
+                                Toast.makeText(context, "PDF saved at ${file.absolutePath}", Toast.LENGTH_SHORT).show()
+                            }
+
+                            // Trigger the download
+                            triggerDownload(requireContext(), file.absolutePath)
                         }
                     }
                 }
@@ -230,11 +278,45 @@ class SuccessFragment : Fragment() {
         }
     }
 
-
-
     private fun generateUniqueOrderId(): String {
         val timestamp = System.currentTimeMillis()
         val randomString = (1..6).map { ('A'..'Z').random() }.joinToString("")
         return "ORD_${timestamp}_$randomString"
+    }
+
+    private fun statusPass(){
+        val userId = auth.currentUser?.uid
+        if(userId != null){
+            firestore.collection("orders")
+                .whereEqualTo("userId",userId)
+                .whereEqualTo("status", "PENDING")
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                   for(document in querySnapshot.documents) {
+                       document.reference.update("status", "SUCCESS")
+                           .addOnSuccessListener { querySnapshot ->
+                               Toast.makeText(
+                                   requireContext(),
+                                   "Status updated",
+                                   Toast.LENGTH_SHORT
+                               ).show()
+                           }
+                           .addOnFailureListener { e ->
+                               Toast.makeText(
+                                   requireContext(),
+                                   "Status updae failed: $e",
+                                   Toast.LENGTH_LONG
+                               ).show()
+                           }
+                   }
+                }
+                .addOnFailureListener{e->
+                    Toast.makeText(
+                        requireContext(),
+                        "ERROR: $e",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+        }
     }
 }
