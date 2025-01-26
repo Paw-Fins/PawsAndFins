@@ -40,6 +40,7 @@ class SuccessFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        statusPass()
         val rootView = inflater.inflate(R.layout.fragment_payment_success, container, false)
 
         val buttonDownloadPdf: Button = rootView.findViewById(R.id.button_download_pdf)
@@ -51,7 +52,6 @@ class SuccessFragment : Fragment() {
         orderid = generateUniqueOrderId()
         date = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date()).toString()
         time = SimpleDateFormat("hh:mm:ss a", Locale.getDefault()).format(Date()).toString()
-        statusPass()
         processOrderAndClearCart()
         buttonDownloadPdf.setOnClickListener {
             generateOrderPdf()
@@ -283,40 +283,40 @@ class SuccessFragment : Fragment() {
         val randomString = (1..6).map { ('A'..'Z').random() }.joinToString("")
         return "ORD_${timestamp}_$randomString"
     }
-
     private fun statusPass(){
         val userId = auth.currentUser?.uid
-        if(userId != null){
-            firestore.collection("orders")
-                .whereEqualTo("userId",userId)
-                .whereEqualTo("status", "PENDING")
+        if (userId != null) {
+            firestore.collection("payment_history")
+                .whereEqualTo("userId", userId)
+                .whereEqualTo("status", "PENDING") // Assuming the initial status is Pending
                 .get()
                 .addOnSuccessListener { querySnapshot ->
-                   for(document in querySnapshot.documents) {
-                       document.reference.update("status", "SUCCESS")
-                           .addOnSuccessListener { querySnapshot ->
-                               Toast.makeText(
-                                   requireContext(),
-                                   "Status updated",
-                                   Toast.LENGTH_SHORT
-                               ).show()
-                           }
-                           .addOnFailureListener { e ->
-                               Toast.makeText(
-                                   requireContext(),
-                                   "Status updae failed: $e",
-                                   Toast.LENGTH_LONG
-                               ).show()
-                           }
-                   }
+                    for (document in querySnapshot.documents) {
+                        document.reference.update("status", "Success")
+                            .addOnSuccessListener {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Payment status updated to Failed!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                            .addOnFailureListener { e ->
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Error updating payment status: ${e.message}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                    }
                 }
-                .addOnFailureListener{e->
+                .addOnFailureListener { e ->
                     Toast.makeText(
                         requireContext(),
-                        "ERROR: $e",
-                        Toast.LENGTH_LONG
+                        "Error fetching payment records: ${e.message}",
+                        Toast.LENGTH_SHORT
                     ).show()
                 }
         }
     }
+
 }
