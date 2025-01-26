@@ -80,9 +80,9 @@ class SuccessFragment : Fragment() {
                                 val productName = product["name"].toString()
                                 val productPrice = product["price"].toString().toInt()
                                 val productQuantity = product["quantity"].toString().toInt()
-
+                                Log.d("Product Info", "Name: $productName, Price: $productPrice, Quantity: $productQuantity")
                                 productList.add(
-                                    mapOf(
+                                   mapOf(
                                         "name" to productName,
                                         "price" to productPrice,
                                         "quantity" to productQuantity
