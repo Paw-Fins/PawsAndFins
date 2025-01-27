@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.myapp.HomeScreenFragment
 import com.example.myapp.MainActivity
 import com.example.myapp.R
 import com.google.firebase.auth.FirebaseAuth
@@ -26,9 +27,9 @@ class ErrorFragment : Fragment() {
 
         // Update payment status to Failed
         updatePaymentStatusToFailed()
-
+        clearUserCart()
         Handler(Looper.getMainLooper()).postDelayed({
-            navigateToCart()
+            navigateToHome()
         }, 5000)
 
         return rootView
@@ -37,9 +38,9 @@ class ErrorFragment : Fragment() {
     private fun updatePaymentStatusToFailed() {
         val userId = auth.currentUser?.uid
         if (userId != null) {
-            firestore.collection("payment_history")
+            firestore.collection("payment_hiwstory")
                 .whereEqualTo("userId", userId)
-                .whereEqualTo("status", "PENDING") // Assuming the initial status is Pending
+                .whereEqualTo("status", "PENDING")
                 .get()
                 .addOnSuccessListener { querySnapshot ->
                     for (document in querySnapshot.documents) {
@@ -70,8 +71,8 @@ class ErrorFragment : Fragment() {
         }
     }
 
-    private fun navigateToCart() {
-        val cartFragment = CartFragment()
+    private fun navigateToHome() {
+        val cartFragment = HomeScreenFragment()
         val transaction = requireActivity().supportFragmentManager.beginTransaction()
         val currentFragment =
             requireActivity().supportFragmentManager.findFragmentById(R.id.fragment_container)
@@ -82,4 +83,26 @@ class ErrorFragment : Fragment() {
         transaction.addToBackStack(null)
         transaction.commit()
     }
+
+    private fun clearUserCart() {
+        val userId = auth.currentUser?.uid
+        userId?.let {
+            firestore.collection("orders").whereEqualTo("userId", userId)
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                    querySnapshot.documents.forEach { document ->
+                        document.reference.delete()
+                    }
+                    activity?.let { context ->
+                        Toast.makeText(context, "Cart cleared successfully!", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                .addOnFailureListener { e ->
+                    activity?.let { context ->
+                        Toast.makeText(context, "Error clearing cart: ${e.message}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+        }
+    }
+
 }
