@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -157,6 +158,8 @@ class AdminScreenFragment : Fragment() {
             addressTextView.text = organization.address
 
             // Find the services container
+            val organizationImage : ImageView = itemView.findViewById<ImageView?>(R.id.organization_image)
+            organizationImage.visibility = View.GONE
             val servicesContainer: LinearLayout = itemView.findViewById(R.id.services_container)
             servicesContainer.removeAllViews() // Clear any previous services
 
