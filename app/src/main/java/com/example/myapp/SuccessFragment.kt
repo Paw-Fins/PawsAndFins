@@ -258,7 +258,6 @@ class SuccessFragment : Fragment() {
 
                         document.close()
 
-                        // Notify user on main thread
                         withContext(Dispatchers.Main) {
                             activity?.let { context ->
                                 Toast.makeText(context, "PDF saved at ${file.absolutePath}", Toast.LENGTH_SHORT).show()

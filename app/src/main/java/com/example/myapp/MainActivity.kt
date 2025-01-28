@@ -35,7 +35,6 @@ class MainActivity : AppCompatActivity(), PaymentResultListener {
     companion object {
         private const val PERMISSION_REQUEST_CODE = 100
     }
-
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var layout: ConstraintLayout
     private lateinit var profileCircle: ImageView

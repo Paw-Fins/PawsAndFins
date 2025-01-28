@@ -10,6 +10,17 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <!-- Search Bar -->
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/search_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:iconifiedByDefault="false"
+            android:queryHint="Search payments"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -24,5 +35,18 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:orientation="vertical" />
+
+        <!-- No Matches Found -->
+        <TextView
+            android:id="@+id/tvNoMatchesFound"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
+            android:text="No matches found"
+            android:textSize="18sp"
+            android:visibility="gone"
+            android:textColor="@android:color/darker_gray" />
+
     </LinearLayout>
 </ScrollView>
