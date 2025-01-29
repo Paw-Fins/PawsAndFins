@@ -5,13 +5,13 @@
     android:layout_height="match_parent">
 
     <FrameLayout
-        android:layout_width="188dp"
+        android:layout_width="190dp"
         android:layout_height="330dp"
         android:padding="8dp"
         android:background="@drawable/border_container"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
+        app:layout_constraintStart_toStartOf="parent"
+>
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -19,9 +19,10 @@
             <!-- Image Section -->
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="125dp"
+                android:layout_width="match_parent"
                 android:layout_height="125dp"
                 app:srcCompat="@drawable/dummy_product"
+                android:scaleType="centerCrop"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginTop="8dp"
@@ -41,21 +42,18 @@
                 app:layout_constraintTop_toBottomOf="@id/imageView" />
 
             <!-- Price Section -->
-
-            <!-- Description Section -->
-
             <TextView
                 android:id="@+id/dynamicPrice"
-                android:layout_width="46dp"
+                android:layout_width="wrap_content"
                 android:layout_height="22dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="124dp"
-                android:text="$150"
+                android:text="₹150"
                 android:textColor="#000000"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/dynamicTextView" />
+                app:layout_constraintTop_toBottomOf="@id/dynamicTextView" />
 
+            <!-- Description Section -->
             <TextView
                 android:id="@+id/dynamicDes"
                 android:layout_width="0dp"
@@ -65,30 +63,30 @@
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/dynamicPrice" />
+                app:layout_constraintTop_toBottomOf="@id/dynamicPrice" />
 
             <!-- Button Container -->
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp">
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/dynamicDes">
 
                 <!-- Buy Now Button -->
                 <Button
                     android:id="@+id/buyNowButton"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginBottom="4dp"
                     android:backgroundTint="#BBD4F6"
                     android:text="Buy Now"
                     android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:textSize="8sp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
 
                 <!-- View More Button -->
                 <Button
@@ -98,13 +96,10 @@
                     android:backgroundTint="#BBD4F6"
                     android:text="View More"
                     android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:textSize="8sp"
-                    app:layout_constraintTop_toBottomOf="@id/buyNowButton"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
