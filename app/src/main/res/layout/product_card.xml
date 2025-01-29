@@ -6,7 +6,7 @@
 
     <FrameLayout
         android:layout_width="188dp"
-        android:layout_height="312dp"
+        android:layout_height="330dp"
         android:padding="8dp"
         android:background="@drawable/border_container"
         app:layout_constraintTop_toTopOf="parent"
@@ -33,36 +33,39 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:maxLines="2"
                 android:text="Dynamic Text"
                 android:textColor="#000000"
                 android:textSize="14sp"
-                app:layout_constraintTop_toBottomOf="@id/imageView"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imageView" />
 
             <!-- Price Section -->
+
+            <!-- Description Section -->
+
             <TextView
                 android:id="@+id/dynamicPrice"
                 android:layout_width="46dp"
                 android:layout_height="22dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="124dp"
                 android:text="$150"
                 android:textColor="#000000"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/imageView" />
+                app:layout_constraintTop_toBottomOf="@+id/dynamicTextView" />
 
-            <!-- Description Section -->
             <TextView
                 android:id="@+id/dynamicDes"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:maxLines="2"
                 android:text="Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus...."
                 android:textSize="12sp"
-                app:layout_constraintTop_toBottomOf="@id/dynamicTextView"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/dynamicPrice" />
 
             <!-- Button Container -->
             <androidx.constraintlayout.widget.ConstraintLayout
