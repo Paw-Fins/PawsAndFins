@@ -18,6 +18,17 @@
             android:textColor="#000000"
             android:layout_marginBottom="16dp"/>
 
+        <TextView
+            android:id="@+id/tvorgIdreg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Organization ID: Not Assigned"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#666666"
+            android:layout_gravity="center"
+            android:layout_marginBottom="10dp"/>
+
         <!-- Organization Name -->
         <TextView
             android:layout_width="match_parent"
@@ -184,6 +195,13 @@
             android:backgroundTint="#BBD4F6"
             android:textColor="#000000"
             android:layout_marginTop="16dp"/>
+
+        <ProgressBar
+            android:id="@+id/organizationProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"/>
 
     </LinearLayout>
 </ScrollView>

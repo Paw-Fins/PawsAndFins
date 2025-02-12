@@ -1,12 +1,25 @@
 package com.example.myapp
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.OpenableColumns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
+import com.cloudinary.Cloudinary
+import com.cloudinary.utils.ObjectUtils
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
+import java.util.concurrent.Executors
 
 class PetRegistrationFragment : Fragment() {
 
@@ -18,9 +31,28 @@ class PetRegistrationFragment : Fragment() {
     private lateinit var radioGroupGender: RadioGroup
     private lateinit var btnUpload: Button
     private lateinit var btnSaveProfile: Button
+    private lateinit var petidText: TextView
+    private lateinit var petImage: ImageView
+
+    private val db = FirebaseFirestore.getInstance()
+    private val userId = FirebaseAuth.getInstance().currentUser?.uid
+    private var petId: String? = null
+    private var imageUri: Uri? = null
+    private var uploadedImageUrl: String? = null
+
+    private val cloudinary: Cloudinary by lazy {
+        Cloudinary(
+            ObjectUtils.asMap(
+                "cloud_name", getString(R.string.cloud_name),
+                "api_key", getString(R.string.api_key),
+                "api_secret", getString(R.string.api_secret)
+            )
+        )
+    }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_pet_registration, container, false)
@@ -34,90 +66,152 @@ class PetRegistrationFragment : Fragment() {
         radioGroupGender = view.findViewById(R.id.radioGroupGender)
         btnUpload = view.findViewById(R.id.uploadButton)
         btnSaveProfile = view.findViewById(R.id.saveProfileButton)
+        petImage = view.findViewById(R.id.petImage)
+        petidText = view.findViewById(R.id.tvPetId)
 
-        // Handle Save Button Click
+        btnUpload.setOnClickListener { openGallery() }
+
         btnSaveProfile.setOnClickListener {
-            if (validateInputs()) {
-                showSuccessMessage(view)
-                navigateToPetDetails()
+            if (imageUri != null) {
+                // First upload image, then save pet profile
+                uploadImageToCloudinary(imageUri!!) {
+                    savePetProfile()
+                }
+            } else {
+                // If no new image, directly save profile
+                savePetProfile()
             }
         }
 
+        fetchPetData()
         return view
     }
 
-    // Validate form inputs
-    private fun validateInputs(): Boolean {
-        if (etPetName.text.toString().trim().isEmpty()) {
-            etPetName.error = "Pet name is required!"
-            return false
-        }
-        if (etPetType.text.toString().trim().isEmpty()) {
-            etPetType.error = "Pet type is required!"
-            return false
-        }
-        if (etPetBreed.text.toString().trim().isEmpty()) {
-            etPetBreed.error = "Pet breed is required!"
-            return false
-        }
-        if (etPetWeight.text.toString().trim().isEmpty()) {
-            etPetWeight.error = "Pet weight is required!"
-            return false
-        }
-        if (etPetAge.text.toString().trim().isEmpty()) {
-            etPetAge.error = "Pet age is required!"
-            return false
-        }
+    private fun fetchPetData() {
+        userId?.let {
+            db.collection("pets").whereEqualTo("userId", it).get()
+                .addOnSuccessListener { documents ->
+                    for (doc in documents) {
+                        petidText.text = doc.getString("petId")
+                        etPetName.hint = doc.getString("name") ?: "Enter Pet Name"
+                        etPetType.hint = doc.getString("type") ?: "Enter Pet Type"
+                        etPetBreed.hint = doc.getString("breed") ?: "Enter Pet Breed"
+                        etPetWeight.hint = doc.getDouble("weight")?.toString() ?: "Enter Weight (kg)"
+                        etPetAge.hint = doc.getLong("age")?.toString() ?: "Enter Age (years)"
 
-        val weight = etPetWeight.text.toString().toDoubleOrNull()
-        val age = etPetAge.text.toString().toIntOrNull()
+                        val gender = doc.getString("gender")
+                        if (gender == "Male") view?.findViewById<RadioButton>(R.id.rbMale)?.isChecked = true
+                        else view?.findViewById<RadioButton>(R.id.rbFemale)?.isChecked = true
 
-        if (weight == null || weight <= 0) {
-            etPetWeight.error = "Enter a valid weight!"
-            return false
+                        uploadedImageUrl = doc.getString("imageUrl")
+                        uploadedImageUrl?.let {
+                            Glide.with(this).load(it).into(petImage)
+                        }
+                    }
+                }
         }
-        if (age == null || age <= 0) {
-            etPetAge.error = "Enter a valid age!"
-            return false
-        }
-
-        if (radioGroupGender.checkedRadioButtonId == -1) {
-            Toast.makeText(requireContext(), "Please select a gender!", Toast.LENGTH_SHORT).show()
-            return false
-        }
-
-        return true
     }
 
-    // Collect pet data
-    private fun navigateToPetDetails() {
-        val petName = etPetName.text.toString().trim()
-        val petType = etPetType.text.toString().trim()
-        val petBreed = etPetBreed.text.toString().trim()
-        val petWeight = etPetWeight.text.toString().toFloat()
-        val petAge = etPetAge.text.toString().toInt()
+    private fun savePetProfile() {
+        val petName = etPetName.text.toString().trim().ifEmpty { etPetName.hint.toString() }
+        val petType = etPetType.text.toString().trim().ifEmpty { etPetType.hint.toString() }
+        val petBreed = etPetBreed.text.toString().trim().ifEmpty { etPetBreed.hint.toString() }
+
+        val petWeightText = etPetWeight.text.toString().trim()
+        val petAgeText = etPetAge.text.toString().trim()
+
+        val petWeight = if (petWeightText.isNotEmpty()) petWeightText.toDouble() else etPetWeight.hint.toString().toDoubleOrNull() ?: 0.0
+        val petAge = if (petAgeText.isNotEmpty()) petAgeText.toInt() else etPetAge.hint.toString().toIntOrNull() ?: 0
 
         val selectedGenderId = radioGroupGender.checkedRadioButtonId
-        val gender = view?.findViewById<RadioButton>(selectedGenderId)?.text.toString()
+        val gender = if (selectedGenderId == R.id.rbMale) "Male" else if (selectedGenderId == R.id.rbFemale) "Female" else null
 
-        // Pass data to PetDetailsFragment
-        val petDetailsFragment = PetDetailsFragment.newInstance(
-            petName = petName,
-            petType = petType,
-            petBreed = petBreed,
-            petAge = petAge,
-            petWeight = petWeight,
-            petGender = gender
+        val finalGender = gender ?: view?.findViewById<RadioButton>(R.id.rbMale)?.text.toString()
+        val petData = hashMapOf(
+            "name" to petName,
+            "type" to petType,
+            "breed" to petBreed,
+            "weight" to petWeight,
+            "age" to petAge,
+            "gender" to finalGender,
+            "imageUrl" to uploadedImageUrl,
+            "userId" to userId,
+            "petId" to petId
         )
+        if (petId == null) {
+            petId = generateUniquePetId()
+            db.collection("pets").document(petId!!)
+                .set(petData)
+                .addOnSuccessListener { Snackbar.make(requireView(), "Pet saved!", Snackbar.LENGTH_LONG).show() }
+        } else {
 
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, petDetailsFragment)
-            .addToBackStack(null)
-            .commit()
+            db.collection("pets").document(petId!!)
+                .update(petData as Map<String, Any>)
+                .addOnSuccessListener { Snackbar.make(requireView(), "Pet updated!", Snackbar.LENGTH_LONG).show() }
+        }
     }
 
-    // Show success message
-    private fun showSuccessMessage(view: View) {
-        Snackbar.make(view, "Pet profile saved successfully!", Snackbar.LENGTH_LONG).show()
+
+    private fun generateUniquePetId(): String {
+        val timestamp = System.currentTimeMillis().toString()
+        val randomPart = (1000..9999).random().toString()
+        return "PET-$timestamp-$randomPart"
+    }
+
+    private fun openGallery() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT).setType("image/*")
+        startActivityForResult(intent, 100)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 100 && resultCode == Activity.RESULT_OK && data != null) {
+            imageUri = data.data
+            petImage.setImageURI(imageUri) // Preview selected image
+        }
+    }
+
+    private fun uploadImageToCloudinary(uri: Uri, onSuccess: () -> Unit) {
+        val executor = Executors.newSingleThreadExecutor()
+        executor.execute {
+            try {
+                val file = getFileFromUri(uri)
+                val uploadResult = cloudinary.uploader().upload(file.absolutePath, ObjectUtils.emptyMap())
+                val url = uploadResult["secure_url"] as String
+                requireActivity().runOnUiThread {
+                    Glide.with(this).load(url).into(petImage)
+                    uploadedImageUrl = url
+                    Snackbar.make(requireView(), "Image uploaded successfully!", Snackbar.LENGTH_LONG).show()
+                    onSuccess() // Now save pet profile after image upload
+                }
+            } catch (e: Exception) {
+                requireActivity().runOnUiThread {
+                    Snackbar.make(requireView(), "Image upload failed: ${e.message}", Snackbar.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
+    private fun getFileFromUri(uri: Uri): File {
+        val fileName = getFileName(uri)
+        val file = File(requireContext().cacheDir, fileName)
+        val inputStream: InputStream? = requireContext().contentResolver.openInputStream(uri)
+        val outputStream = FileOutputStream(file)
+        inputStream?.copyTo(outputStream)
+        inputStream?.close()
+        outputStream.close()
+        return file
+    }
+
+    private fun getFileName(uri: Uri): String {
+        var name = "temp_pet_image.jpg"
+        val cursor = requireContext().contentResolver.query(uri, null, null, null, null)
+        cursor?.use {
+            if (it.moveToFirst()) {
+                val columnIndex = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                if (columnIndex >= 0) name = it.getString(columnIndex)
+            }
+        }
+        return name
     }
 }

@@ -23,6 +23,8 @@
             android:textColor="#000000"
             android:layout_marginBottom="16dp"/>
 
+
+
         <!-- Pet Image View -->
         <ImageView
             android:id="@+id/petImage"
@@ -31,6 +33,17 @@
             android:scaleType="centerCrop"
             android:layout_gravity="center"
             android:src="@drawable/dog"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:id="@+id/tvPetId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pet ID: Not Assigned"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="#666666"
+            android:layout_gravity="center"
             android:layout_marginBottom="8dp"/>
 
         <!-- Pet Name -->
@@ -173,6 +186,7 @@
             android:backgroundTint="#FFB74D"
             android:textColor="#000000"
             android:layout_marginTop="8dp"/>
+
 
     </LinearLayout>
 </ScrollView>

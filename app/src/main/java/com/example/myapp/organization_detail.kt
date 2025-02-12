@@ -23,8 +23,9 @@ class OrganizationDetailFragment : Fragment() {
         val email = arguments?.getString("email")
         val phoneNumber = arguments?.getString("phoneNumber")
         val address = arguments?.getString("address")
-        val website = arguments?.getString("website")
+        val website = arguments?.getString("website") ?: "Not Provided"
         val description = arguments?.getString("description")
+        val orgId = arguments?.getString("orgId") ?: "N/A" // Handle null case
 
         // Set values in TextViews
         view.findViewById<TextView>(R.id.displayOrgName).text = orgName
@@ -34,7 +35,9 @@ class OrganizationDetailFragment : Fragment() {
         view.findViewById<TextView>(R.id.displayAddress).text = address
         view.findViewById<TextView>(R.id.displayWebsite).text = website
         view.findViewById<TextView>(R.id.displayDescription).text = description
+        view.findViewById<TextView>(R.id.tvorgId).text = orgId // Display org ID
 
+        // Back button
         val backButton = view.findViewById<Button>(R.id.backButton)
         backButton.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
