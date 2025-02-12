@@ -104,5 +104,20 @@
         android:name="com.example.myapp.guide"
         android:label="fragment_guide"
         tools:layout="@layout/fragment_guide" />
+    <fragment
+        android:id="@+id/adoption"
+        android:name="com.example.myapp.Adoption"
+        android:label="fragment_adoption"
+        tools:layout="@layout/fragment_adoption" />
+    <fragment
+        android:id="@+id/pet_profile"
+        android:name="com.example.myapp.pet_profile"
+        android:label="fragment_pet_profile"
+        tools:layout="@layout/fragment_pet_registration" />
+    <fragment
+        android:id="@+id/pet_profile2"
+        android:name="com.example.myapp.pet_profile"
+        android:label="fragment_pet_profile"
+        tools:layout="@layout/fragment_pet_profile" />
 
 </navigation>

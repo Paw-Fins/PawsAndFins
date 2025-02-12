@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    android:layout_marginBottom="16dp"
+    android:background="@drawable/border_container">
+
+    <!-- Pet Image -->
+    <ImageView
+        android:id="@+id/petImage"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_margin="8dp"
+        android:layout_marginStart="8dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/dog"
+        app:layout_constraintBottom_toTopOf="@id/contactButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <!-- Details Layout -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:orientation="vertical"
+        app:layout_constraintStart_toEndOf="@id/petImage"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/contactButton"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/petName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Name: Max"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textAlignment="textStart"/>
+
+        <TextView
+            android:id="@+id/petAge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Age: 3 years"
+            android:layout_marginTop="4dp"
+            android:textAlignment="textStart"/>
+
+        <TextView
+            android:id="@+id/petHeight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Height: 40 cm"
+            android:layout_marginTop="4dp"
+            android:textAlignment="textStart"/>
+
+        <TextView
+            android:id="@+id/petBreed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Breed: Golden Retriever"
+            android:layout_marginTop="4dp"
+            android:textAlignment="textStart"/>
+
+        <TextView
+            android:id="@+id/petGender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Gender: Male"
+            android:layout_marginTop="4dp"
+            android:textAlignment="textStart"/>
+    </LinearLayout>
+
+    <!-- Full-Width Contact Button with Spacing -->
+    <Button
+        android:id="@+id/contactButton"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#BBD4F6"
+        android:text="Contact"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

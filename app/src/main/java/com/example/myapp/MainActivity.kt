@@ -209,7 +209,7 @@ class MainActivity : AppCompatActivity(), PaymentResultListener {
             navigationView.setNavigationItemSelectedListener { item ->
                 when (item.itemId) {
                     R.id.nav_profile -> {
-                        loadFragment(UserProfile())
+                        loadFragment(PetRegistrationFragment())
                         drawerLayout.closeDrawer(Gravity.RIGHT)
                         true
                     }
@@ -248,6 +248,17 @@ class MainActivity : AppCompatActivity(), PaymentResultListener {
                         drawerLayout.closeDrawer(Gravity.RIGHT)
                         true
                     }
+                    R.id.donation -> {
+                        loadFragment(DonationFragment())
+                        drawerLayout.closeDrawer(Gravity.RIGHT)
+                        true
+                    }
+                    R.id.adoption -> {
+                        loadFragment(AdoptionFragment())
+                        drawerLayout.closeDrawer(Gravity.RIGHT)
+                        true
+                    }
+//                    DonationFragment
                     else -> false
                 }
             }

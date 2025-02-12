@@ -3,7 +3,7 @@
     <item
         android:id="@+id/nav_profile"
         android:icon="@drawable/profile_circle"
-        android:title="Profile" />
+        android:title="Pet Profile" />
     <item
         android:id="@+id/nav_ngo"
         android:icon="@drawable/ngo"
@@ -33,5 +33,13 @@
         android:id="@+id/payhistory"
         android:icon="@drawable/payment_h"
         android:title="Payment History" />
+    <item
+        android:id="@+id/donation"
+        android:icon="@drawable/payment_h"
+        android:title="Donation" />
+    <item
+        android:id="@+id/adoption"
+        android:icon="@drawable/payment_h"
+        android:title="Adoption" />
 
 </menu>

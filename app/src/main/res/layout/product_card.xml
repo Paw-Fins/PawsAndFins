@@ -6,7 +6,7 @@
 
     <FrameLayout
         android:layout_width="190dp"
-        android:layout_height="330dp"
+        android:layout_height="wrap_content"
         android:padding="8dp"
         android:background="@drawable/border_container"
         app:layout_constraintTop_toTopOf="parent"

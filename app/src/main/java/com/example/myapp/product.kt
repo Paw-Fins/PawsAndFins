@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.GridLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
@@ -168,6 +169,11 @@ class ProductFragment : Fragment() {
 //    }
 
     private fun fetchProducts(productContainer: LinearLayout, filter: String? = null) {
+        val progressBar: ProgressBar? = view?.findViewById(R.id.productProgressBar)
+
+        // Show progress bar if it exists
+        progressBar?.visibility = View.VISIBLE
+
         firestore.collection("products")
             .get()
             .addOnSuccessListener { documents ->
@@ -181,124 +187,62 @@ class ProductFragment : Fragment() {
                 if (documents.isEmpty()) {
                     Log.d("ProductFragment", "No products available")
                     Toast.makeText(requireContext(), "No products available", Toast.LENGTH_SHORT).show()
-                    return@addOnSuccessListener
-                }
+                } else {
+                    var rowLayout: LinearLayout? = null
+                    var count = 0
 
-                var rowLayout: LinearLayout? = null
-                var count = 0
+                    for (document in documents) {
+                        val productData = document.data
+                        val productName = productData["name"].toString()
+                        val productPrice = productData["price"]?.toString() ?: "$0"
+                        val productDescription = productData["description"].toString()
+                        val productImageUrl = productData["imageUrl"].toString()
+                        val productId = document.id
+                        val productCategory = productData["category"]?.toString()?.trim()?.lowercase() ?: ""
 
-                for (document in documents) {
-                    val productData = document.data
-                    val productName = productData["name"].toString()
-                    val productPrice = productData["price"]?.toString() ?: "$0"
-                    val productDescription = productData["description"].toString()
-                    val productImageUrl = productData["imageUrl"].toString()
-                    val productId = document.id
-
-                    // Apply filter logic (if any)
-                    if (filter == null || filter.equals("All", ignoreCase = true) || productName.contains(filter, ignoreCase = true)) {
-                        if (count % 2 == 0) {
-                            // Create a new horizontal row for every two products
-                            rowLayout = LinearLayout(requireContext()).apply {
-                                orientation = LinearLayout.HORIZONTAL
-                                layoutParams = LinearLayout.LayoutParams(
-                                    LinearLayout.LayoutParams.MATCH_PARENT,
-                                    LinearLayout.LayoutParams.WRAP_CONTENT
-                                ).apply {
-                                    setMargins(0, 0, 0, 8) // Add spacing between rows
-                                }
-                            }
-                            productContainer.addView(rowLayout)
-                        }
-
-                        // Inflate product card
-                        val productCard = inflater.inflate(R.layout.product_card, rowLayout, false)
-
-                        // Set layout parameters for spacing
-                        val params = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
+                        if (filter.isNullOrEmpty() || filter.equals("All", ignoreCase = true) || filter.trim().equals(productCategory, ignoreCase = true)) {
                             if (count % 2 == 0) {
-                                // First column (left product) gets right margin
-                                setMargins(0, 0, 8, 0)
-                            } else {
-                                // Second column (right product) gets no margin
-                                setMargins(0, 0, 0, 0)
+                                rowLayout = LinearLayout(requireContext()).apply {
+                                    orientation = LinearLayout.HORIZONTAL
+                                    layoutParams = LinearLayout.LayoutParams(
+                                        LinearLayout.LayoutParams.MATCH_PARENT,
+                                        LinearLayout.LayoutParams.WRAP_CONTENT
+                                    ).apply { setMargins(0, 0, 0, 8) }
+                                }
+                                productContainer.addView(rowLayout)
                             }
+
+                            val productCard = inflater.inflate(R.layout.product_card, rowLayout, false)
+                            productCard.layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f).apply {
+                                setMargins(if (count % 2 == 0) 0 else 8, 0, 0, 0)
+                            }
+
+                            productCard.findViewById<TextView>(R.id.dynamicTextView).text = productName
+                            productCard.findViewById<TextView>(R.id.dynamicPrice).text = "$$productPrice"
+                            productCard.findViewById<TextView>(R.id.dynamicDes).text = productDescription
+
+                            val imageView = productCard.findViewById<ImageView>(R.id.imageView)
+                            Glide.with(requireContext())
+                                .load(productImageUrl)
+                                .placeholder(R.drawable.dummy_product)
+                                .error(R.drawable.dummy_product)
+                                .into(imageView)
+
+                            rowLayout?.addView(productCard)
+                            count++
                         }
-                        productCard.layoutParams = params
-
-                        // Bind product data to UI elements
-                        productCard.findViewById<TextView>(R.id.dynamicTextView).text = productName
-                        productCard.findViewById<TextView>(R.id.dynamicPrice).text = "$$productPrice"
-                        productCard.findViewById<TextView>(R.id.dynamicDes).text = productDescription
-
-                        // Load product image using Glide
-                        val imageView = productCard.findViewById<ImageView>(R.id.imageView)
-                        Glide.with(requireContext())
-                            .load(productImageUrl)
-                            .placeholder(R.drawable.dummy_product)
-                            .error(R.drawable.dummy_product)
-                            .into(imageView)
-
-                        // Handle "Buy Now" button click
-                        productCard.findViewById<Button>(R.id.buyNowButton).setOnClickListener {
-                            val currentUser = auth.currentUser
-                            if (currentUser != null) {
-                                val userId = currentUser.uid
-                                firestore.collection("orders")
-                                    .whereEqualTo("userId", userId)
-                                    .whereEqualTo("name", productName)
-                                    .get()
-                                    .addOnSuccessListener { querySnapshot ->
-                                        if (querySnapshot.isEmpty) {
-                                            val product = Product(
-                                                name = productName,
-                                                price = productPrice.toInt(),
-                                                description = productDescription,
-                                                imageUrl = productImageUrl,
-                                                quantity = 1
-                                            )
-                                            saveProductToFirestore(product)
-                                        } else {
-                                            Toast.makeText(
-                                                requireContext(),
-                                                "Product already in cart",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-                                        }
-                                    }
-                            } else {
-                                Toast.makeText(requireContext(), "User not authenticated!", Toast.LENGTH_SHORT).show()
-                            }
-                        }
-
-                        // Handle "View More" button click
-                        productCard.findViewById<Button>(R.id.viewMoreButton).setOnClickListener {
-                            val bundle = Bundle().apply {
-                                putString("product_id", productId)
-                                putString("product_name", productName)
-                                putString("product_price", productPrice)
-                                putString("product_desc", productDescription)
-                                putString("product_image_url", productImageUrl)
-                            }
-                            val productDetail = ProductDetailFragment().apply {
-                                arguments = bundle
-                            }
-                            requireActivity().supportFragmentManager.beginTransaction()
-                                .replace(R.id.fragment_container, productDetail)
-                                .addToBackStack(null)
-                                .commit()
-                        }
-
-                        // Add product card to row layout
-                        rowLayout?.addView(productCard)
-
-                        count++
                     }
                 }
+
+                // Hide progress bar if it exists
+                progressBar?.visibility = View.GONE
             }
             .addOnFailureListener { exception ->
                 Log.w("ProductFragment", "Error getting documents: ", exception)
                 Toast.makeText(requireContext(), "Error fetching products: ${exception.message}", Toast.LENGTH_SHORT).show()
+
+                // Hide progress bar in case of error
+                progressBar?.visibility = View.GONE
             }
     }
 
