@@ -23,7 +23,7 @@
         android:title="Groomers" />
     <item
         android:id="@+id/guide"
-        android:icon="@drawable/payment_h"
+        android:icon="@drawable/guide"
         android:title="Guid" />
     <item
         android:id="@+id/appointhistory"
@@ -35,11 +35,11 @@
         android:title="Payment History" />
     <item
         android:id="@+id/donation"
-        android:icon="@drawable/payment_h"
+        android:icon="@drawable/donation"
         android:title="Donation" />
     <item
         android:id="@+id/adoption"
-        android:icon="@drawable/payment_h"
+        android:icon="@drawable/adoption"
         android:title="Adoption" />
 
 </menu>

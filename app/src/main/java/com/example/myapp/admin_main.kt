@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -35,12 +36,15 @@ class AdminScreenFragment : Fragment() {
         val productContainer: LinearLayout = view.findViewById(R.id.adminProductContainer)
         val appointment : Button = view.findViewById(R.id.btnAppointmentHistory)
         val ngoViewButton :Button = view.findViewById(R.id.btnViewAllNgo)
+        val progressBar : ProgressBar = view.findViewById(R.id.productProgressBar)
         val vetViewButton :Button = view.findViewById(R.id.btnViewAllVet)
         val groomerViewButton :Button = view.findViewById(R.id.btnViewAllGroomer)
         val payment : Button = view.findViewById(R.id.btnPayments)
         val ngoContainer: LinearLayout = view.findViewById(R.id.adminNgoRegisterContainer)
         val vetContainer: LinearLayout = view.findViewById(R.id.adminVetRegisterContainer)
         val groomerContainer: LinearLayout = view.findViewById(R.id.adminGroomerRegisterContainer)
+
+        progressBar.visibility = View.GONE
 
         ngoViewButton.setOnClickListener{
             val ngoView =AdminNgoRegister()
@@ -86,7 +90,7 @@ class AdminScreenFragment : Fragment() {
         
 
         // Fetch and display products dynamically
-        fetchProducts(productContainer)
+        fetchProducts(productContainer,progressBar)
 
         // Handle Add Product button click
         val btnAddProduct: MaterialButton = view.findViewById(R.id.btnAddProduct)
@@ -158,8 +162,8 @@ class AdminScreenFragment : Fragment() {
             addressTextView.text = organization.address
 
             // Find the services container
-            val organizationImage : ImageView = itemView.findViewById<ImageView?>(R.id.organization_image)
-            organizationImage.visibility = View.GONE
+//            val organizationImage : ImageView = itemView.findViewById<ImageView?>(R.id.organization_image)
+//            organizationImage.visibility = View.GONE
             val servicesContainer: LinearLayout = itemView.findViewById(R.id.services_container)
             servicesContainer.removeAllViews() // Clear any previous services
 
@@ -196,8 +200,9 @@ class AdminScreenFragment : Fragment() {
 
 
     // Fetch product data from Firestore
-    private fun fetchProducts(productContainer: LinearLayout) {
+    private fun fetchProducts(productContainer: LinearLayout,progressBar:ProgressBar) {
         val db = FirebaseFirestore.getInstance()
+        progressBar.visibility = View.VISIBLE
 
         db.collection("products")
             .get()
@@ -268,10 +273,13 @@ class AdminScreenFragment : Fragment() {
                     rowLayout?.addView(productCard, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
                     productCount++
                 }
+                progressBar.visibility = View.GONE
             }
             .addOnFailureListener { e ->
                 Log.e("AdminScreenFragment", "Error fetching products", e)
                 Toast.makeText(requireContext(), "Error fetching products: ${e.message}", Toast.LENGTH_SHORT).show()
+                progressBar.visibility = View.GONE
+
             }
     }
 

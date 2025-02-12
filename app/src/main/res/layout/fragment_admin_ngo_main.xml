@@ -5,11 +5,29 @@
     android:padding="16dp"
     android:background="#FFFFFF"
     tools:context=".AdminNgoRegister">
-    <TextView
-        android:layout_width="wrap_content"
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="25sp"
-        android:textColor="@color/black"
-        android:text="All the NGO registered"/>
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="25sp"
+            android:textColor="@color/black"
+            android:text="All the NGO registered"
+            android:layout_marginBottom="10dp"/>
+
+        <!-- RecyclerView for displaying NGO details -->
+            <LinearLayout
+                android:id="@+id/adminNgoRegisterContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
+
+
+
+    </LinearLayout>
 </ScrollView>

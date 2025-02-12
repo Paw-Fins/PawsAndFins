@@ -218,7 +218,7 @@ class ProductFragment : Fragment() {
                             }
 
                             productCard.findViewById<TextView>(R.id.dynamicTextView).text = productName
-                            productCard.findViewById<TextView>(R.id.dynamicPrice).text = "$$productPrice"
+                            productCard.findViewById<TextView>(R.id.dynamicPrice).text = "₹$productPrice"
                             productCard.findViewById<TextView>(R.id.dynamicDes).text = productDescription
 
                             val imageView = productCard.findViewById<ImageView>(R.id.imageView)

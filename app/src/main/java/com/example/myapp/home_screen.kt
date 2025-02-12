@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.GridLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
@@ -30,12 +31,14 @@ class HomeScreenFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home_screen, container, false)
+        val progressBar:ProgressBar = view.findViewById(R.id.productProgressBar)
+        progressBar.visibility = View.GONE
 
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
         (requireActivity() as MainActivity).showBottomNavigation(true)
         val productContainer: LinearLayout = view.findViewById(R.id.productContainer)
-        fetchProducts(productContainer)
+        fetchProducts(productContainer,progressBar)
 
         return view
     }
@@ -125,12 +128,13 @@ class HomeScreenFragment : Fragment() {
 //            Log.w( "Error getting documents: ", exception)
 //        }
 //}
-private fun fetchProducts(productContainer: LinearLayout) {
+private fun fetchProducts(productContainer: LinearLayout,progressBar: ProgressBar) {
     val db = FirebaseFirestore.getInstance()
     val auth = FirebaseAuth.getInstance()
     val firestore = FirebaseFirestore.getInstance()
 
     productContainer.removeAllViews()
+    progressBar.visibility = View.VISIBLE
 
     val gridLayout = GridLayout(requireContext()).apply {
         layoutParams = LinearLayout.LayoutParams(
@@ -228,10 +232,12 @@ private fun fetchProducts(productContainer: LinearLayout) {
                 productCard.layoutParams = params
 
                 gridLayout.addView(productCard) // Add card to grid layout
+                progressBar.visibility = View.GONE
             }
         }
         .addOnFailureListener { exception ->
             Log.w("Error getting products: ", exception)
+            progressBar.visibility = View.GONE
         }
 }
 

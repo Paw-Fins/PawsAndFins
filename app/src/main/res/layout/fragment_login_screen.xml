@@ -9,15 +9,12 @@
     android:padding="16dp">
 
     <!-- Logo Text -->
-    <TextView
+    <ImageView
         android:id="@+id/logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:src="@drawable/pawfins_logo"
+        android:layout_width="50sp"
+        android:layout_height="50dp"
         android:layout_marginTop="16dp"
-        android:text="LOGO"
-        android:textColor="?attr/colorOnBackground"
-        android:textSize="28sp"
-        android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="15dp" />
 
