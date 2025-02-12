@@ -5,6 +5,7 @@ import CartFragment
 import ErrorFragment
 import SuccessFragment
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Bundle
@@ -249,16 +250,17 @@ class MainActivity : AppCompatActivity(), PaymentResultListener {
                         true
                     }
                     R.id.donation -> {
-                        loadFragment(DonationFragment())
+                        val intent = Intent(this, DonationActivity::class.java)
+                        startActivity(intent)
                         drawerLayout.closeDrawer(Gravity.RIGHT)
                         true
                     }
+
                     R.id.adoption -> {
                         loadFragment(AdoptionFragment())
                         drawerLayout.closeDrawer(Gravity.RIGHT)
                         true
                     }
-//                    DonationFragment
                     else -> false
                 }
             }
