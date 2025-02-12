@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".DonationFragment">
+    tools:context=".DonationActivity">
 
     <TextView
         android:id="@+id/tvDonateTitle"
@@ -18,9 +18,42 @@
         android:layout_gravity="center"
         android:paddingBottom="16dp"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewDonations"
+    <EditText
+        android:id="@+id/etDonationAmount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:nestedScrollingEnabled="false"/>
+        android:hint="Enter donation amount"
+        android:inputType="numberDecimal"
+        android:padding="10dp"
+        android:background="@android:drawable/editbox_background"
+        android:textSize="16sp"/>
+
+    <Button
+        android:id="@+id/btnDonate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Donate"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/purple_500"
+        android:textColor="@android:color/white"/>
+
+    <TextView
+        android:id="@+id/tvdonorhistory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Previous Donors"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:paddingBottom="10dp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvDonations"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:padding="8dp"
+        android:scrollbars="vertical"/>
+
 </LinearLayout>

@@ -176,7 +176,7 @@ class DeliveryAddressFragment : Fragment(), PaymentResultListener {
 
     private fun startRazorpayCheckout(email: String, contact: String) {
         val checkout = Checkout()
-        checkout.setKeyID("rzp_test_P9PyXF3R9dZq2c")
+        checkout.setKeyID(getString(R.string.rzr_pay))
 
         try {
             val options = JSONObject()
