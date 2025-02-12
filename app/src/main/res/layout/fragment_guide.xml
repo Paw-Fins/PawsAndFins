@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/titleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Welcome Guide for New Pet Parents"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
+            android:paddingBottom="16dp"/>
+
+        <!-- Introduction -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Congratulations on your new furry friend! Becoming a pet parent is an exciting and rewarding journey. This guide will provide you with essential tips and resources to ensure your pet stays happy and healthy."
+            android:textSize="16sp"
+            android:paddingBottom="12dp"/>
+
+        <!-- Essential Pet Supplies -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Essential Pet Supplies"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:paddingBottom="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="• Food and Water Bowls\n• High-Quality Pet Food\n• Comfortable Bed\n• Collar and ID Tag\n• Leash and Harness\n• Toys for Mental Stimulation\n• Grooming Supplies (e.g., brush, nail clippers)\n• Pet Carrier or Crate\n• Litter Box (for cats)"
+            android:textSize="16sp"
+            android:paddingBottom="12dp"/>
+
+        <!-- Creating a Safe Space -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Creating a Safe Space"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:paddingBottom="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Designate a specific area in your home for your pet to relax and feel secure. Ensure the space is free from hazards such as toxic plants, electrical cords, and small objects that can be swallowed."
+            android:textSize="16sp"
+            android:paddingBottom="12dp"/>
+
+        <!-- Health Care Tips -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Health Care Tips"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:paddingBottom="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="• Schedule a vet visit within the first week of bringing your pet home.\n• Keep vaccinations and deworming up to date.\n• Discuss spaying or neutering options with your vet.\n• Provide regular flea and tick prevention.\n• Maintain a balanced diet and avoid overfeeding."
+            android:textSize="16sp"
+            android:paddingBottom="12dp"/>
+
+        <!-- Training and Socialization -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Training and Socialization"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:paddingBottom="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Training and socialization are key to a well-behaved and happy pet. Start with basic commands like 'sit,' 'stay,' and 'come.' Gradually introduce your pet to different environments, people, and other animals."
+            android:textSize="16sp"
+            android:paddingBottom="12dp"/>
+
+        <!-- Emergency Contacts -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Emergency Contacts"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:paddingBottom="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="• Local Veterinarian: [Enter Contact Info]\n• Emergency Animal Hospital: [Enter Contact Info]"
+            android:textSize="16sp"
+            android:paddingBottom="12dp"/>
+
+    </LinearLayout>
+</ScrollView>

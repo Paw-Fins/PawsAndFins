@@ -46,7 +46,7 @@ class NGOFragment : Fragment() {
 
     private fun fetchNGOData() {
         firestore.collection("users")
-            .whereEqualTo("role", "NGO") // Filter documents by role "NGO"
+            .whereEqualTo("role", "NGO Manager") // Filter documents by role "NGO"
             .get()
             .addOnSuccessListener { result ->
                 if (result.isEmpty) {

@@ -33,14 +33,6 @@ class HomeScreenFragment : Fragment() {
 
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
-        val filterSpinner: Spinner = view.findViewById(R.id.filterSpinner)
-        val adapter = ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.filter_options,
-            R.layout.spinner_item
-        )
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        filterSpinner.adapter = adapter
         (requireActivity() as MainActivity).showBottomNavigation(true)
         val productContainer: LinearLayout = view.findViewById(R.id.productContainer)
         fetchProducts(productContainer)
@@ -150,6 +142,7 @@ private fun fetchProducts(productContainer: LinearLayout) {
     productContainer.addView(gridLayout)
 
     db.collection("products")
+        .limit(4)
         .get()
         .addOnSuccessListener { documents ->
             val inflater = LayoutInflater.from(requireContext())
@@ -229,7 +222,8 @@ private fun fetchProducts(productContainer: LinearLayout) {
                 val params = GridLayout.LayoutParams().apply {
                     width = 0
                     height = GridLayout.LayoutParams.WRAP_CONTENT
-                    columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f) // Equal width, no margin
+                    columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
+                    setMargins(0, 0, 0, 0)
                 }
                 productCard.layoutParams = params
 

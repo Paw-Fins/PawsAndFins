@@ -243,6 +243,11 @@ class MainActivity : AppCompatActivity(), PaymentResultListener {
                         drawerLayout.closeDrawer(Gravity.RIGHT)
                         true
                     }
+                    R.id.guide -> {
+                        loadFragment(GuideFragment())
+                        drawerLayout.closeDrawer(Gravity.RIGHT)
+                        true
+                    }
                     else -> false
                 }
             }
@@ -296,9 +301,12 @@ class MainActivity : AppCompatActivity(), PaymentResultListener {
         if (show) {
             layout.visibility = View.VISIBLE
             bottomNavigationView.visibility = View.VISIBLE
+            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
         } else {
             layout.visibility = View.GONE
             bottomNavigationView.visibility = View.GONE
+            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+
         }
     }
 

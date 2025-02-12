@@ -99,5 +99,10 @@
         android:name="com.example.myapp.payment_history_user"
         android:label="fragment_payment_history_user"
         tools:layout="@layout/fragment_payment_history_user" />
+    <fragment
+        android:id="@+id/guide2"
+        android:name="com.example.myapp.guide"
+        android:label="fragment_guide"
+        tools:layout="@layout/fragment_guide" />
 
 </navigation>
