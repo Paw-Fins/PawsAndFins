@@ -19,7 +19,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -75,11 +74,12 @@ class MainActivity : AppCompatActivity(), PaymentResultListener {
                         val userRole = document.getString("role")?.toLowerCase()
 
                         // Handle redirection based on role
-                        when (userRole) {
+                        when (userRole?.toLowerCase()) {
                             "admin" -> navigateToAdminScreen()
                             "doctor" -> navigateToDoctorDashboard()
                             "groomer" -> navigateToGroomerDashboard()
                             "trainer" -> navigateToTrainerDashboard()
+                            "ngo manager" -> navigateToNgo()
                             else -> navigateToHomeScreen()
                         }
 
@@ -138,7 +138,7 @@ class MainActivity : AppCompatActivity(), PaymentResultListener {
                 "doctor" -> dashboardFrag = ServiceDashboard()
                 "groomer" -> dashboardFrag = GroomerDashboard()
                 "trainer" -> dashboardFrag = TrainerDashboard()
-                "ngo" -> dashboardFrag = NGODashboard()
+                "ngo manager" -> dashboardFrag = NGODashboard()
             }
 
             bottomNavigationView.setOnNavigationItemSelectedListener { item ->
@@ -166,7 +166,7 @@ class MainActivity : AppCompatActivity(), PaymentResultListener {
             navigationView.setNavigationItemSelectedListener { item ->
                 when (item.itemId) {
                     R.id.nav_organization_profile -> {
-                        loadFragment(UserProfile())
+                        loadFragment(OrganizationRegistrationFragment())
                         drawerLayout.closeDrawer(Gravity.RIGHT)
                         true
                     }
@@ -428,6 +428,12 @@ class MainActivity : AppCompatActivity(), PaymentResultListener {
         val adminFragment = AdminScreenFragment()
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, adminFragment)
+            .commit()
+    }
+    private fun navigateToNgo(){
+        val ngoFrag = NGODashboard()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, ngoFrag)
             .commit()
     }
 

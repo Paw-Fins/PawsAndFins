@@ -1,6 +1,6 @@
 package com.example.myapp
 
-import GroomerAppointmentService
+import NGOAppointmentService
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -27,7 +27,7 @@ class NGODashboard : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_trainer_dashboard_main, container, false)
+        val view = inflater.inflate(R.layout.fragment_ngo_dashboard, container, false)
 
         auth = FirebaseAuth.getInstance()
         firestore = FirebaseFirestore.getInstance()
@@ -100,7 +100,7 @@ class NGOAppointmentAdapter(private val appointments: List<NGOAppointment>) :
             viewMoreButton.setOnClickListener {
                 val transaction = itemView.context as AppCompatActivity
                 transaction.supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, GroomerAppointmentService())
+                    .replace(R.id.fragment_container, NGOAppointmentService())
                     .addToBackStack(null)
                     .commit()
             }

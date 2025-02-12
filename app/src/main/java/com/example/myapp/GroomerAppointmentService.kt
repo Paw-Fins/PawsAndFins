@@ -65,7 +65,7 @@ class GroomerAppointmentService : Fragment() {
     }
 
     private fun fetchGroomingAppointmentData(serviceId: String) {
-        val appointmentsRef = db.collection("groomingAppointments")
+        val appointmentsRef = db.collection("appointments")
 
         appointmentsRef.whereEqualTo("serviceId", serviceId)
             .get()
@@ -98,7 +98,7 @@ class GroomerAppointmentService : Fragment() {
     }
 
     private fun updateGroomingAppointmentStatus(status: String) {
-        val appointmentRef = db.collection("groomingAppointments")
+        val appointmentRef = db.collection("appointments")
 
         appointmentRef.whereEqualTo("serviceId", auth.currentUser?.uid)
             .get()

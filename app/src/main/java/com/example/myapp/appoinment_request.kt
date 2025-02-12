@@ -1,5 +1,6 @@
 package com.example.myapp
 
+import GroomerAppointmentService
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -102,7 +104,11 @@ class AppointmentRequestAdapter(private val appointments: List<AppointmentReques
             problemDescTextView.text = appointment.problemDesc
 
             viewMoreButton.setOnClickListener {
-                // Logic for viewing more details about the appointment can be added here
+                val transaction = itemView.context as AppCompatActivity
+                transaction.supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, GroomerAppointmentService())
+                    .addToBackStack(null)
+                    .commit()
             }
         }
     }

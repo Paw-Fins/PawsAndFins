@@ -1,0 +1,136 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="#FFFFFF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Organization Details"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Organization Name -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Organization Name:"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/displayOrgName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:paddingBottom="8dp"/>
+
+        <!-- Contact Person -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Contact Person:"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/displayContactPerson"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:paddingBottom="8dp"/>
+
+        <!-- Email -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Email:"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/displayEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:paddingBottom="8dp"/>
+
+        <!-- Phone Number -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Phone Number:"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/displayPhoneNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:paddingBottom="8dp"/>
+
+        <!-- Address -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Address:"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/displayAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:paddingBottom="8dp"/>
+
+        <!-- Website -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Website:"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/displayWebsite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:paddingBottom="8dp"/>
+
+        <!-- Description -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Description:"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/displayDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:paddingBottom="8dp"/>
+
+        <!-- Back Button -->
+        <Button
+            android:id="@+id/backButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Back"
+            android:backgroundTint="#BBD4F6"
+            android:textColor="#000000"
+            android:layout_marginTop="16dp"/>
+    </LinearLayout>
+</ScrollView>

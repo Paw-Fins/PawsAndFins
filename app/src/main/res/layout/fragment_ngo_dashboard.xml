@@ -62,20 +62,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp" />
 
-        <!-- Grooming Payment History Section -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Grooming Payment History"
-            android:textColor="#000000"
-            android:textStyle="bold"
-            android:layout_marginTop="20dp" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/paymentHistoryRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp" />
 
         <!-- Process Payment Button -->
 

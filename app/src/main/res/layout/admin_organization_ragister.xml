@@ -22,12 +22,12 @@
             android:padding="16dp">
 
             <!-- Image -->
-            <ImageView
-                android:id="@+id/organization_image"
-                android:layout_width="match_parent"
-                android:layout_height="160dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_launcher_background" />
+<!--            <ImageView-->
+<!--                android:id="@+id/organization_image"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="160dp"-->
+<!--                android:scaleType="centerCrop"-->
+<!--                android:src="@drawable/ic_launcher_background" />-->
 
             <!-- Organization Owner Name -->
             <LinearLayout

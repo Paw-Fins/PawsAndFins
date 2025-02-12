@@ -119,5 +119,15 @@
         android:name="com.example.myapp.pet_profile"
         android:label="fragment_pet_profile"
         tools:layout="@layout/fragment_pet_profile" />
+    <fragment
+        android:id="@+id/service_provider_organisation_register"
+        android:name="com.example.myapp.service_provider_organisation_register"
+        android:label="fragment_service_provider_organisation_register"
+        tools:layout="@layout/fragment_service_provider_organisation_register" />
+    <fragment
+        android:id="@+id/organization_detail"
+        android:name="com.example.myapp.organization_detail"
+        android:label="fragment_organization_detail"
+        tools:layout="@layout/fragment_organization_detail" />
 
 </navigation>
