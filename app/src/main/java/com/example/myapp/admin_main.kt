@@ -15,7 +15,9 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.replace
 import com.bumptech.glide.Glide
+import com.example.pawsandfins.ReviewsFragment
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.android.material.button.MaterialButton
 
@@ -40,6 +42,7 @@ class AdminScreenFragment : Fragment() {
         val vetViewButton :Button = view.findViewById(R.id.btnViewAllVet)
         val groomerViewButton :Button = view.findViewById(R.id.btnViewAllGroomer)
         val payment : Button = view.findViewById(R.id.btnPayments)
+        val reviews : Button = view.findViewById(R.id.btnReviews)
         val ngoContainer: LinearLayout = view.findViewById(R.id.adminNgoRegisterContainer)
         val vetContainer: LinearLayout = view.findViewById(R.id.adminVetRegisterContainer)
         val groomerContainer: LinearLayout = view.findViewById(R.id.adminGroomerRegisterContainer)
@@ -76,6 +79,14 @@ class AdminScreenFragment : Fragment() {
                 .addToBackStack(null)
                 .commit()
         }
+
+        reviews.setOnClickListener({
+            val admireview = ReviewsFragment()
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, admireview          )
+                .addToBackStack(null)
+                .commit()
+        })
         loadStaticNGOs(ngoContainer)
         loadStaticVets(vetContainer)
         loadStaticGroomers(groomerContainer)
