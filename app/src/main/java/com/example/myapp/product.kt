@@ -57,6 +57,7 @@ class ProductFragment : Fragment() {
         filterSpinner.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                 val selectedFilter = filterSpinner.getItemAtPosition(position).toString()
+                productContainer.removeAllViews()
                 fetchProducts(productContainer, selectedFilter)
             }
             override fun onNothingSelected(parent: AdapterView<*>) {
@@ -127,6 +128,54 @@ class ProductFragment : Fragment() {
                                 .error(R.drawable.dummy_product)
                                 .into(imageView)
 
+                            // "Buy Now" button logic
+                            productCard.findViewById<Button>(R.id.buyNowButton).setOnClickListener {
+                                val currentUser = auth.currentUser
+                                if (currentUser != null) {
+                                    val userId = currentUser.uid
+                                    firestore.collection("orders")
+                                        .whereEqualTo("userId", userId)
+                                        .whereEqualTo("name", productName)
+                                        .get()
+                                        .addOnSuccessListener { querySnapshot ->
+                                            if (querySnapshot.isEmpty) {
+                                                val product = Product(
+                                                    name = productName,
+                                                    price = productPrice.toInt(),
+                                                    description = productDescription,
+                                                    imageUrl = productImageUrl,
+                                                    quantity = 1
+                                                )
+                                                saveProductToFirestore(product)
+                                            } else {
+                                                Toast.makeText(
+                                                    requireContext(),
+                                                    "Product already in cart",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+                                        }
+                                }
+                            }
+
+                            // "View More" button logic
+                            productCard.findViewById<Button>(R.id.viewMoreButton).setOnClickListener {
+                                val bundle = Bundle().apply {
+                                    putString("product_id", productId) // Pass the product ID
+                                    putString("product_name", productName)
+                                    putString("product_price", productPrice)
+                                    putString("product_desc", productDescription)
+                                    putString("product_image_url", productImageUrl)
+                                }
+                                val productDetail = ProductDetailFragment().apply {
+                                    arguments = bundle
+                                }
+                                requireActivity().supportFragmentManager.beginTransaction()
+                                    .replace(R.id.fragment_container, productDetail)
+                                    .addToBackStack(null) // Add to back stack to allow navigation back
+                                    .commit()
+                            }
+
                             rowLayout?.addView(productCard)
                             count++
                         }
@@ -144,7 +193,6 @@ class ProductFragment : Fragment() {
                 progressBar?.visibility = View.GONE
             }
     }
-
 
     // Function to save product details to Firestore
     private fun saveProductToFirestore(product: Product) {
