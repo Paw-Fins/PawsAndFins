@@ -82,7 +82,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="16dp"
         android:backgroundTint="#BBD4F6"
-        android:text="Contact"
+        android:text="Call owner"
         android:textColor="@color/black"
         android:textSize="14sp"
         android:textStyle="bold"

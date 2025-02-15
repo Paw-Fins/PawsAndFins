@@ -24,7 +24,7 @@
     <item
         android:id="@+id/guide"
         android:icon="@drawable/guide"
-        android:title="Guid" />
+        android:title="Guide" />
     <item
         android:id="@+id/appointhistory"
         android:icon="@drawable/appoint"
@@ -41,5 +41,4 @@
         android:id="@+id/adoption"
         android:icon="@drawable/adoption"
         android:title="Adoption" />
-
 </menu>

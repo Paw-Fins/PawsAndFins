@@ -1,6 +1,8 @@
 package com.example.myapp
 
 import VetContactFragment
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +20,8 @@ data class Trainer(
     val shopName: String,
     val location: String,
     val ownerName: String,
-    val availabilityTime: String
+    val availabilityTime: String,
+    val contact: String
 )
 
 class TrainerFragment : Fragment() {
@@ -59,9 +62,10 @@ class TrainerFragment : Fragment() {
                         val location = document.getString("physicalAddress") ?: "Not Available"
                         val ownerName = document.getString("email") ?: "Unknown"
                         val availabilityTime = document.getString("availability") ?: "Not Available"
+                        val contact = document.getString("mobile") ?: "Not Available"
 
                         // Add each trainer data to the view
-                        addTrainerView(Trainer(id, shopName, location, ownerName, availabilityTime))
+                        addTrainerView(Trainer(id, shopName, location, ownerName, availabilityTime, contact))
                     }
                 }
             }
@@ -78,6 +82,7 @@ class TrainerFragment : Fragment() {
         val ownerNameTextView: TextView = trainerView.findViewById(R.id.serviceOwnerName)
         val availabilityTextView: TextView = trainerView.findViewById(R.id.available)
         val contactButton: Button = trainerView.findViewById(R.id.buyNowButton)
+        val contactNo = trainer.contact
 
         shopNameTextView.text = trainer.shopName
         locationTextView.text = trainer.location
@@ -87,6 +92,13 @@ class TrainerFragment : Fragment() {
         // Ensure "Call Trainer" option is always visible and functional
         contactButton.text = "Call Trainer"
         contactButton.setOnClickListener {
+            if (contactNo.isNotEmpty()) {
+                val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:$contactNo"))
+                startActivity(intent)
+            } else {
+                // Handle the case where there is no phone number available
+                Toast.makeText(requireContext(), "No contact number available", Toast.LENGTH_SHORT).show()
+            }
         }
 
         // Set layout parameters to add top margin
@@ -99,5 +111,6 @@ class TrainerFragment : Fragment() {
 
         // Add the inflated view to the LinearLayout
         trainerContainer.addView(trainerView)
+
     }
 }

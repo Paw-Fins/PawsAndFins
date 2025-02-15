@@ -1,6 +1,7 @@
 package com.example.myapp
 
-import VetContactFragment
+
+import NgoContactFragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -46,7 +47,7 @@ class NGOFragment : Fragment() {
 
     private fun fetchNGOData() {
         firestore.collection("users")
-            .whereEqualTo("role", "NGO Manager") // Filter documents by role "NGO"
+            .whereEqualTo("role", "NGO") // Filter documents by role "NGO"
             .get()
             .addOnSuccessListener { result ->
                 if (result.isEmpty) {
@@ -83,7 +84,8 @@ class NGOFragment : Fragment() {
         // Ensure "Contact NGO" option is always visible and functional
         contactButton.text = "Contact NGO"
         contactButton.setOnClickListener {
-
+            // Send the groomer's data to another fragment or activity
+            navigateToContact(ngo)
         }
 
         // Set layout parameters to add top margin
@@ -96,4 +98,26 @@ class NGOFragment : Fragment() {
 
         ngoContainer.addView(ngoView)
     }
+
+    private fun navigateToContact(ngo: NGO) {
+        val homeScreenFragment = NgoContactFragment()
+        val bundle = Bundle().apply {
+            putString("groomerId", ngo.id) // Pass groomer ID
+            putString("groomerShopName", ngo.name) // Pass shop name
+            putString("groomerLocation", ngo.address) // Pass location
+            putString("groomerOwnerName", ngo.ownerName) // Pass owner name
+        }
+
+        homeScreenFragment.arguments = bundle
+
+        val transaction = requireActivity().supportFragmentManager.beginTransaction()
+        val currentFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.fragment_container)
+        if (currentFragment != null) {
+            transaction.hide(currentFragment)
+        }
+        transaction.replace(R.id.fragment_container, homeScreenFragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
+    }
+
 }

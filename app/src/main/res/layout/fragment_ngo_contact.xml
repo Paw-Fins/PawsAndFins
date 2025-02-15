@@ -6,63 +6,55 @@
     android:padding="16dp">
 
     <LinearLayout
-        android:id="@+id/groomerContainer"
+        android:id="@+id/ngoContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="8dp">
 
-        <!-- Groomer Profile Section -->
+        <!-- NGO Profile Section -->
         <ImageView
-            android:id="@+id/groomerProfileImage"
+            android:id="@+id/ngoProfileImage"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center_horizontal"
-            android:contentDescription="Groomer Profile Picture"
+            android:contentDescription="NGO Profile Picture"
             android:src="@drawable/ic_launcher_foreground" />
 
         <TextView
-            android:id="@+id/groomerName"
+            android:id="@+id/ngoName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Groomer Name"
+            android:text="NGO Name"
             android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/groomerSpecialty"
+            android:id="@+id/ngoContactInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Specialty: Pet Grooming"
+            android:text="Contact: +91 XXXXXXXXXX"
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/groomerContactInfo"
+            android:id="@+id/ngoAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Contact: +1 234 567 890"
+            android:text="NGO Address"
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/groomerAddress"
+            android:id="@+id/ngoServices"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="123 Grooming Avenue, Pet City, PC 12345"
+            android:text="Services: Food Distribution, Animal Rescue, Education Support"
             android:textSize="16sp" />
 
-        <TextView
-            android:id="@+id/groomerServices"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="Services: Haircuts, Nail Trimming, Bathing, Teeth Cleaning"
-            android:textSize="16sp" />
-
-        <!-- Dynamic Details Container (Initially Hidden) -->
+        <!-- Details Container (Initially Hidden) -->
         <LinearLayout
             android:id="@+id/detailsContainer"
             android:layout_width="match_parent"
@@ -70,23 +62,22 @@
             android:orientation="vertical"
             android:visibility="gone"
             android:padding="8dp">
-            <!-- Additional dynamic content can be added here -->
         </LinearLayout>
 
         <!-- Action Buttons -->
         <Button
-            android:id="@+id/bookGroomingButton"
+            android:id="@+id/donateButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Book Grooming" />
+            android:text="Request visit" />
 
         <Button
-            android:id="@+id/callGroomerButton"
+            android:id="@+id/callNgoButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Call Groomer" />
+            android:text="Call NGO" />
 
         <!-- Reviews Section -->
         <TextView
